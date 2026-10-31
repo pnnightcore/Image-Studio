@@ -7,16 +7,8 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "functions": {
-    "api/*.ts": {
-      "includeFiles": "{node_modules/harfbuzzjs/**,node_modules/satori/**,public/fonts/**}",
-      "maxDuration": 30
-    },
-    "api/generate.ts": {
-      "includeFiles": "{node_modules/harfbuzzjs/**,node_modules/satori/**,public/fonts/**}",
-      "maxDuration": 30
-    },
-    "api/animation/frame.ts": {
-      "includeFiles": "{node_modules/harfbuzzjs/**,node_modules/satori/**,public/fonts/**}",
+    "api/**/*.ts": {
+      "includeFiles": "node_modules/{harfbuzzjs/hb.wasm,satori/yoga.wasm}",
       "maxDuration": 30
     }
   }
