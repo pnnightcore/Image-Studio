@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import satori from "satori";
 import sharp from "sharp";
 import { loadSatoriAdditionalAsset } from "./unicode-fonts.js";
+import { getEmbeddedRobotoFonts } from "./embedded-fonts.js";
 import { computeElementTextShadow } from "./text-effects.js";
 import { computeParticles, renderParticlesToSatoriVNodes, createDefaultParticleConfig } from "./particle-system.js";
 import type {
@@ -70,13 +71,13 @@ export async function imageToDataUri(url: string, targetSize = 96): Promise<stri
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 2500);
 
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
         Accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-        "User-Agent": "Mozilla/5.0 (compatible; ImageStudioBot/1.0)",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       },
     });
 
@@ -145,27 +146,30 @@ function getFontDir(): string {
 function loadFonts() {
   if (cachedFonts) return cachedFonts;
 
-  const fontDir = getFontDir();
-  // Keep the API usable in deployments where only the bundled font assets exist.
-  // Roboto-Regular.ttf is not part of this project; use the available Roboto medium
-  // face as the Latin fallback instead of failing the whole function with ENOENT.
-  const regularLatinPath = path.join(fontDir, "Roboto-Regular.ttf");
-  const regularLatin = fs.readFileSync(
-    fs.existsSync(regularLatinPath)
-      ? regularLatinPath
-      : path.join(fontDir, "Roboto-Medium-Latin.ttf")
-  );
-  const regularVn = fs.readFileSync(path.join(fontDir, "Roboto-Vietnamese.ttf"));
-  const mediumLatin = fs.readFileSync(path.join(fontDir, "Roboto-Medium-Latin.ttf"));
-  const mediumVn = fs.readFileSync(path.join(fontDir, "Roboto-Medium-Vn.ttf"));
+  try {
+    const fontDir = getFontDir();
+    const regularLatinPath = path.join(fontDir, "Roboto-Regular.ttf");
+    const regularLatin = fs.readFileSync(
+      fs.existsSync(regularLatinPath)
+        ? regularLatinPath
+        : path.join(fontDir, "Roboto-Medium-Latin.ttf")
+    );
+    const regularVn = fs.readFileSync(path.join(fontDir, "Roboto-Vietnamese.ttf"));
+    const mediumLatin = fs.readFileSync(path.join(fontDir, "Roboto-Medium-Latin.ttf"));
+    const mediumVn = fs.readFileSync(path.join(fontDir, "Roboto-Medium-Vn.ttf"));
 
-  cachedFonts = [
-    { name: "Roboto", data: regularLatin, weight: 400, style: "normal" },
-    { name: "Roboto", data: regularVn, weight: 400, style: "normal" },
-    { name: "Roboto", data: mediumLatin, weight: 500, style: "normal" },
-    { name: "Roboto", data: mediumVn, weight: 500, style: "normal" },
-  ];
+    cachedFonts = [
+      { name: "Roboto", data: regularLatin, weight: 400, style: "normal" },
+      { name: "Roboto", data: regularVn, weight: 400, style: "normal" },
+      { name: "Roboto", data: mediumLatin, weight: 500, style: "normal" },
+      { name: "Roboto", data: mediumVn, weight: 500, style: "normal" },
+    ];
+    return cachedFonts;
+  } catch (err) {
+    console.warn("[image-generator] Failed to load fonts from filesystem, falling back to embedded fonts:", err);
+  }
 
+  cachedFonts = getEmbeddedRobotoFonts();
   return cachedFonts;
 }
 
@@ -581,16 +585,24 @@ export async function generateSongImage(request: {
 
   const height = calculateHeight(songs.length, effectiveLayout);
 
-  const processedSongs = await Promise.all(
-    songs.map(async (song, index) => {
-      const avatarUri = await imageToDataUri(song.avatar, effectiveLayout === "grid" ? 300 : 120);
-      return {
-        ...song,
-        index: song.index ?? index + 1,
-        avatarUri,
-      };
-    })
-  );
+  // Process avatars in chunks to prevent thread pool exhaustion and memory spikes on serverless
+  const processedSongs: Array<SongResult & { index: number; avatarUri: string }> = [];
+  const avatarChunkSize = 5;
+  for (let i = 0; i < songs.length; i += avatarChunkSize) {
+    const chunk = songs.slice(i, i + avatarChunkSize);
+    const chunkResults = await Promise.all(
+      chunk.map(async (song, chunkIdx) => {
+        const itemIdx = i + chunkIdx;
+        const avatarUri = await imageToDataUri(song.avatar, effectiveLayout === "grid" ? 300 : 120);
+        return {
+          ...song,
+          index: song.index ?? itemIdx + 1,
+          avatarUri,
+        };
+      })
+    );
+    processedSongs.push(...chunkResults);
+  }
 
   let contentRows: any[];
 

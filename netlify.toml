@@ -7,6 +7,7 @@
   node_bundler = "esbuild"
   external_node_modules = ["sharp"]
   included_files = ["public/fonts/**", "node_modules/harfbuzzjs/**", "node_modules/satori/**"]
+  timeout = 26
 
 # API route rewrites to Netlify functions
 [[redirects]]
