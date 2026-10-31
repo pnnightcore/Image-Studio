@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import satori from "satori";
 import sharp from "sharp";
 import { loadSatoriAdditionalAsset } from "./unicode-fonts.js";
@@ -112,10 +113,39 @@ let cachedFonts: Array<{
   style: "normal";
 }> | null = null;
 
+function getFontDir(): string {
+  const currentDir =
+    typeof __dirname !== "undefined"
+      ? __dirname
+      : typeof import.meta !== "undefined" && import.meta.url
+      ? path.dirname(fileURLToPath(import.meta.url))
+      : "";
+
+  const candidates = [
+    path.resolve(process.cwd(), "public/fonts"),
+    path.resolve(process.cwd(), "fonts"),
+    ...(currentDir
+      ? [
+          path.resolve(currentDir, "../../public/fonts"),
+          path.resolve(currentDir, "../public/fonts"),
+          path.resolve(currentDir, "public/fonts"),
+          path.resolve(currentDir, "../../../public/fonts"),
+        ]
+      : []),
+  ];
+
+  for (const c of candidates) {
+    if (fs.existsSync(path.join(c, "Roboto-Vietnamese.ttf"))) {
+      return c;
+    }
+  }
+  return path.resolve(process.cwd(), "public/fonts");
+}
+
 function loadFonts() {
   if (cachedFonts) return cachedFonts;
 
-  const fontDir = path.resolve(process.cwd(), "public/fonts");
+  const fontDir = getFontDir();
   // Keep the API usable in deployments where only the bundled font assets exist.
   // Roboto-Regular.ttf is not part of this project; use the available Roboto medium
   // face as the Latin fallback instead of failing the whole function with ENOENT.

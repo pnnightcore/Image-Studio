@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import type { CustomCanvasData, CustomElement, CustomElementType, Transform } from "../lib/types";
 import { recordGeneratedImage } from "../lib/use-stats";
+import { getApiUrl } from "../lib/api-config";
 import { TextShadowControlPanel } from "./TextShadowControlPanel";
 import { computeElementTextShadow, TEXT_SHADOW_PRESETS } from "../lib/text-effects";
 import { ParticleControlPanel } from "./ParticleControlPanel";
@@ -1314,7 +1315,7 @@ export function AnimationTimeline() {
         },
       });
 
-      const r = await fetch("/api/generate", {
+      const r = await fetch(getApiUrl("/api/generate"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1433,7 +1434,7 @@ export function AnimationTimeline() {
         },
       };
 
-      const r = await fetch("/api/generate", {
+      const r = await fetch(getApiUrl("/api/generate"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1559,7 +1560,10 @@ export function AnimationTimeline() {
     } catch {}
     const isFrame = payloadTarget === "frame-png";
     const mime = isFrame ? "image/png" : format === "gif" ? "image/gif" : "image/webp";
-    const endpoint = isFrame ? "http://localhost:3000/api/animation/frame" : "http://localhost:3000/api/generate";
+    const currentOrigin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
+    const targetPath = isFrame ? "/api/animation/frame" : "/api/generate";
+    const resolvedUrl = getApiUrl(targetPath);
+    const endpoint = resolvedUrl.startsWith("http") ? resolvedUrl : `${currentOrigin}${resolvedUrl}`;
     const outName = isFrame ? `frame-${Math.round(time)}ms.png` : `animation.${format}`;
     const curl = `curl -X POST ${endpoint} \\\n  -H "Content-Type: application/json" \\\n  -H "Accept: ${mime}" \\\n  -d '${safeJson.replace(/'/g, "'\\''")}' \\\n  --output ${outName}`;
     await navigator.clipboard.writeText(curl);
@@ -1629,7 +1633,7 @@ export function AnimationTimeline() {
       const reqMime = isPng ? "image/png" : format === "gif" ? "image/gif" : "image/webp";
       const ext = isPng ? "png" : format;
 
-      const r = await fetch("/api/generate", {
+      const r = await fetch(getApiUrl("/api/generate"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

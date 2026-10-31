@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { getApiUrl } from "./api-config";
 
 const LOCAL_KEY_USER = "image_studio_user_generated";
 const LOCAL_KEY_TOTAL = "image_studio_total_generated";
@@ -48,7 +49,7 @@ export function useStats() {
   // Sync with server /api/stats
   const syncWithServer = useCallback(async () => {
     try {
-      const res = await fetch("/api/stats");
+      const res = await fetch(getApiUrl("/api/stats"));
       if (res.ok) {
         const data = await res.json();
         if (typeof data.totalGenerated === "number") {

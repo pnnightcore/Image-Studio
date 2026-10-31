@@ -1,0 +1,46 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["sharp"]
+  included_files = ["public/fonts/**", "node_modules/{harfbuzzjs/hb.wasm,satori/yoga.wasm}"]
+
+# API route rewrites to Netlify functions
+[[redirects]]
+  from = "/api/animation/frame"
+  to = "/.netlify/functions/frame"
+  status = 200
+
+[[redirects]]
+  from = "/api/animated/frame"
+  to = "/.netlify/functions/frame"
+  status = 200
+
+[[redirects]]
+  from = "/api/generate"
+  to = "/.netlify/functions/generate"
+  status = 200
+
+[[redirects]]
+  from = "/api/stats"
+  to = "/.netlify/functions/stats"
+  status = 200
+
+# Client-side routing fallback for SPA (/profile, /leaderboard, /quote, /animation, etc.)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

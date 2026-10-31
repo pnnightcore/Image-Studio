@@ -335,6 +335,33 @@ curl -X POST http://localhost:3000/api/generate \
 
 ---
 
+## 🚀 Deployment Guide (Vercel · Netlify · Cloudflare Pages)
+
+Image Studio supports 1-click deployment across all major hosting platforms:
+
+### 1. ▲ Vercel (Full-Stack Serverless)
+- **Zero-config deployment**: Connected automatically via `vercel.json`.
+- **API Functions**: Node.js Serverless Functions in `api/generate.ts`, `api/animation/frame.ts`, and `api/stats.ts`.
+- **Bundled Fonts & WASM**: `vercel.json` automatically includes HarfBuzz & Satori Yoga WASM + `public/fonts/**`.
+- **Build Command**: `npm run build` | **Output Directory**: `dist`
+
+### 2. 💠 Netlify (Full-Stack Functions)
+- **Configuration**: Powered by `netlify.toml`.
+- **Functions**: Located in `netlify/functions/` (`generate.ts`, `frame.ts`, `stats.ts`).
+- **Native Addon Bundling**: Sharp is marked as external with `esbuild`, and font assets + WASM files are packaged automatically.
+- **SPA Rewrites**: Redirects `/api/*` to functions and `/*` to `index.html` for client routing.
+- **Build Command**: `npm run build` | **Publish Directory**: `dist`
+
+### 3. 🟧 Cloudflare Pages (Edge SPA + Proxy)
+- **Static Assets & SPA Routing**: `public/_redirects` ensures seamless SPA client routing (`/* /index.html 200`), and `public/_headers` optimizes cache policies for fonts and images.
+- **Edge Function Routing**: `public/_routes.json` limits function executions to `/api/*`, leaving static assets on Cloudflare's global edge cache.
+- **Sharp/Backend Integration**: Cloudflare Workers/Pages run on V8 isolates (without native C++ Sharp). You can either:
+  1. Set environment variable **`BACKEND_API_URL`** (or **`VITE_API_URL`**) in Cloudflare Pages dashboard pointing to your Vercel, Netlify, or VPS deployment — `functions/api/[[path]].ts` will transparently reverse-proxy all `/api/*` requests with no CORS issues.
+  2. Or configure `public/_redirects` to proxy `/api/*` directly to your API server.
+- **Build Command**: `npm run build` | **Build Output Directory**: `dist`
+
+---
+
 ## 📄 License
 MIT License. Open source and ready for bot integrations and production workflows.
 

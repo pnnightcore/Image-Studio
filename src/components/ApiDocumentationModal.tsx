@@ -37,7 +37,14 @@ export function ApiDocumentationModal({ isOpen, onClose }: ApiDocumentationModal
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const currentOrigin = typeof window !== "undefined" ? window.location.origin : "http://localhost:3000";
+  const configuredApiBase =
+    typeof import.meta !== "undefined" &&
+    (import.meta.env?.VITE_API_URL || import.meta.env?.VITE_API_BASE_URL);
+  const currentOrigin = configuredApiBase
+    ? configuredApiBase.replace(/\/+$/, "")
+    : typeof window !== "undefined"
+    ? window.location.origin
+    : "http://localhost:3000";
 
   return (
     <div

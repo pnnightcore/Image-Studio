@@ -15,6 +15,7 @@ import {
   defaultQuoteData,
 } from "./lib/sample-data";
 import { useStats, recordGeneratedImage } from "./lib/use-stats";
+import { getApiUrl } from "./lib/api-config";
 import { GeneratorForm } from "./components/GeneratorForm";
 import { ImagePreview } from "./components/ImagePreview";
 import { ProfileForm } from "./components/ProfileForm";
@@ -208,7 +209,7 @@ export default function App() {
       }
 
       try {
-        const response = await fetch("/api/generate", {
+        const response = await fetch(getApiUrl("/api/generate"), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
