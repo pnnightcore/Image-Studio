@@ -24,6 +24,7 @@ export function QuotePreview({
 }: QuotePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number>(0.75);
+  const [zoomMode, setZoomMode] = useState<"fit" | "50" | "75" | "100">("fit");
   const [copied, setCopied] = useState<boolean>(false);
   const [imgError, setImgError] = useState<boolean>(false);
   const [previewPngUrl, setPreviewPngUrl] = useState<string | null>(null);
@@ -39,14 +40,22 @@ export function QuotePreview({
   useEffect(() => {
     function updateScale() {
       if (!containerRef.current) return;
-      const availableWidth = containerRef.current.clientWidth - 40;
-      const newScale = Math.min(1, Math.max(0.35, availableWidth / QUOTE_WIDTH));
-      setScale(newScale);
+      if (zoomMode === "100") {
+        setScale(1);
+      } else if (zoomMode === "75") {
+        setScale(0.75);
+      } else if (zoomMode === "50") {
+        setScale(0.5);
+      } else {
+        const availableWidth = containerRef.current.clientWidth - 48;
+        const newScale = Math.min(1, Math.max(0.35, availableWidth / QUOTE_WIDTH));
+        setScale(newScale);
+      }
     }
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  }, [zoomMode]);
 
   const handleCopyBlob = async () => {
     if (!lastGeneratedBlob) {
@@ -66,21 +75,42 @@ export function QuotePreview({
     }
   };
 
+  const layout = data.layout || "split-portrait";
+
   return (
-    <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0e0a1e]/90 shadow-2xl backdrop-blur-xl">
-      {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3.5">
+    <div className="flex flex-col rounded-xl border border-white/8 bg-[#0f1118] shadow-2xl overflow-hidden">
+      {/* Studio Stage Header Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-3 bg-[#0a0c10]/60">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-indigo-400 shadow-sm shadow-indigo-400/50" />
-            <h3 className="text-sm font-semibold text-white">Quote Card Preview</h3>
+            <span className="h-2 w-2 rounded-full bg-sky-400" />
+            <h3 className="font-['Space_Grotesk',sans-serif] text-xs font-bold uppercase tracking-wider text-white">
+              Quote Stage Viewport
+            </h3>
           </div>
-          <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-xs text-indigo-300">
-            {QUOTE_WIDTH} × {QUOTE_HEIGHT} px
+          <span className="font-mono text-[10px] text-slate-300 rounded border border-white/10 bg-white/5 px-2 py-0.5">
+            {QUOTE_WIDTH} × {QUOTE_HEIGHT} PX · {layout.toUpperCase()}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Zoom Selector */}
+          <div className="flex items-center rounded-md border border-white/10 bg-[#090a0f] p-0.5 text-xs text-slate-300 font-mono">
+            {(["fit", "50", "75", "100"] as const).map((z) => (
+              <button
+                key={z}
+                onClick={() => setZoomMode(z)}
+                className={`rounded px-2 py-0.5 text-[11px] transition-colors ${
+                  zoomMode === z
+                    ? "bg-[#1d2232] text-white font-semibold"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {z === "fit" ? "Fit" : `${z}%`}
+              </button>
+            ))}
+          </div>
+
           {/* Particle System Ambience Selector */}
           {onParticleConfigChange && (
             <ParticleOverlayButton
@@ -92,28 +122,28 @@ export function QuotePreview({
           {lastGeneratedBlob && (
             <button
               onClick={handleCopyBlob}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/10"
+              className="flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-200 hover:bg-white/10 transition tactile-press"
               title="Copy image to clipboard"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-              <span>{copied ? "Copied!" : "Copy"}</span>
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
           )}
 
           <button
             onClick={onGenerate}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-1.5 text-xs font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-md bg-[#ff462b] px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-[#ea381f] disabled:opacity-40 transition-all tactile-press"
           >
             {isGenerating ? (
               <>
-                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <span>Exporting...</span>
               </>
             ) : (
               <>
                 <Download className="h-3.5 w-3.5" />
-                <span>Export PNG</span>
+                <span>Render</span>
               </>
             )}
           </button>
@@ -123,14 +153,10 @@ export function QuotePreview({
       {/* Canvas Viewport */}
       <div
         ref={containerRef}
-        className="relative flex min-h-[460px] flex-1 items-center justify-center overflow-auto p-6"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 70%), #06040d",
-        }}
+        className="relative flex min-h-[460px] flex-1 items-center justify-center overflow-auto p-6 bg-studio-stage"
       >
         <div
-          className="transition-transform duration-150 ease-out origin-center"
+          className="transition-transform duration-150 ease-out origin-center shadow-2xl"
           style={{
             transform: `scale(${scale})`,
             width: `${QUOTE_WIDTH}px`,
@@ -170,8 +196,8 @@ export function QuotePreview({
                       crossOrigin="anonymous"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-zinc-950 text-indigo-400">
-                      <QuoteIcon className="h-24 w-24 opacity-30" />
+                    <div className="flex h-full w-full items-center justify-center bg-zinc-950 text-sky-400">
+                      <QuoteIcon className="h-20 w-20 opacity-30" />
                     </div>
                   )}
                   <div
@@ -188,17 +214,17 @@ export function QuotePreview({
                   <h1 className="max-w-[460px] text-[36px] font-normal leading-[48px] text-white">
                     {data.quote || "Quote text"}
                   </h1>
-                  <div className="mt-[24px] text-[24px] italic text-white">
+                  <div className="mt-[24px] text-[24px] italic text-white font-['Space_Grotesk',sans-serif]">
                     - {data.author || "Author"}
                   </div>
-                  <div className="mt-[6px] text-[17px] text-[#9ca3af]">
+                  <div className="mt-[6px] text-[17px] text-[#9ca3af] font-mono">
                     {data.handle || "@handle"}
                   </div>
                 </div>
 
                 {/* Watermark Tag Bottom Right */}
                 <div className="absolute bottom-[16px] right-[24px] z-20 font-mono text-[14px] text-[#4b5563]">
-                  {data.tag || "Ziji#9575"}
+                  {data.tag || "IMAGE_STUDIO"}
                 </div>
               </div>
             )}
@@ -214,7 +240,7 @@ export function QuotePreview({
               >
                 {/* Background ambient quotation mark */}
                 <div
-                  className="pointer-events-none absolute select-none font-serif text-[200px] font-bold text-indigo-500/10 leading-none"
+                  className="pointer-events-none absolute select-none font-serif text-[200px] font-bold text-sky-500/10 leading-none"
                   style={{ top: "40px" }}
                 >
                   “
@@ -222,7 +248,7 @@ export function QuotePreview({
 
                 {/* Top Avatar */}
                 <div className="relative z-10 mb-5">
-                  <div className="h-[96px] w-[96px] rounded-full p-[3px] bg-gradient-to-tr from-indigo-500 via-purple-400 to-pink-500 shadow-xl shadow-indigo-500/25">
+                  <div className="h-[96px] w-[96px] rounded-full p-[3px] bg-gradient-to-tr from-sky-500 via-indigo-400 to-rose-400 shadow-xl shadow-sky-500/20">
                     <img
                       src={data.avatar}
                       alt={data.author}
@@ -238,17 +264,17 @@ export function QuotePreview({
                 </div>
 
                 {/* Elegant separator */}
-                <div className="my-5 h-[2px] w-[90px] bg-gradient-to-r from-transparent via-indigo-400/60 to-transparent" />
+                <div className="my-5 h-[2px] w-[90px] bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
 
                 {/* Author Info */}
                 <div className="relative z-10 flex flex-col items-center gap-1">
-                  <div className="text-[22px] font-semibold text-indigo-200">
+                  <div className="text-[22px] font-semibold text-sky-200 font-['Space_Grotesk',sans-serif]">
                     {data.author || "Author"}
                   </div>
-                  <div className="flex items-center gap-2 text-[14px] text-slate-400">
+                  <div className="flex items-center gap-2 text-[14px] text-slate-400 font-mono">
                     <span>{data.handle || "@handle"}</span>
                     <span>·</span>
-                    <span className="font-mono text-indigo-300/80">{data.tag || "Verified"}</span>
+                    <span className="text-sky-300/80">{data.tag || "Editorial"}</span>
                   </div>
                 </div>
               </div>
@@ -286,16 +312,16 @@ export function QuotePreview({
                       />
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[20px] font-bold text-white">{data.author}</span>
-                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500 text-[11px] text-white">
+                          <span className="text-[20px] font-bold text-white font-['Space_Grotesk',sans-serif]">{data.author}</span>
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[11px] text-white">
                             ✓
                           </span>
                         </div>
-                        <span className="text-[13px] text-indigo-300">{data.handle}</span>
+                        <span className="text-[13px] text-sky-300 font-mono">{data.handle}</span>
                       </div>
                     </div>
 
-                    <div className="rounded-full border border-indigo-400/30 bg-indigo-500/15 px-3.5 py-1 text-xs font-mono font-medium text-indigo-200">
+                    <div className="rounded border border-sky-400/30 bg-sky-500/15 px-3 py-1 text-xs font-mono font-medium text-sky-200">
                       {data.tag || "QUOTE"}
                     </div>
                   </div>
@@ -308,9 +334,9 @@ export function QuotePreview({
                   </div>
 
                   {/* Card Footer */}
-                  <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-slate-400">
-                    <span className="font-mono text-slate-500">Image Studio Quote · Authenticated</span>
-                    <span className="font-mono text-indigo-400">{data.tag}</span>
+                  <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-slate-400 font-mono">
+                    <span className="text-slate-500">Image Studio Editorial · Authenticated</span>
+                    <span className="text-sky-400">{data.tag}</span>
                   </div>
                 </div>
               </div>
@@ -319,7 +345,7 @@ export function QuotePreview({
             {/* 4. Layout: Neon Cyber */}
             {data.layout === "neon-cyber" && (
               <div
-                className="relative flex h-full w-full flex-col justify-between p-10 overflow-hidden font-sans border-2 border-cyan-400/50"
+                className="relative flex h-full w-full flex-col justify-between p-10 overflow-hidden font-mono border-2 border-cyan-400/50"
                 style={{
                   background:
                     "radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(192, 132, 252, 0.15) 0%, transparent 50%), #040711",
@@ -342,9 +368,9 @@ export function QuotePreview({
                 <div className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b-2 border-r-2 border-cyan-400" />
 
                 {/* Top Status Header */}
-                <div className="relative z-10 flex items-center justify-between border-b border-cyan-500/30 pb-3 font-mono text-xs">
+                <div className="relative z-10 flex items-center justify-between border-b border-cyan-500/30 pb-3 text-xs">
                   <div className="flex items-center gap-2 text-cyan-400">
-                    <span className="inline-block h-2 w-2 rounded-full bg-cyan-400 animate-pulse shadow-sm shadow-cyan-400" />
+                    <span className="inline-block h-2 w-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400" />
                     <span>TERMINAL_SPEECH // STREAM_ACTIVE</span>
                   </div>
                   <span className="text-fuchsia-400 tracking-widest">{data.tag || "CYBER_ID"}</span>
@@ -362,14 +388,14 @@ export function QuotePreview({
                         crossOrigin="anonymous"
                       />
                     </div>
-                    <div className="absolute -bottom-2 -right-2 rounded bg-cyan-500 px-1.5 py-0.5 font-mono text-[10px] font-bold text-black">
+                    <div className="absolute -bottom-2 -right-2 rounded bg-cyan-500 px-1.5 py-0.5 text-[10px] font-bold text-black">
                       REC
                     </div>
                   </div>
 
                   {/* Speech Terminal Body */}
                   <div className="flex-1 space-y-3">
-                    <div className="font-mono text-xs text-cyan-400/80 tracking-wide">
+                    <div className="text-xs text-cyan-400/80 tracking-wide">
                       &gt; INPUT_LOG_PROMPT:
                     </div>
                     <p
@@ -379,18 +405,18 @@ export function QuotePreview({
                       "{data.quote || "Quote text"}"
                     </p>
                     <div className="flex items-center gap-3 pt-2">
-                      <span className="font-mono text-[18px] font-bold text-cyan-300">
+                      <span className="text-[18px] font-bold text-cyan-300">
                         // {data.author}
                       </span>
-                      <span className="font-mono text-xs text-fuchsia-400">
+                      <span className="text-xs text-fuchsia-400">
                         {data.handle}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Bottom Soundwave / Equalizer Telemetry */}
-                <div className="relative z-10 flex items-center justify-between border-t border-cyan-500/30 pt-3 font-mono text-[11px] text-cyan-400/70">
+                {/* Bottom Soundwave Telemetry */}
+                <div className="relative z-10 flex items-center justify-between border-t border-cyan-500/30 pt-3 text-[11px] text-cyan-400/70">
                   <div className="flex items-center gap-1">
                     {[12, 18, 8, 22, 14, 26, 10, 16, 24, 12, 19, 9, 23, 15, 27].map((h, i) => (
                       <span
@@ -408,17 +434,17 @@ export function QuotePreview({
         </div>
       </div>
 
-      {/* Bottom Info Bar */}
-      <div className="flex items-center justify-between border-t border-white/8 bg-black/30 px-5 py-2.5 text-xs text-slate-400">
-        <span>Discord Bot Speech Quote Banner</span>
+      {/* Bottom Telemetry Bar */}
+      <div className="flex items-center justify-between border-t border-white/8 bg-[#0a0c10]/80 px-4 py-2.5 text-xs text-slate-400 font-mono">
+        <span>Quote Engine: <strong className="text-white font-mono">{QUOTE_WIDTH} × {QUOTE_HEIGHT} PX</strong> · Author: <strong className="text-sky-300">{data.author}</strong></span>
         {previewPngUrl && (
           <a
             href={previewPngUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1 text-indigo-400 hover:text-indigo-300"
+            className="flex items-center gap-1 text-[#ff462b] hover:underline"
           >
-            <span>Open exported image</span>
+            <span>Inspect Raw PNG Buffer</span>
             <ExternalLink className="h-3 w-3" />
           </a>
         )}

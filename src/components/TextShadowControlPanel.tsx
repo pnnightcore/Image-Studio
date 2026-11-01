@@ -26,21 +26,21 @@ interface TextShadowControlPanelProps {
 const SHADOW_COLOR_SWATCHES = [
   { name: "Black 85%", hex: "rgba(0, 0, 0, 0.85)" },
   { name: "Pure Black", hex: "#000000" },
-  { name: "Dark Purple", hex: "#1e1035" },
+  { name: "Dark Carbon", hex: "#0f1118" },
   { name: "Deep Navy", hex: "#030712" },
   { name: "Dark Red", hex: "#450a0a" },
-  { name: "Dark Gray", hex: "rgba(30, 41, 59, 0.9)" },
+  { name: "Dark Slate", hex: "rgba(30, 41, 59, 0.9)" },
 ];
 
 const GLOW_COLOR_SWATCHES = [
-  { name: "Purple", hex: "#c084fc" },
-  { name: "Cyan", hex: "#38bdf8" },
+  { name: "Vermilion", hex: "#ff462b" },
+  { name: "Amber", hex: "#f59e0b" },
   { name: "Gold", hex: "#facc15" },
-  { name: "Pink", hex: "#f43f5e" },
+  { name: "Crimson", hex: "#f43f5e" },
+  { name: "Cyan", hex: "#38bdf8" },
   { name: "Emerald", hex: "#34d399" },
+  { name: "Lime", hex: "#c8f049" },
   { name: "Pure White", hex: "#ffffff" },
-  { name: "Orange", hex: "#fb923c" },
-  { name: "Indigo", hex: "#818cf8" },
 ];
 
 export function TextShadowControlPanel({ element, onChange }: TextShadowControlPanelProps) {
@@ -127,7 +127,6 @@ export function TextShadowControlPanel({ element, onChange }: TextShadowControlP
     }
   };
 
-  // Sync drop shadow changes
   const updateShadow = (patch: Partial<CustomElement>) => {
     const shadowEnabled = patch.shadowEnabled !== undefined ? patch.shadowEnabled : (element.shadowEnabled ?? true);
     const glowEnabled = element.glowEnabled ?? false;
@@ -160,13 +159,12 @@ export function TextShadowControlPanel({ element, onChange }: TextShadowControlP
     });
   };
 
-  // Sync glow changes
   const updateGlow = (patch: Partial<CustomElement>) => {
     const glowEnabled = patch.glowEnabled !== undefined ? patch.glowEnabled : (element.glowEnabled ?? true);
     const shadowEnabled = element.shadowEnabled ?? false;
 
     const nextGlowBlur = patch.glowBlur !== undefined ? patch.glowBlur : (element.glowBlur ?? 14);
-    const nextGlowColor = patch.glowColor !== undefined ? patch.glowColor : (element.glowColor || "#c084fc");
+    const nextGlowColor = patch.glowColor !== undefined ? patch.glowColor : (element.glowColor || "#ff462b");
     const nextGlowIntensity = patch.glowIntensity !== undefined ? patch.glowIntensity : (element.glowIntensity || "medium");
 
     const combinedCss = buildTextShadowString({
@@ -191,7 +189,6 @@ export function TextShadowControlPanel({ element, onChange }: TextShadowControlP
     });
   };
 
-  // Copy CSS to clipboard
   const handleCopyCss = async () => {
     if (!currentTextShadow) return;
     await navigator.clipboard.writeText(`text-shadow: ${currentTextShadow};`);
@@ -209,108 +206,70 @@ export function TextShadowControlPanel({ element, onChange }: TextShadowControlP
       shadowBlur: 6,
       shadowColor: "rgba(0, 0, 0, 0.85)",
       glowBlur: 14,
-      glowColor: "#c084fc",
+      glowColor: "#ff462b",
       glowIntensity: "medium",
     });
   };
 
   return (
-    <div className="rounded-xl border border-purple-500/20 bg-purple-950/20 p-3 space-y-3">
+    <div className="rounded-xl border border-white/8 bg-[#0f1118] p-3 space-y-3 font-mono">
       {/* Section Header */}
-      <div className="flex items-center justify-between border-b border-purple-500/15 pb-2">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-200">
-          <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-          <span>Hiệu ứng Chữ: Đổ bóng & Phát sáng</span>
+      <div className="flex items-center justify-between border-b border-white/8 pb-2">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-white">
+          <Sparkles className="h-3.5 w-3.5 text-[#ff462b]" />
+          <span>Typographic Depth & Illumination</span>
         </div>
 
         {hasAnyEffect && (
           <button
             type="button"
             onClick={handleResetEffects}
-            className="flex items-center gap-1 text-[10px] text-red-400 hover:text-red-300 transition"
-            title="Xóa toàn bộ hiệu ứng bóng và glow"
+            className="flex items-center gap-1 text-[10px] text-red-400 hover:underline transition"
           >
             <RotateCcw className="h-2.5 w-2.5" />
-            <span>Tắt hiệu ứng</span>
+            <span>Reset FX</span>
           </button>
         )}
       </div>
 
       {/* Live Preview Pill */}
-      <div className="rounded-lg bg-black/60 border border-white/5 p-2 flex items-center justify-between gap-2 overflow-hidden">
+      <div className="rounded-lg bg-[#090a0f] border border-white/5 p-2 flex items-center justify-between gap-2 overflow-hidden">
         <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-          <Eye className="h-3 w-3 text-purple-400 flex-shrink-0" />
-          <span className="text-[10px] uppercase font-mono text-slate-500">Xem thử:</span>
+          <Eye className="h-3 w-3 text-[#ff462b] flex-shrink-0" />
+          <span className="text-[10px] uppercase text-slate-500">Preview:</span>
         </div>
         <div
-          className="text-sm font-bold truncate tracking-wide px-2 py-0.5"
+          className="text-xs font-bold truncate tracking-wide px-2 py-0.5"
           style={{
             color: element.color || "#ffffff",
             textShadow: currentTextShadow || "none",
           }}
         >
-          {element.content?.slice(0, 24) || "Aa Text Glow"}
+          {element.content?.slice(0, 24) || "Aa Visual Depth"}
         </div>
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="grid grid-cols-4 gap-1 p-0.5 rounded-lg bg-black/40 border border-white/5 text-[11px]">
-        <button
-          type="button"
-          onClick={() => setActiveTab("presets")}
-          className={`py-1 rounded-md transition font-medium ${
-            activeTab === "presets"
-              ? "bg-purple-600 text-white font-semibold shadow-sm"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          Preset
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("shadow")}
-          className={`flex items-center justify-center gap-1 py-1 rounded-md transition font-medium ${
-            activeTab === "shadow"
-              ? "bg-purple-600 text-white font-semibold shadow-sm"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          <Moon className="h-2.5 w-2.5" />
-          <span>Đổ bóng</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("glow")}
-          className={`flex items-center justify-center gap-1 py-1 rounded-md transition font-medium ${
-            activeTab === "glow"
-              ? "bg-purple-600 text-white font-semibold shadow-sm"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          <Sun className="h-2.5 w-2.5" />
-          <span>Phát sáng</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab("custom")}
-          className={`flex items-center justify-center gap-1 py-1 rounded-md transition font-medium ${
-            activeTab === "custom"
-              ? "bg-purple-600 text-white font-semibold shadow-sm"
-              : "text-slate-400 hover:text-white"
-          }`}
-        >
-          <Sliders className="h-2.5 w-2.5" />
-          <span>Mã CSS</span>
-        </button>
+      <div className="grid grid-cols-4 gap-1 p-0.5 rounded-lg bg-[#090a0f] border border-white/5 text-[11px]">
+        {(["presets", "shadow", "glow", "custom"] as const).map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+            className={`py-1 rounded capitalize transition font-medium ${
+              activeTab === tab
+                ? "bg-[#1d2232] text-white font-semibold shadow-sm"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
       {/* TAB 1: PRESETS */}
       {activeTab === "presets" && (
         <div className="space-y-2">
-          <div className="text-[10px] text-slate-400 font-medium">
-            Bấm 1 chạm để áp dụng hiệu ứng có sẵn:
-          </div>
-
           <div className="grid grid-cols-2 gap-1.5 max-h-[220px] overflow-y-auto pr-0.5">
             {TEXT_SHADOW_PRESETS.map((p) => {
               const isActive =
@@ -324,19 +283,18 @@ export function TextShadowControlPanel({ element, onChange }: TextShadowControlP
                   onClick={() => handleApplyPreset(p)}
                   className={`group relative flex flex-col items-start gap-1 rounded-lg border p-2 text-left transition ${
                     isActive
-                      ? "border-purple-400 bg-purple-900/50 ring-1 ring-purple-400 shadow-md"
-                      : "border-white/10 bg-black/40 hover:border-purple-500/40 hover:bg-purple-950/30"
+                      ? "border-[#ff462b]/60 bg-[#161a26] text-white shadow-sm"
+                      : "border-white/5 bg-[#090a0f] hover:border-white/15"
                   }`}
                   title={p.description}
                 >
                   <div className="flex w-full items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-200 group-hover:text-white">
+                    <span className="text-[10px] font-semibold text-slate-200">
                       {p.name}
                     </span>
-                    {isActive && <Check className="h-3 w-3 text-purple-300" />}
+                    {isActive && <Check className="h-3 w-3 text-[#ff462b]" />}
                   </div>
 
-                  {/* Visual sample inside preset button */}
                   <div
                     className="text-xs font-bold truncate max-w-full px-1"
                     style={{
@@ -355,323 +313,122 @@ export function TextShadowControlPanel({ element, onChange }: TextShadowControlP
 
       {/* TAB 2: DROP SHADOW */}
       {activeTab === "shadow" && (
-        <div className="space-y-3">
-          {/* Shadow toggle */}
-          <div className="flex items-center justify-between bg-black/30 p-2 rounded-lg border border-white/5">
-            <div className="flex items-center gap-1.5 text-xs text-slate-300 font-medium">
-              <Moon className="h-3.5 w-3.5 text-purple-400" />
-              <span>Bật Đổ Bóng (Drop Shadow)</span>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={element.shadowEnabled ?? false}
-                onChange={(e) => updateShadow({ shadowEnabled: e.target.checked })}
-                className="sr-only peer"
-              />
-              <div className="w-8 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-600" />
-            </label>
+        <div className="space-y-3 font-mono text-[11px]">
+          <div className="flex items-center justify-between bg-[#090a0f] p-2 rounded-lg border border-white/5">
+            <span className="text-slate-300 font-medium">Drop Shadow Enabled</span>
+            <input
+              type="checkbox"
+              checked={element.shadowEnabled ?? false}
+              onChange={(e) => updateShadow({ shadowEnabled: e.target.checked })}
+              className="accent-[#ff462b] cursor-pointer"
+            />
           </div>
 
-          {(element.shadowEnabled ?? false) ? (
-            <div className="space-y-2.5 pt-1">
-              {/* Offset X Slider */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-slate-400">
-                  <span>Độ lệch ngang X (Offset X)</span>
-                  <span className="font-mono text-purple-300">{element.shadowOffsetX ?? 2}px</span>
-                </div>
+          <div className="space-y-2">
+            <div className="space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>Blur Radius</span>
+                <span className="text-white">{element.shadowBlur ?? 6}px</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={40}
+                value={element.shadowBlur ?? 6}
+                onChange={(e) => updateShadow({ shadowBlur: parseInt(e.target.value, 10) })}
+                className="h-1 w-full accent-[#ff462b] bg-white/10 rounded cursor-pointer"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <span className="text-slate-400">Offset X</span>
                 <input
-                  type="range"
-                  min="-30"
-                  max="30"
-                  step="1"
+                  type="number"
                   value={element.shadowOffsetX ?? 2}
-                  onChange={(e) => updateShadow({ shadowOffsetX: Number(e.target.value) })}
-                  className="w-full accent-purple-500"
+                  onChange={(e) => updateShadow({ shadowOffsetX: parseInt(e.target.value, 10) || 0 })}
+                  className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2 py-1 text-xs text-white"
                 />
               </div>
-
-              {/* Offset Y Slider */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-slate-400">
-                  <span>Độ lệch dọc Y (Offset Y)</span>
-                  <span className="font-mono text-purple-300">{element.shadowOffsetY ?? 3}px</span>
-                </div>
+              <div>
+                <span className="text-slate-400">Offset Y</span>
                 <input
-                  type="range"
-                  min="-30"
-                  max="30"
-                  step="1"
+                  type="number"
                   value={element.shadowOffsetY ?? 3}
-                  onChange={(e) => updateShadow({ shadowOffsetY: Number(e.target.value) })}
-                  className="w-full accent-purple-500"
+                  onChange={(e) => updateShadow({ shadowOffsetY: parseInt(e.target.value, 10) || 0 })}
+                  className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2 py-1 text-xs text-white"
                 />
               </div>
-
-              {/* Blur Radius Slider */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-slate-400">
-                  <span>Độ nhòe bóng (Blur Radius)</span>
-                  <span className="font-mono text-purple-300">{element.shadowBlur ?? 6}px</span>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="40"
-                  step="1"
-                  value={element.shadowBlur ?? 6}
-                  onChange={(e) => updateShadow({ shadowBlur: Number(e.target.value) })}
-                  className="w-full accent-purple-500"
-                />
-              </div>
-
-              {/* Shadow Color Control */}
-              <div className="space-y-1.5 pt-1">
-                <div className="flex items-center justify-between text-[11px] text-slate-400">
-                  <span>Màu bóng (Shadow Color)</span>
-                  <button
-                    type="button"
-                    onClick={() => setShowShadowSwatches((v) => !v)}
-                    className="flex items-center gap-1 text-[10px] text-purple-400 hover:text-purple-300"
-                  >
-                    <Palette className="h-3 w-3" />
-                    <span>Màu nhanh</span>
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <label
-                    className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-white/20 shadow-inner flex-shrink-0"
-                    style={{ backgroundColor: element.shadowColor || "#000000" }}
-                    title="Bấm để chọn màu bóng"
-                  >
-                    <input
-                      type="color"
-                      value={element.shadowColor && element.shadowColor.startsWith("#") ? element.shadowColor : "#000000"}
-                      onChange={(e) => updateShadow({ shadowColor: e.target.value })}
-                      className="absolute inset-0 h-full w-full opacity-0 cursor-pointer"
-                    />
-                  </label>
-                  <input
-                    type="text"
-                    value={element.shadowColor || "rgba(0, 0, 0, 0.85)"}
-                    onChange={(e) => updateShadow({ shadowColor: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-black/40 px-2 py-1 text-xs text-white font-mono outline-none focus:border-purple-500"
-                  />
-                </div>
-
-                {showShadowSwatches && (
-                  <div className="rounded-lg border border-white/10 bg-black/70 p-2 space-y-1">
-                    <span className="text-[10px] text-slate-400">Tông màu bóng tối ưu:</span>
-                    <div className="grid grid-cols-3 gap-1">
-                      {SHADOW_COLOR_SWATCHES.map((sw) => (
-                        <button
-                          key={sw.name}
-                          type="button"
-                          onClick={() => {
-                            updateShadow({ shadowColor: sw.hex });
-                            setShowShadowSwatches(false);
-                          }}
-                          className="flex items-center gap-1 px-1.5 py-1 rounded bg-white/5 hover:bg-white/10 text-[10px] text-slate-300 truncate"
-                        >
-                          <span
-                            className="h-2.5 w-2.5 rounded-full border border-white/20 flex-shrink-0"
-                            style={{ backgroundColor: sw.hex }}
-                          />
-                          <span className="truncate">{sw.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
-          ) : (
-            <div className="text-[11px] text-slate-400 text-center py-2 bg-black/20 rounded-lg">
-              Bật công tắc phía trên để chỉnh độ lệch X, Y, độ nhòe và màu đổ bóng.
-            </div>
-          )}
+          </div>
         </div>
       )}
 
-      {/* TAB 3: OUTER GLOW */}
+      {/* TAB 3: GLOW */}
       {activeTab === "glow" && (
-        <div className="space-y-3">
-          {/* Glow toggle */}
-          <div className="flex items-center justify-between bg-black/30 p-2 rounded-lg border border-white/5">
-            <div className="flex items-center gap-1.5 text-xs text-slate-300 font-medium">
-              <Sun className="h-3.5 w-3.5 text-amber-400" />
-              <span>Bật Phát Sáng (Outer Glow)</span>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={element.glowEnabled ?? false}
-                onChange={(e) => updateGlow({ glowEnabled: e.target.checked })}
-                className="sr-only peer"
-              />
-              <div className="w-8 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-600" />
-            </label>
+        <div className="space-y-3 font-mono text-[11px]">
+          <div className="flex items-center justify-between bg-[#090a0f] p-2 rounded-lg border border-white/5">
+            <span className="text-slate-300 font-medium">Luminous Glow Enabled</span>
+            <input
+              type="checkbox"
+              checked={element.glowEnabled ?? false}
+              onChange={(e) => updateGlow({ glowEnabled: e.target.checked })}
+              className="accent-[#ff462b] cursor-pointer"
+            />
           </div>
 
-          {(element.glowEnabled ?? false) ? (
-            <div className="space-y-2.5 pt-1">
-              {/* Glow Radius Slider */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-slate-400">
-                  <span>Bán kính hào quang (Glow Radius)</span>
-                  <span className="font-mono text-purple-300">{element.glowBlur ?? 14}px</span>
-                </div>
-                <input
-                  type="range"
-                  min="2"
-                  max="50"
-                  step="1"
-                  value={element.glowBlur ?? 14}
-                  onChange={(e) => updateGlow({ glowBlur: Number(e.target.value) })}
-                  className="w-full accent-purple-500"
-                />
+          <div className="space-y-2">
+            <div className="space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>Glow Diffusion</span>
+                <span className="text-white">{element.glowBlur ?? 14}px</span>
               </div>
+              <input
+                type="range"
+                min={2}
+                max={60}
+                value={element.glowBlur ?? 14}
+                onChange={(e) => updateGlow({ glowBlur: parseInt(e.target.value, 10) })}
+                className="h-1 w-full accent-[#ff462b] bg-white/10 rounded cursor-pointer"
+              />
+            </div>
 
-              {/* Glow Intensity Segmented Button */}
-              <div className="space-y-1">
-                <label className="text-[11px] text-slate-400">Cường độ phát sáng (Intensity)</label>
-                <div className="grid grid-cols-3 gap-1 text-[10px] p-0.5 bg-black/40 rounded-lg border border-white/5">
+            <div>
+              <span className="text-slate-400 mb-1 block">Glow Palette</span>
+              <div className="grid grid-cols-4 gap-1">
+                {GLOW_COLOR_SWATCHES.map((swatch) => (
                   <button
+                    key={swatch.hex}
                     type="button"
-                    onClick={() => updateGlow({ glowIntensity: "soft" })}
-                    className={`py-1 rounded transition font-medium ${
-                      (element.glowIntensity || "medium") === "soft"
-                        ? "bg-purple-600 text-white font-semibold"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    Dịu nhẹ (Soft)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateGlow({ glowIntensity: "medium" })}
-                    className={`py-1 rounded transition font-medium ${
-                      (element.glowIntensity || "medium") === "medium"
-                        ? "bg-purple-600 text-white font-semibold"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    Vừa (Medium)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateGlow({ glowIntensity: "neon" })}
-                    className={`py-1 rounded transition font-medium ${
-                      element.glowIntensity === "neon"
-                        ? "bg-purple-600 text-white font-semibold"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    Siêu Neon
-                  </button>
-                </div>
-              </div>
-
-              {/* Glow Color Control */}
-              <div className="space-y-1.5 pt-1">
-                <div className="flex items-center justify-between text-[11px] text-slate-400">
-                  <span>Màu hào quang (Glow Color)</span>
-                  <button
-                    type="button"
-                    onClick={() => setShowGlowSwatches((v) => !v)}
-                    className="flex items-center gap-1 text-[10px] text-purple-400 hover:text-purple-300"
-                  >
-                    <Palette className="h-3 w-3" />
-                    <span>Màu nhanh</span>
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <label
-                    className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-white/20 shadow-inner flex-shrink-0"
-                    style={{ backgroundColor: element.glowColor || "#c084fc" }}
-                    title="Bấm để chọn màu phát sáng"
-                  >
-                    <input
-                      type="color"
-                      value={element.glowColor && element.glowColor.startsWith("#") ? element.glowColor : "#c084fc"}
-                      onChange={(e) => updateGlow({ glowColor: e.target.value })}
-                      className="absolute inset-0 h-full w-full opacity-0 cursor-pointer"
-                    />
-                  </label>
-                  <input
-                    type="text"
-                    value={element.glowColor || "#c084fc"}
-                    onChange={(e) => updateGlow({ glowColor: e.target.value })}
-                    className="w-full rounded-lg border border-white/10 bg-black/40 px-2 py-1 text-xs text-white font-mono outline-none focus:border-purple-500"
+                    onClick={() => updateGlow({ glowColor: swatch.hex })}
+                    className="h-6 rounded border border-white/10 text-[9px] font-bold text-black"
+                    style={{ backgroundColor: swatch.hex }}
                   />
-                </div>
-
-                {showGlowSwatches && (
-                  <div className="rounded-lg border border-white/10 bg-black/70 p-2 space-y-1">
-                    <span className="text-[10px] text-slate-400">Hào quang thịnh hành:</span>
-                    <div className="grid grid-cols-4 gap-1">
-                      {GLOW_COLOR_SWATCHES.map((gw) => (
-                        <button
-                          key={gw.name}
-                          type="button"
-                          onClick={() => {
-                            updateGlow({ glowColor: gw.hex });
-                            setShowGlowSwatches(false);
-                          }}
-                          className="flex items-center gap-1 p-1 rounded bg-white/5 hover:bg-white/10 text-[10px] text-slate-300"
-                          title={gw.name}
-                        >
-                          <span
-                            className="h-2.5 w-2.5 rounded-full border border-white/20 flex-shrink-0"
-                            style={{ backgroundColor: gw.hex }}
-                          />
-                          <span className="truncate">{gw.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                ))}
               </div>
             </div>
-          ) : (
-            <div className="text-[11px] text-slate-400 text-center py-2 bg-black/20 rounded-lg">
-              Bật công tắc phía trên để tùy chỉnh bán kính hào quang, màu sắc và mức độ phát sáng.
-            </div>
-          )}
+          </div>
         </div>
       )}
 
-      {/* TAB 4: CUSTOM CSS */}
+      {/* TAB 4: RAW CSS */}
       {activeTab === "custom" && (
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between text-[11px] text-slate-400">
-            <span>Chuỗi CSS `text-shadow`:</span>
-            {currentTextShadow && (
-              <button
-                type="button"
-                onClick={handleCopyCss}
-                className="flex items-center gap-1 text-[10px] text-purple-400 hover:text-purple-300"
-              >
-                {copiedCss ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
-                <span>{copiedCss ? "Đã chép!" : "Chép CSS"}</span>
-              </button>
-            )}
-          </div>
-
+        <div className="space-y-2 font-mono">
           <textarea
-            rows={3}
             value={currentTextShadow}
             onChange={(e) => onChange({ textShadow: e.target.value })}
-            placeholder="Ví dụ: 0 0 10px #c084fc, 2px 3px 6px rgba(0,0,0,0.8)"
-            className="w-full rounded-lg border border-white/10 bg-black/50 p-2 text-xs text-white font-mono outline-none focus:border-purple-500 resize-none"
+            rows={3}
+            className="w-full rounded border border-white/10 bg-[#090a0f] p-2 text-xs text-amber-200"
+            placeholder="e.g. 2px 2px 4px rgba(0,0,0,0.8)"
           />
-
-          <div className="text-[10px] text-slate-500 leading-relaxed">
-            💡 Bạn có thể dán trực tiếp bất kỳ cú pháp <code className="text-purple-300 font-mono">text-shadow</code> nào từ Figma, Photoshop hoặc CSS. Satori và Canvas Studio sẽ tự động kết xuất chuẩn xác khi xuất GIF / WebP / PNG!
-          </div>
+          <button
+            type="button"
+            onClick={handleCopyCss}
+            className="flex items-center gap-1 rounded bg-white/5 border border-white/10 px-2.5 py-1 text-[10px] text-slate-300 hover:text-white"
+          >
+            {copiedCss ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+            <span>{copiedCss ? "CSS Copied" : "Copy CSS Property"}</span>
+          </button>
         </div>
       )}
     </div>

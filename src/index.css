@@ -1,1 +1,97 @@
 @import "tailwindcss";
+
+@theme {
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-brand: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --color-studio-void: #090a0f;
+  --color-studio-obsidian: #0f1117;
+  --color-studio-steel: #141722;
+  --color-studio-panel: #1a1e2b;
+  --color-studio-card: #12151e;
+  --color-studio-hairline: rgba(255, 255, 255, 0.07);
+  --color-studio-border: rgba(255, 255, 255, 0.12);
+  --color-studio-vermilion: #ff462b;
+  --color-studio-amber: #f59e0b;
+  --color-studio-crimson: #e11d48;
+  --color-studio-gold: #eab308;
+  --color-studio-cyan: #0284c7;
+  --color-studio-lime: #c8f049;
+}
+
+/* Base resets & typography */
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #232838;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #394158;
+}
+
+/* Studio Precision Grid Background */
+.bg-studio-grid {
+  background-color: #090a0f;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Studio Stage Dot Pattern */
+.bg-studio-stage {
+  background-color: #0c0e14;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
+  background-size: 20px 20px;
+  background-position: -1px -1px;
+}
+
+/* Subtle architectural hairline */
+.hairline-b {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.hairline-t {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.hairline-r {
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+.hairline-l {
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Tactile physical button press */
+.tactile-press {
+  transition: transform 0.08s ease, filter 0.15s ease, background-color 0.15s ease;
+}
+.tactile-press:active {
+  transform: translateY(1px);
+}
+
+/* Focus styles for inputs & buttons */
+input:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1.5px #ff462b, 0 0 16px rgba(255, 70, 43, 0.2);
+}
+
+/* Number tabular alignment */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

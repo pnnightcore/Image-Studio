@@ -24,8 +24,8 @@ export function ProfilePreview({
 }: ProfilePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number>(0.75);
+  const [zoomMode, setZoomMode] = useState<"fit" | "50" | "75" | "100">("fit");
   const [copied, setCopied] = useState<boolean>(false);
-  const [imgError, setImgError] = useState<boolean>(false);
   const [previewPngUrl, setPreviewPngUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,14 +39,22 @@ export function ProfilePreview({
   useEffect(() => {
     function updateScale() {
       if (!containerRef.current) return;
-      const availableWidth = containerRef.current.clientWidth - 40;
-      const newScale = Math.min(1, Math.max(0.35, availableWidth / PROFILE_WIDTH));
-      setScale(newScale);
+      if (zoomMode === "100") {
+        setScale(1);
+      } else if (zoomMode === "75") {
+        setScale(0.75);
+      } else if (zoomMode === "50") {
+        setScale(0.5);
+      } else {
+        const availableWidth = containerRef.current.clientWidth - 48;
+        const newScale = Math.min(1, Math.max(0.35, availableWidth / PROFILE_WIDTH));
+        setScale(newScale);
+      }
     }
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  }, [zoomMode]);
 
   const handleCopyBlob = async () => {
     if (!lastGeneratedBlob) {
@@ -73,114 +81,40 @@ export function ProfilePreview({
 
   const theme = data.theme || "ruby-poly";
 
-  // Visual Theme Configuration
-  const themeStyles = {
-    "ruby-poly": {
-      cardBg: "linear-gradient(135deg, #090210 0%, #1a031e 30%, #3d0728 65%, #630c33 100%)",
-      shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(225, 29, 72, 0.25)",
-      border: "1px solid rgba(244, 63, 94, 0.25)",
-      avatarBorder: "linear-gradient(135deg, rgba(244, 63, 94, 0.8), rgba(255, 255, 255, 0.3))",
-      avatarRadius: "rounded-full",
-      avatarImgRadius: "rounded-full",
-      primaryText: "#f43f5e",
-      secondaryText: "#a1a1aa",
-      progressBg: "#3e4147",
-      progressFill: "linear-gradient(90deg, #f43f5e, #fb7185)",
-      badgeBg: "rgba(244, 63, 94, 0.15)",
-      badgeBorder: "1px solid rgba(244, 63, 94, 0.4)",
-      badgeColor: "#fb7185",
-      statsColor: "#f43f5e",
-      shape1: "linear-gradient(45deg, rgba(225, 29, 72, 0.25), rgba(159, 18, 57, 0.05))",
-      shape2: "linear-gradient(135deg, rgba(136, 19, 55, 0.3), transparent)",
-    },
-    "cyber-neon": {
-      cardBg: "radial-gradient(circle at 85% 15%, rgba(192, 132, 252, 0.2) 0%, transparent 60%), linear-gradient(135deg, #050816 0%, #0c1024 50%, #160e29 100%)",
-      shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.3)",
-      border: "2px solid rgba(56, 189, 248, 0.45)",
-      avatarBorder: "linear-gradient(135deg, #38bdf8, #c084fc)",
-      avatarRadius: "rounded-[24px]",
-      avatarImgRadius: "rounded-[20px]",
-      primaryText: "#38bdf8",
-      secondaryText: "#94a3b8",
-      progressBg: "#111827",
-      progressFill: "linear-gradient(90deg, #38bdf8, #c084fc)",
-      badgeBg: "rgba(56, 189, 248, 0.15)",
-      badgeBorder: "1px solid rgba(56, 189, 248, 0.5)",
-      badgeColor: "#38bdf8",
-      statsColor: "#e879f9",
-      shape1: "linear-gradient(45deg, rgba(56, 189, 248, 0.2), transparent)",
-      shape2: "linear-gradient(135deg, rgba(192, 132, 252, 0.25), transparent)",
-    },
-    "glass-minimal": {
-      cardBg: "radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.2) 0%, transparent 50%), linear-gradient(135deg, #021a14 0%, #06241c 50%, #0a1b24 100%)",
-      shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.85), 0 0 30px rgba(16, 185, 129, 0.2)",
-      border: "1px solid rgba(52, 211, 153, 0.35)",
-      avatarBorder: "linear-gradient(135deg, rgba(52, 211, 153, 0.8), rgba(255, 255, 255, 0.3))",
-      avatarRadius: "rounded-full",
-      avatarImgRadius: "rounded-full",
-      primaryText: "#34d399",
-      secondaryText: "#a7f3d0",
-      progressBg: "rgba(0, 0, 0, 0.45)",
-      progressFill: "linear-gradient(90deg, #10b981, #6ee7b7)",
-      badgeBg: "rgba(16, 185, 129, 0.15)",
-      badgeBorder: "1px solid rgba(52, 211, 153, 0.4)",
-      badgeColor: "#6ee7b7",
-      statsColor: "#34d399",
-      shape1: "linear-gradient(45deg, rgba(16, 185, 129, 0.15), transparent)",
-      shape2: "linear-gradient(135deg, rgba(45, 212, 191, 0.15), transparent)",
-    },
-    "gold-legend": {
-      cardBg: "radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.25) 0%, transparent 60%), linear-gradient(135deg, #140d02 0%, #261a05 45%, #181003 100%)",
-      shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 35px rgba(245, 158, 11, 0.35)",
-      border: "2px solid rgba(245, 158, 11, 0.5)",
-      avatarBorder: "linear-gradient(135deg, #fef08a, #f59e0b)",
-      avatarRadius: "rounded-full",
-      avatarImgRadius: "rounded-full",
-      primaryText: "#fbbf24",
-      secondaryText: "#fed7aa",
-      progressBg: "rgba(0, 0, 0, 0.5)",
-      progressFill: "linear-gradient(90deg, #f59e0b, #fef08a)",
-      badgeBg: "rgba(245, 158, 11, 0.2)",
-      badgeBorder: "1px solid rgba(245, 158, 11, 0.6)",
-      badgeColor: "#fef08a",
-      statsColor: "#fbbf24",
-      shape1: "linear-gradient(45deg, rgba(245, 158, 11, 0.25), transparent)",
-      shape2: "linear-gradient(135deg, rgba(217, 119, 6, 0.25), transparent)",
-    },
-  }[theme] || {
-    cardBg: "linear-gradient(135deg, #090210 0%, #1a031e 30%, #3d0728 65%, #630c33 100%)",
-    shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(225, 29, 72, 0.25)",
-    border: "1px solid rgba(244, 63, 94, 0.25)",
-    avatarBorder: "linear-gradient(135deg, rgba(244, 63, 94, 0.8), rgba(255, 255, 255, 0.3))",
-    avatarRadius: "rounded-full",
-    avatarImgRadius: "rounded-full",
-    primaryText: "#f43f5e",
-    secondaryText: "#a1a1aa",
-    progressBg: "#3e4147",
-    progressFill: "linear-gradient(90deg, #f43f5e, #fb7185)",
-    badgeBg: "rgba(244, 63, 94, 0.15)",
-    badgeBorder: "1px solid rgba(244, 63, 94, 0.4)",
-    badgeColor: "#fb7185",
-    statsColor: "#f43f5e",
-    shape1: "linear-gradient(45deg, rgba(225, 29, 72, 0.25), rgba(159, 18, 57, 0.05))",
-    shape2: "linear-gradient(135deg, rgba(136, 19, 55, 0.3), transparent)",
-  };
-
   return (
-    <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0e0a1e]/90 shadow-2xl backdrop-blur-xl">
-      {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3.5">
+    <div className="flex flex-col rounded-xl border border-white/8 bg-[#0f1118] shadow-2xl overflow-hidden">
+      {/* Studio Stage Header Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-3 bg-[#0a0c10]/60">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50" />
-            <h3 className="text-sm font-semibold text-white">Profile Card Preview</h3>
+            <span className="h-2 w-2 rounded-full bg-rose-500" />
+            <h3 className="font-['Space_Grotesk',sans-serif] text-xs font-bold uppercase tracking-wider text-white">
+              Profile Stage Viewport
+            </h3>
           </div>
-          <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-xs text-rose-300">
-            {PROFILE_WIDTH} × {PROFILE_HEIGHT} px · {theme.toUpperCase()}
+          <span className="font-mono text-[10px] text-slate-300 rounded border border-white/10 bg-white/5 px-2 py-0.5">
+            {PROFILE_WIDTH} × {PROFILE_HEIGHT} PX · {theme.toUpperCase()}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Zoom Selector */}
+          <div className="flex items-center rounded-md border border-white/10 bg-[#090a0f] p-0.5 text-xs text-slate-300 font-mono">
+            {(["fit", "50", "75", "100"] as const).map((z) => (
+              <button
+                key={z}
+                onClick={() => setZoomMode(z)}
+                className={`rounded px-2 py-0.5 text-[11px] transition-colors ${
+                  zoomMode === z
+                    ? "bg-[#1d2232] text-white font-semibold"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {z === "fit" ? "Fit" : `${z}%`}
+              </button>
+            ))}
+          </div>
+
           {/* Particle System Ambience Selector */}
           {onParticleConfigChange && (
             <ParticleOverlayButton
@@ -192,28 +126,28 @@ export function ProfilePreview({
           {lastGeneratedBlob && (
             <button
               onClick={handleCopyBlob}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/10"
+              className="flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-200 hover:bg-white/10 transition tactile-press"
               title="Copy image to clipboard"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-              <span>{copied ? "Copied!" : "Copy"}</span>
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
           )}
 
           <button
             onClick={onGenerate}
             disabled={isGenerating}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 to-pink-600 px-4 py-1.5 text-xs font-semibold text-white shadow-lg shadow-rose-600/30 transition-all hover:from-rose-500 hover:to-pink-500 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-md bg-[#ff462b] px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-[#ea381f] disabled:opacity-40 transition-all tactile-press"
           >
             {isGenerating ? (
               <>
-                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <span>Exporting...</span>
               </>
             ) : (
               <>
                 <Download className="h-3.5 w-3.5" />
-                <span>Export PNG</span>
+                <span>Render</span>
               </>
             )}
           </button>
@@ -223,14 +157,10 @@ export function ProfilePreview({
       {/* Canvas Viewport */}
       <div
         ref={containerRef}
-        className="relative flex min-h-[380px] flex-1 items-center justify-center overflow-auto p-6"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(225, 29, 72, 0.12) 0%, transparent 70%), #06040d",
-        }}
+        className="relative flex min-h-[380px] flex-1 items-center justify-center overflow-auto p-6 bg-studio-stage"
       >
         <div
-          className="transition-transform duration-150 ease-out origin-center"
+          className="transition-transform duration-150 ease-out origin-center shadow-2xl"
           style={{
             transform: `scale(${scale})`,
             width: `${PROFILE_WIDTH}px`,
@@ -331,9 +261,9 @@ export function ProfilePreview({
 
                   {/* Stats Row */}
                   <div className="mt-[16px] flex flex-row gap-[50px] text-[18px] font-semibold tracking-wider text-rose-400 font-mono">
-                    <span>⚔️ LEVEL {data.level ?? 1}</span>
-                    <span>⚡ XP: {data.currentXp ?? 0}/{data.requiredXp ?? 100} ({percent}%)</span>
-                    <span>🏆 RANK: {data.rank ?? "#1"}</span>
+                    <span>LVL: {data.level ?? 1}</span>
+                    <span>EXP: {data.currentXp ?? 0}/{data.requiredXp ?? 100} ({percent}%)</span>
+                    <span>RANK: {data.rank ?? "#1"}</span>
                   </div>
                 </div>
               </div>
@@ -361,7 +291,7 @@ export function ProfilePreview({
                 {/* Cyber Top Status Bar */}
                 <div className="relative z-10 flex items-center justify-between border-b border-cyan-500/30 pb-2 text-xs">
                   <div className="flex items-center gap-2 text-cyan-400">
-                    <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse shadow-sm shadow-cyan-400" />
+                    <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400" />
                     <span>CYBER_ID // NETWORK_RANK_STATUS</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-400 text-[11px]">
@@ -556,9 +486,8 @@ export function ProfilePreview({
                 <div className="pointer-events-none absolute bottom-2 left-2 text-amber-400 text-xs font-mono">❖</div>
                 <div className="pointer-events-none absolute bottom-2 right-2 text-amber-400 text-xs font-mono">❖</div>
 
-                {/* Left Crowned Avatar */}
+                {/* Left Avatar */}
                 <div className="relative z-10 flex flex-col items-center shrink-0">
-                  <div className="text-2xl mb-1 filter drop-shadow">👑</div>
                   <div className="h-[130px] w-[130px] rounded-full p-1 bg-gradient-to-tr from-amber-600 via-yellow-300 to-amber-500 shadow-2xl shadow-amber-500/40">
                     <img
                       src={data.avatar}
@@ -575,7 +504,7 @@ export function ProfilePreview({
                   <div>
                     <div className="flex items-center justify-between">
                       <div className="text-xs font-sans tracking-widest text-amber-300/90 uppercase font-semibold">
-                        ✦ IMPERIAL SOVEREIGN OF THE REALM ✦
+                        SOVEREIGN OF THE REALM
                       </div>
                       <div className="rounded-lg bg-amber-500/20 border border-amber-400/50 px-3 py-0.5 text-xs font-sans font-bold text-amber-200">
                         {data.rank ?? "#1"} SOVEREIGN
@@ -613,11 +542,11 @@ export function ProfilePreview({
                   {/* Bottom Imperial Heraldic Badges */}
                   <div className="flex items-center justify-between border-t border-amber-500/25 pt-3 font-sans text-xs">
                     <div className="flex items-center gap-3">
-                      <span className="rounded bg-amber-950/70 border border-amber-500/40 px-3 py-1 font-bold text-amber-300">
-                        LEVEL: {data.level ?? 80}
+                      <span className="rounded bg-amber-950/70 border border-amber-500/40 px-3 py-1 font-bold text-amber-300 font-mono">
+                        LEVEL {data.level ?? 80}
                       </span>
                       <span className="text-amber-200/80">
-                        TITLE: {data.title || "Imperial Vanguard"}
+                        {data.title || "Imperial Vanguard"}
                       </span>
                     </div>
 
@@ -632,17 +561,17 @@ export function ProfilePreview({
         </div>
       </div>
 
-      {/* Bottom Info Bar */}
-      <div className="flex items-center justify-between border-t border-white/8 bg-black/30 px-5 py-2.5 text-xs text-slate-400">
+      {/* Bottom Telemetry Bar */}
+      <div className="flex items-center justify-between border-t border-white/8 bg-[#0a0c10]/80 px-4 py-2.5 text-xs text-slate-400 font-mono">
         <span>XP Progress: <strong className="text-white font-mono">{percent}%</strong> ({data.currentXp}/{data.requiredXp})</span>
         {previewPngUrl && (
           <a
             href={previewPngUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1 text-rose-400 hover:text-rose-300"
+            className="flex items-center gap-1 text-[#ff462b] hover:underline"
           >
-            <span>Open exported image</span>
+            <span>Inspect Raw PNG Buffer</span>
             <ExternalLink className="h-3 w-3" />
           </a>
         )}

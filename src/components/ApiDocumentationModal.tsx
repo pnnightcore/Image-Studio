@@ -53,50 +53,50 @@ export function ApiDocumentationModal({ isOpen, onClose }: ApiDocumentationModal
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="flex h-[90vh] max-h-[850px] w-full max-w-5xl flex-col rounded-2xl border border-white/10 bg-[#0c0918] shadow-2xl overflow-hidden">
+      <div className="flex h-[90vh] max-h-[850px] w-full max-w-5xl flex-col rounded-xl border border-white/10 bg-[#0c0e14] shadow-2xl overflow-hidden font-['Plus_Jakarta_Sans',sans-serif]">
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between border-b border-white/10 bg-[#120d24] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-white/10 bg-[#08090d] px-6 py-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30">
-              <BookOpen className="h-5 w-5" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141722] border border-white/10 text-white">
+              <BookOpen className="h-4 w-4 text-[#ff462b]" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <h2 className="font-['Space_Grotesk',sans-serif] text-sm font-bold text-white flex items-center gap-2">
                 Image Studio API Reference
-                <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-[11px] font-mono font-medium text-purple-300 border border-purple-500/30">
-                  v2.0 · REST
+                <span className="rounded bg-white/5 px-2 py-0.5 text-[10px] font-mono font-medium text-slate-300 border border-white/10">
+                  v2.4 · REST
                 </span>
               </h2>
-              <p className="text-xs text-slate-400">
-                High-performance Satori & Sharp rendering engine for Discord bots & web services
+              <p className="font-mono text-[10px] text-slate-400">
+                Zero-latency Satori & Sharp rendering engine for Discord bots & microservices
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 hover:bg-white/10 hover:text-white transition-colors"
+            className="rounded-md p-1.5 text-slate-400 hover:bg-white/10 hover:text-white transition-colors"
             title="Close (Esc)"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Modal Body: Sidebar + Main Content */}
         <div className="flex flex-1 min-h-0 overflow-hidden">
           {/* Sidebar Navigation */}
-          <div className="w-56 shrink-0 border-r border-white/10 bg-[#090614] p-3 overflow-y-auto space-y-1">
-            <div className="px-3 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="w-56 shrink-0 border-r border-white/8 bg-[#090a0f] p-3 overflow-y-auto space-y-1 font-mono">
+            <div className="px-2 py-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
               Endpoints
             </div>
             {[
-              { id: "overview", label: "Tổng Quan / Overview", icon: Zap, color: "text-amber-400" },
-              { id: "song", label: "1. Song Search Card", icon: Music, color: "text-purple-400" },
-              { id: "profile", label: "2. Profile & Rank Card", icon: User, color: "text-rose-400" },
-              { id: "leaderboard", label: "3. Guild Leaderboard", icon: Trophy, color: "text-amber-400" },
-              { id: "quote", label: "4. Quote Card", icon: Quote, color: "text-indigo-400" },
-              { id: "animation", label: "5. Animation & Frame", icon: Film, color: "text-fuchsia-400" },
-              { id: "particles", label: "6. Particle System", icon: Sparkles, color: "text-amber-400" },
-              { id: "stats", label: "7. Stats Counter", icon: Terminal, color: "text-emerald-400" },
+              { id: "overview", label: "Overview", icon: Zap, color: "text-[#ff462b]" },
+              { id: "song", label: "Song Search Card", icon: Music, color: "text-amber-400" },
+              { id: "profile", label: "Profile & Rank", icon: User, color: "text-rose-400" },
+              { id: "leaderboard", label: "Leaderboard", icon: Trophy, color: "text-yellow-400" },
+              { id: "quote", label: "Quote Card", icon: Quote, color: "text-sky-400" },
+              { id: "animation", label: "Animation Studio", icon: Film, color: "text-[#ff462b]" },
+              { id: "particles", label: "Particle System", icon: Sparkles, color: "text-amber-400" },
+              { id: "stats", label: "Stats Counter", icon: Terminal, color: "text-emerald-400" },
             ].map((sec) => {
               const Icon = sec.icon;
               const isSelected = activeSection === sec.id;
@@ -104,35 +104,35 @@ export function ApiDocumentationModal({ isOpen, onClose }: ApiDocumentationModal
                 <button
                   key={sec.id}
                   onClick={() => setActiveSection(sec.id as DocSection)}
-                  className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs font-medium transition-all ${
+                  className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-xs transition-all ${
                     isSelected
-                      ? "bg-purple-600/30 text-white font-semibold border border-purple-500/40 shadow-sm"
+                      ? "bg-[#1d2232] text-white font-semibold border border-white/10 shadow-sm"
                       : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
                   }`}
                 >
-                  <Icon className={`h-4 w-4 shrink-0 ${sec.color}`} />
-                  <span className="truncate">{sec.label}</span>
+                  <Icon className={`h-3.5 w-3.5 shrink-0 ${sec.color}`} />
+                  <span className="truncate text-[11px]">{sec.label}</span>
                 </button>
               );
             })}
 
-            <div className="mt-4 pt-3 border-t border-white/10 px-3 py-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-              Client Language
+            <div className="mt-4 pt-3 border-t border-white/8 px-2 py-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+              Client Code
             </div>
-            <div className="grid grid-cols-2 gap-1.5 px-2">
+            <div className="grid grid-cols-2 gap-1 px-1">
               {[
                 { id: "curl", label: "cURL" },
                 { id: "python", label: "Python" },
                 { id: "nodejs", label: "Node.js" },
-                { id: "discord", label: "Discord Bot" },
+                { id: "discord", label: "Discord.py" },
               ].map((lang) => (
                 <button
                   key={lang.id}
                   onClick={() => setCodeLang(lang.id as CodeLang)}
-                  className={`rounded-lg py-1 px-2 text-[11px] font-mono font-medium transition-colors ${
+                  className={`rounded py-1 px-1.5 text-[10px] font-mono transition-colors text-center ${
                     codeLang === lang.id
-                      ? "bg-white/15 text-white shadow-sm border border-white/20"
-                      : "text-slate-400 hover:bg-white/5 hover:text-slate-300"
+                      ? "bg-[#1d2232] text-white border border-white/10 font-bold"
+                      : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
                   }`}
                 >
                   {lang.label}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { SongResult } from "../lib/types";
-import { ChevronUp, ChevronDown, Trash2, Edit3, Check, Music } from "lucide-react";
+import { ChevronUp, ChevronDown, Trash2, Edit3, Check, Disc3 } from "lucide-react";
 
 interface SongCardProps {
   song: SongResult;
@@ -43,82 +43,96 @@ export function SongCard({
     setIsEditing(false);
   };
 
+  const formattedIndex = String(song.index).padStart(2, "0");
+
   return (
-    <div className="group relative rounded-xl border border-white/8 bg-[#141026]/90 p-3 transition-all duration-200 hover:border-purple-500/30 hover:bg-[#1a1532]">
+    <div className="group relative rounded-lg border border-white/8 bg-[#0a0c10]/70 p-2.5 transition-all duration-150 hover:border-white/15 hover:bg-[#121520]">
       {isEditing ? (
-        <div className="space-y-3">
+        <div className="space-y-3 p-1">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
-            <span className="text-xs font-medium text-purple-400">
-              Edit Track #{song.index}
+            <span className="font-mono text-xs font-semibold text-amber-400">
+              TRACK [{formattedIndex}] · PARAMETERS
             </span>
             <button
               onClick={handleSave}
-              className="flex items-center gap-1 rounded-md bg-purple-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-purple-500"
+              className="flex items-center gap-1 rounded bg-[#ff462b] px-2.5 py-1 text-xs font-semibold text-white hover:bg-[#ea381f] transition tactile-press"
             >
-              <Check className="h-3.5 w-3.5" />
-              Save
+              <Check className="h-3 w-3" />
+              <span>Apply</span>
             </button>
           </div>
 
           <div className="space-y-2">
             <div>
-              <label className="text-[11px] text-slate-400">Track Name / Title</label>
+              <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                Track Title
+              </label>
               <input
                 type="text"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white focus:border-purple-500 focus:outline-none"
+                className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-xs text-white focus:border-[#ff462b] focus:outline-none"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[11px] text-slate-400">Channel / Artist (e.g. Chillhop Music)</label>
+                <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                  Artist / Channel
+                </label>
                 <input
                   type="text"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="Chillhop Music"
-                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white focus:border-purple-500 focus:outline-none"
+                  placeholder="e.g. Chillhop Music"
+                  className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-xs text-white focus:border-[#ff462b] focus:outline-none"
                 />
               </div>
               <div>
-                <label className="text-[11px] text-slate-400">Views / Likes (e.g. 24M views)</label>
+                <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                  Viewcount / Metric
+                </label>
                 <input
                   type="text"
                   value={views}
                   onChange={(e) => setViews(e.target.value)}
-                  placeholder="24M views"
-                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white focus:border-purple-500 focus:outline-none"
+                  placeholder="e.g. 1.2M views"
+                  className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-xs text-white focus:border-[#ff462b] focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[11px] text-slate-400">Duration (e.g. 3:00:00 or 04:15)</label>
+                <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                  Duration
+                </label>
                 <input
                   type="text"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  placeholder="3:00:00"
-                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white focus:border-purple-500 focus:outline-none font-mono"
+                  placeholder="03:45"
+                  className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2.5 py-1.5 font-mono text-xs text-white focus:border-[#ff462b] focus:outline-none"
                 />
               </div>
               <div>
-                <label className="text-[11px] text-slate-400">Source Platform</label>
+                <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                  Source Platform
+                </label>
                 <input
                   type="text"
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
                   placeholder="youtube"
-                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white focus:border-purple-500 focus:outline-none"
+                  className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-xs text-white focus:border-[#ff462b] focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[11px] text-slate-400">Thumbnail URL (16:9 or Square)</label>
+              <label className="font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                Artwork URL
+              </label>
               <input
                 type="url"
                 value={avatar}
@@ -127,20 +141,20 @@ export function SongCard({
                   setImgError(false);
                 }}
                 placeholder="https://..."
-                className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/40 px-2.5 py-1.5 text-xs text-white focus:border-purple-500 focus:outline-none"
+                className="mt-0.5 w-full rounded border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-xs text-white focus:border-[#ff462b] focus:outline-none font-mono"
               />
             </div>
           </div>
         </div>
       ) : (
         <div className="flex items-center gap-3">
-          {/* Index badge */}
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-slate-200">
-            {song.index}
+          {/* Index indicator */}
+          <div className="font-mono text-[11px] font-bold text-slate-400 w-5 text-right shrink-0">
+            {formattedIndex}
           </div>
 
-          {/* Thumbnail */}
-          <div className="relative h-11 w-16 shrink-0 overflow-hidden rounded-md border border-white/10 bg-black/50">
+          {/* Thumbnail preview */}
+          <div className="relative h-10 w-16 shrink-0 overflow-hidden rounded border border-white/10 bg-black/60">
             {!imgError && song.avatar ? (
               <img
                 src={song.avatar}
@@ -151,33 +165,33 @@ export function SongCard({
                 loading="lazy"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-purple-400">
-                <Music className="h-5 w-5" />
+              <div className="flex h-full w-full items-center justify-center text-slate-500">
+                <Disc3 className="h-4 w-4" />
               </div>
             )}
-            <div className="absolute bottom-0.5 right-0.5 rounded bg-black/80 px-1 py-0.2 text-[9px] font-mono text-white">
+            <div className="absolute bottom-0.5 right-0.5 rounded bg-black/80 px-1 py-0.2 font-mono text-[9px] text-white">
               {song.time}
             </div>
           </div>
 
-          {/* Info */}
+          {/* Track details */}
           <div className="min-w-0 flex-1">
-            <h4 className="truncate text-sm font-medium text-white group-hover:text-purple-200">
+            <h4 className="truncate text-xs font-semibold text-white group-hover:text-amber-200 transition-colors">
               {song.displayName}
             </h4>
-            <div className="mt-0.5 flex items-center gap-2 text-xs text-indigo-300">
-              <span className="truncate">{song.author || song.source}</span>
-              <span className="text-slate-600">·</span>
-              <span className="font-mono text-[11px] text-slate-400">{song.views || song.time}</span>
+            <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-400">
+              <span className="truncate text-slate-300 font-medium">{song.author || song.source}</span>
+              <span className="text-slate-400">·</span>
+              <span className="font-mono text-[10px] text-slate-400">{song.views || song.time}</span>
             </div>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-1 opacity-70 transition-opacity group-hover:opacity-100">
+          {/* Channel Strip Actions */}
+          <div className="flex items-center gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
             <button
               onClick={() => setIsEditing(true)}
               title="Edit track"
-              className="rounded-md p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+              className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-white transition"
             >
               <Edit3 className="h-3.5 w-3.5" />
             </button>
@@ -186,7 +200,7 @@ export function SongCard({
                 disabled={isFirst}
                 onClick={onMoveUp}
                 title="Move up"
-                className="rounded p-0.5 text-slate-400 hover:bg-white/10 hover:text-white disabled:opacity-20"
+                className="rounded p-0.5 text-slate-400 hover:bg-white/10 hover:text-white disabled:opacity-20 transition"
               >
                 <ChevronUp className="h-3 w-3" />
               </button>
@@ -194,7 +208,7 @@ export function SongCard({
                 disabled={isLast}
                 onClick={onMoveDown}
                 title="Move down"
-                className="rounded p-0.5 text-slate-400 hover:bg-white/10 hover:text-white disabled:opacity-20"
+                className="rounded p-0.5 text-slate-400 hover:bg-white/10 hover:text-white disabled:opacity-20 transition"
               >
                 <ChevronDown className="h-3 w-3" />
               </button>
@@ -202,7 +216,7 @@ export function SongCard({
             <button
               onClick={onDelete}
               title="Delete track"
-              className="rounded-md p-1.5 text-red-400 hover:bg-red-500/20 hover:text-red-300"
+              className="rounded p-1 text-slate-500 hover:bg-red-500/20 hover:text-red-400 transition"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>

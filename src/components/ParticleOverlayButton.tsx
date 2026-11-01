@@ -5,7 +5,7 @@ import {
   PARTICLE_PRESET_LIST,
   createDefaultParticleConfig,
 } from "../lib/particle-system";
-import { Sparkles, Sliders, X, Check } from "lucide-react";
+import { Sparkles, SlidersHorizontal, X, Check } from "lucide-react";
 import { ParticleControlPanel } from "./ParticleControlPanel";
 
 interface ParticleOverlayButtonProps {
@@ -22,8 +22,8 @@ export function ParticleOverlayButton({
 
   const currentPresetName =
     particleConfig?.preset && PARTICLE_PRESETS[particleConfig.preset]
-      ? `${PARTICLE_PRESETS[particleConfig.preset].icon} ${PARTICLE_PRESETS[particleConfig.preset].name}`
-      : "Custom";
+      ? `${PARTICLE_PRESETS[particleConfig.preset].name}`
+      : "Custom FX";
 
   const handleToggle = () => {
     if (isEnabled) {
@@ -34,27 +34,23 @@ export function ParticleOverlayButton({
     }
   };
 
-  const handleSelectPreset = (id: ParticlePresetId) => {
-    onChange(createDefaultParticleConfig(id));
-  };
-
   return (
     <div className="relative inline-block text-xs">
-      <div className="flex items-center gap-1 bg-black/40 rounded-xl border border-white/10 p-0.5">
+      <div className="flex items-center gap-1 bg-[#090a0f] rounded-md border border-white/10 p-0.5 font-mono">
         <button
           type="button"
           onClick={handleToggle}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+          className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold transition ${
             isEnabled
-              ? "bg-gradient-to-r from-amber-500/30 via-rose-500/30 to-purple-500/30 border border-amber-500/40 text-amber-200 shadow-sm"
-              : "text-slate-400 hover:text-white hover:bg-white/5"
+              ? "bg-[#1d2232] border border-amber-500/40 text-amber-300 shadow-sm"
+              : "text-slate-400 hover:text-white"
           }`}
-          title="Bật/Tắt hiệu ứng hạt lấp lánh trên banner"
+          title="Toggle interactive particle physics ambience"
         >
-          <Sparkles className={`h-3.5 w-3.5 ${isEnabled ? "text-amber-400 animate-spin-slow" : "text-slate-400"}`} />
+          <Sparkles className={`h-3 w-3 ${isEnabled ? "text-amber-400" : "text-slate-400"}`} />
           <span>{isEnabled ? currentPresetName : "Particles"}</span>
           {isEnabled && (
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 ml-0.5" />
           )}
         </button>
 
@@ -62,34 +58,40 @@ export function ParticleOverlayButton({
           <button
             type="button"
             onClick={() => setIsOpen((v) => !v)}
-            className={`p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition ${
-              isOpen ? "text-purple-300 bg-white/10" : ""
+            className={`p-1 rounded text-slate-400 hover:text-white hover:bg-white/10 transition ${
+              isOpen ? "text-white bg-white/10" : ""
             }`}
-            title="Tùy chỉnh chi tiết Particle System"
+            title="Configure particle physics"
           >
-            <Sliders className="h-3.5 w-3.5" />
+            <SlidersHorizontal className="h-3 w-3" />
           </button>
         )}
       </div>
 
       {/* Floating Popup Panel */}
       {isOpen && isEnabled && (
-        <div className="absolute right-0 top-11 z-50 w-80 sm:w-96 rounded-2xl border border-white/15 bg-[#120d24] p-4 shadow-2xl backdrop-blur-xl animate-in fade-in duration-150">
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="absolute right-0 top-9 z-50 w-80 sm:w-96 rounded-xl border border-white/10 bg-[#0f1118] p-4 shadow-2xl backdrop-blur-xl animate-in fade-in duration-150"
+        >
           <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-amber-400" />
-              <span className="font-bold text-white text-xs">Particle System Overlay</span>
+              <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+              <span className="font-['Space_Grotesk',sans-serif] font-bold text-white text-xs">
+                Particle Synthesizer
+              </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 font-mono text-[10px]">
               <button
                 type="button"
                 onClick={() => {
                   onChange(undefined);
                   setIsOpen(false);
                 }}
-                className="text-[10px] text-red-400 hover:text-red-300"
+                className="text-red-400 hover:underline"
               >
-                Tắt hiệu ứng
+                Disable
               </button>
               <button
                 type="button"

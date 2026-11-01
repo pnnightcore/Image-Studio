@@ -3,7 +3,7 @@ import type { LeaderboardData, ParticleConfig } from "../lib/types";
 import { LEADERBOARD_WIDTH, calculateLeaderboardHeight } from "../lib/constants";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { ParticleOverlayButton } from "./ParticleOverlayButton";
-import { Download, Copy, Check, ExternalLink } from "lucide-react";
+import { Download, Copy, Check, ExternalLink, Trophy } from "lucide-react";
 
 interface LeaderboardPreviewProps {
   data: LeaderboardData;
@@ -24,6 +24,7 @@ export function LeaderboardPreview({
 }: LeaderboardPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number>(0.7);
+  const [zoomMode, setZoomMode] = useState<"fit" | "50" | "75" | "100">("fit");
   const [copied, setCopied] = useState<boolean>(false);
   const [previewPngUrl, setPreviewPngUrl] = useState<string | null>(null);
 
@@ -42,14 +43,22 @@ export function LeaderboardPreview({
   useEffect(() => {
     function updateScale() {
       if (!containerRef.current) return;
-      const availableWidth = containerRef.current.clientWidth - 40;
-      const newScale = Math.min(1, Math.max(0.35, availableWidth / LEADERBOARD_WIDTH));
-      setScale(newScale);
+      if (zoomMode === "100") {
+        setScale(1);
+      } else if (zoomMode === "75") {
+        setScale(0.75);
+      } else if (zoomMode === "50") {
+        setScale(0.5);
+      } else {
+        const availableWidth = containerRef.current.clientWidth - 48;
+        const newScale = Math.min(1, Math.max(0.35, availableWidth / LEADERBOARD_WIDTH));
+        setScale(newScale);
+      }
     }
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  }, [zoomMode, items.length, layout]);
 
   const handleCopyBlob = async () => {
     if (!lastGeneratedBlob) {
@@ -75,21 +84,40 @@ export function LeaderboardPreview({
   const rest = items.filter((i) => i.rank > 3);
 
   return (
-    <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0e0a1e]/90 shadow-2xl backdrop-blur-xl">
-      {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3.5">
+    <div className="flex flex-col rounded-xl border border-white/8 bg-[#0f1118] shadow-2xl overflow-hidden">
+      {/* Studio Stage Header Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-3 bg-[#0a0c10]/60">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50" />
-            <h3 className="text-sm font-semibold text-white">Leaderboard Preview</h3>
+            <span className="h-2 w-2 rounded-full bg-yellow-400" />
+            <h3 className="font-['Space_Grotesk',sans-serif] text-xs font-bold uppercase tracking-wider text-white">
+              Leaderboard Stage Viewport
+            </h3>
           </div>
-          <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-xs text-amber-300">
-            {LEADERBOARD_WIDTH} × {height} px
+          <span className="font-mono text-[10px] text-slate-300 rounded border border-white/10 bg-white/5 px-2 py-0.5">
+            {LEADERBOARD_WIDTH} × {height} PX
           </span>
-          <span className="text-xs text-slate-400">({items.length} members)</span>
+          <span className="text-[11px] font-mono text-slate-400">({items.length} members)</span>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Zoom Selector */}
+          <div className="flex items-center rounded-md border border-white/10 bg-[#090a0f] p-0.5 text-xs text-slate-300 font-mono">
+            {(["fit", "50", "75", "100"] as const).map((z) => (
+              <button
+                key={z}
+                onClick={() => setZoomMode(z)}
+                className={`rounded px-2 py-0.5 text-[11px] transition-colors ${
+                  zoomMode === z
+                    ? "bg-[#1d2232] text-white font-semibold"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {z === "fit" ? "Fit" : `${z}%`}
+              </button>
+            ))}
+          </div>
+
           {/* Particle System Ambience Selector */}
           {onParticleConfigChange && (
             <ParticleOverlayButton
@@ -101,28 +129,28 @@ export function LeaderboardPreview({
           {lastGeneratedBlob && (
             <button
               onClick={handleCopyBlob}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/10"
+              className="flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-200 hover:bg-white/10 transition tactile-press"
               title="Copy image to clipboard"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-              <span>{copied ? "Copied!" : "Copy"}</span>
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
           )}
 
           <button
             onClick={onGenerate}
             disabled={isGenerating || items.length === 0}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 px-4 py-1.5 text-xs font-semibold text-white shadow-lg shadow-amber-500/30 transition-all hover:from-amber-400 hover:to-orange-500 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-md bg-[#ff462b] px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-[#ea381f] disabled:opacity-40 transition-all tactile-press"
           >
             {isGenerating ? (
               <>
-                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <span>Exporting...</span>
               </>
             ) : (
               <>
                 <Download className="h-3.5 w-3.5" />
-                <span>Export PNG</span>
+                <span>Render</span>
               </>
             )}
           </button>
@@ -132,14 +160,10 @@ export function LeaderboardPreview({
       {/* Viewport Canvas */}
       <div
         ref={containerRef}
-        className="relative flex min-h-[500px] flex-1 items-start justify-center overflow-auto p-6"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 10%, rgba(245, 158, 11, 0.1) 0%, transparent 60%), #06040d",
-        }}
+        className="relative flex min-h-[480px] flex-1 items-start justify-center overflow-auto p-6 bg-studio-stage"
       >
         <div
-          className="transition-transform duration-150 ease-out origin-top"
+          className="transition-transform duration-150 ease-out origin-top shadow-2xl"
           style={{
             transform: `scale(${scale})`,
             width: `${LEADERBOARD_WIDTH}px`,
@@ -182,26 +206,24 @@ export function LeaderboardPreview({
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[17px] font-bold tracking-tight text-white">
+                  <span className="text-[17px] font-bold tracking-tight text-white font-['Space_Grotesk',sans-serif]">
                     {data.guildName || "Server Leaderboard"}
                   </span>
-                  <span className="text-[11px] text-slate-400">
-                    Top {items.length} Members · XP Rankings
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    Top {items.length} Members · XP Ledger
                   </span>
                 </div>
               </div>
 
-              <div className="rounded-full border border-amber-500/35 bg-amber-500/15 px-3 py-1 text-[11px] font-bold tracking-wider text-amber-300">
+              <div className="rounded border border-amber-500/35 bg-amber-500/15 px-2.5 py-1 text-[11px] font-mono font-bold tracking-wider text-amber-300">
                 {data.season || "SEASON 1"}
               </div>
             </div>
 
-            {/* Layout Branching: compact-list, cyber-grid, or podium */}
+            {/* Layout Branching: compact-list, cyber-grid, minimal-cards, or podium */}
             {layout === "compact-list" ? (
               <div className="flex w-full flex-col gap-2">
                 {items.map((item) => {
-                  const medal =
-                    item.rank === 1 ? "🥇" : item.rank === 2 ? "🥈" : item.rank === 3 ? "🥉" : null;
                   const rankColor =
                     item.rank === 1 ? "#f59e0b" : item.rank === 2 ? "#38bdf8" : item.rank === 3 ? "#f97316" : "#64748b";
                   return (
@@ -209,14 +231,8 @@ export function LeaderboardPreview({
                       key={item.rank}
                       className="flex h-[64px] w-full items-center rounded-[12px] border border-white/6 bg-white/[0.04] px-4 transition-all hover:bg-white/[0.07]"
                     >
-                      <div className="mr-3 flex w-[32px] items-center justify-center font-bold text-[16px]">
-                        {medal ? (
-                          <span className="text-[20px]">{medal}</span>
-                        ) : (
-                          <span className="font-mono text-[14px] font-bold text-slate-400">
-                            #{item.rank}
-                          </span>
-                        )}
+                      <div className="mr-3 flex w-[32px] items-center justify-center font-mono font-bold text-[14px]">
+                        <span style={{ color: rankColor }}>#{item.rank}</span>
                       </div>
 
                       <img
@@ -231,19 +247,19 @@ export function LeaderboardPreview({
                         <div className="truncate text-[15px] font-semibold text-white">
                           {item.username}
                         </div>
-                        <div className="text-[12px] text-slate-400">{item.handle}</div>
+                        <div className="text-[12px] text-slate-400 font-mono">{item.handle}</div>
                       </div>
 
                       <div className="flex flex-col items-end">
                         <div
-                          className="rounded-full px-2.5 py-0.5 text-[11px] font-bold"
+                          className="rounded px-2 py-0.5 text-[10px] font-mono font-bold"
                           style={{
                             backgroundColor: `${rankColor}22`,
                             color: rankColor,
                             border: `1px solid ${rankColor}44`,
                           }}
                         >
-                          Level {item.level}
+                          LVL {item.level}
                         </div>
                         <div className="mt-1 font-mono text-[12px] font-semibold text-slate-300">
                           {item.xp.toLocaleString()} XP
@@ -276,14 +292,14 @@ export function LeaderboardPreview({
                           crossOrigin="anonymous"
                         />
                         <span
-                          className="absolute -top-1.5 -left-1.5 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-black shadow"
+                          className="absolute -top-1.5 -left-1.5 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-black shadow font-mono"
                           style={{ backgroundColor: rankColor }}
                         >
                           {item.rank}
                         </span>
                       </div>
 
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 font-mono">
                         <div className="truncate text-[13px] font-bold text-white">
                           {item.username}
                         </div>
@@ -294,7 +310,7 @@ export function LeaderboardPreview({
                           <span className="font-bold" style={{ color: rankColor }}>
                             Lv.{item.level}
                           </span>
-                          <span className="font-mono text-slate-300 text-[10px]">
+                          <span className="text-slate-300 text-[10px]">
                             {item.xp} XP
                           </span>
                         </div>
@@ -306,8 +322,6 @@ export function LeaderboardPreview({
             ) : layout === "minimal-cards" ? (
               <div className="flex w-full flex-col gap-2">
                 {items.map((item) => {
-                  const medal =
-                    item.rank === 1 ? "🥇" : item.rank === 2 ? "🥈" : item.rank === 3 ? "🥉" : `#${item.rank}`;
                   const rankColor =
                     item.rank === 1 ? "#f59e0b" : item.rank === 2 ? "#38bdf8" : item.rank === 3 ? "#f97316" : "#818cf8";
                   const maxXp = items[0]?.xp || 1000;
@@ -322,14 +336,14 @@ export function LeaderboardPreview({
                       }}
                     >
                       <div
-                        className="mr-3.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-[15px] font-bold"
+                        className="mr-3.5 flex h-8 w-8 shrink-0 items-center justify-center rounded text-[13px] font-mono font-bold"
                         style={{
                           backgroundColor: `${rankColor}20`,
                           border: `1px solid ${rankColor}55`,
                           color: rankColor,
                         }}
                       >
-                        {medal}
+                        #{item.rank}
                       </div>
 
                       <img
@@ -344,7 +358,7 @@ export function LeaderboardPreview({
                         <div className="truncate text-[15px] font-bold text-white">
                           {item.username}
                         </div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{item.handle}</div>
+                        <div className="text-[11px] text-slate-400 mt-0.5 font-mono">{item.handle}</div>
                       </div>
 
                       {/* Mini XP Bar */}
@@ -362,14 +376,14 @@ export function LeaderboardPreview({
 
                       <div className="flex flex-col items-end shrink-0">
                         <div
-                          className="rounded-full px-2.5 py-0.5 text-[11px] font-bold"
+                          className="rounded px-2 py-0.5 text-[10px] font-mono font-bold"
                           style={{
                             backgroundColor: `${rankColor}20`,
                             color: rankColor,
                             border: `1px solid ${rankColor}55`,
                           }}
                         >
-                          Lv.{item.level}
+                          LVL {item.level}
                         </div>
                         <div className="mt-1 font-mono text-[12px] font-semibold text-slate-300">
                           {item.xp.toLocaleString()} XP
@@ -383,157 +397,146 @@ export function LeaderboardPreview({
               <>
                 {/* 2. Top 3 Podium */}
                 <div className="mb-[16px] flex w-full items-end justify-center gap-2">
-              {/* Rank 2 (Left) */}
-              <div className="relative flex h-[232px] flex-1 flex-col items-center justify-end">
-                {/* Pedestal Box */}
-                <div className="flex h-[152px] w-full flex-col items-center rounded-t-[14px] border-l border-r border-t-[3px] border-[#38bdf8] border-l-sky-500/20 border-r-sky-500/20 bg-gradient-to-b from-[#242a38] to-[#171b26] pt-[34px]">
-                  <div className="w-[135px] truncate text-center text-[15px] font-semibold text-white">
-                    {top2?.username || "Player 2"}
+                  {/* Rank 2 (Left) */}
+                  <div className="relative flex h-[232px] flex-1 flex-col items-center justify-end">
+                    <div className="flex h-[152px] w-full flex-col items-center rounded-t-[14px] border-l border-r border-t-[3px] border-[#38bdf8] border-l-sky-500/20 border-r-sky-500/20 bg-gradient-to-b from-[#242a38] to-[#171b26] pt-[34px]">
+                      <div className="w-[135px] truncate text-center text-[15px] font-semibold text-white">
+                        {top2?.username || "Player 2"}
+                      </div>
+                      <div className="mt-[2px] text-[11px] text-slate-400 font-mono">{top2?.handle || "@player2"}</div>
+                      <div className="mt-[10px] rounded bg-sky-500/15 px-2 py-0.5 text-[11px] font-mono font-semibold text-[#38bdf8]">
+                        LVL {top2?.level ?? 1}
+                      </div>
+                      <div className="mt-[4px] text-[12px] font-mono font-medium text-[#38bdf8]">{top2?.xp ?? 0} XP</div>
+                    </div>
+
+                    <div className="absolute top-[18px] flex flex-col items-center">
+                      <div className="relative">
+                        <img
+                          src={top2?.avatar}
+                          alt="Top 2"
+                          className="h-[62px] w-[62px] rounded-full border-[3px] border-[#38bdf8] bg-black/50 object-cover shadow-lg"
+                          crossOrigin="anonymous"
+                        />
+                        <div className="absolute -bottom-2.5 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-[#38bdf8] font-mono text-[12px] font-bold text-black shadow">
+                          2
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-[2px] text-[11px] text-slate-400">{top2?.handle || "@player2"}</div>
-                  <div className="mt-[10px] rounded-full bg-sky-500/15 px-2 py-0.5 text-[12px] font-semibold text-[#38bdf8]">
-                    Level {top2?.level ?? 1}
+
+                  {/* Rank 1 (Center) */}
+                  <div className="relative flex h-[265px] flex-1 flex-col items-center justify-end">
+                    <div className="flex h-[180px] w-full flex-col items-center rounded-t-[14px] border-l border-r border-t-[3px] border-[#f59e0b] border-l-amber-500/20 border-r-amber-500/20 bg-gradient-to-b from-[#382b1c] to-[#1e1913] pt-[36px]">
+                      <div className="w-[145px] truncate text-center text-[16px] font-bold text-white">
+                        {top1?.username || "Player 1"}
+                      </div>
+                      <div className="mt-[2px] text-[11px] text-slate-400 font-mono">{top1?.handle || "@player1"}</div>
+                      <div className="mt-[10px] rounded bg-amber-500/20 px-2.5 py-0.5 text-[11px] font-mono font-bold text-[#f59e0b]">
+                        LVL {top1?.level ?? 1}
+                      </div>
+                      <div className="mt-[4px] text-[13px] font-mono font-bold text-[#f59e0b]">{top1?.xp ?? 0} XP</div>
+                    </div>
+
+                    <div className="absolute top-[12px] flex flex-col items-center">
+                      <div className="relative">
+                        <img
+                          src={top1?.avatar}
+                          alt="Top 1"
+                          className="h-[74px] w-[74px] rounded-full border-[3px] border-[#f59e0b] bg-black/50 object-cover shadow-xl"
+                          crossOrigin="anonymous"
+                        />
+                        <div className="absolute -bottom-2.5 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-[#f59e0b] font-mono text-[12px] font-bold text-black shadow">
+                          1
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-[4px] text-[12px] font-medium text-[#38bdf8]">{top2?.xp ?? 0} XP</div>
+
+                  {/* Rank 3 (Right) */}
+                  <div className="relative flex h-[216px] flex-1 flex-col items-center justify-end">
+                    <div className="flex h-[138px] w-full flex-col items-center rounded-t-[14px] border-l border-r border-t-[3px] border-[#f97316] border-l-orange-500/20 border-r-orange-500/20 bg-gradient-to-b from-[#2b201d] to-[#191516] pt-[32px]">
+                      <div className="w-[135px] truncate text-center text-[15px] font-semibold text-white">
+                        {top3?.username || "Player 3"}
+                      </div>
+                      <div className="mt-[2px] text-[11px] text-slate-400 font-mono">{top3?.handle || "@player3"}</div>
+                      <div className="mt-[10px] rounded bg-orange-500/15 px-2 py-0.5 text-[11px] font-mono font-semibold text-[#f97316]">
+                        LVL {top3?.level ?? 1}
+                      </div>
+                      <div className="mt-[4px] text-[12px] font-mono font-medium text-[#f97316]">{top3?.xp ?? 0} XP</div>
+                    </div>
+
+                    <div className="absolute top-[20px] flex flex-col items-center">
+                      <div className="relative">
+                        <img
+                          src={top3?.avatar}
+                          alt="Top 3"
+                          className="h-[58px] w-[58px] rounded-full border-[3px] border-[#f97316] bg-black/50 object-cover shadow-lg"
+                          crossOrigin="anonymous"
+                        />
+                        <div className="absolute -bottom-2.5 left-1/2 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full bg-[#f97316] font-mono text-[12px] font-bold text-black shadow">
+                          3
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Avatar & Rank Badge sitting on top */}
-                <div className="absolute bottom-[124px] z-20 flex flex-col items-center">
-                  <img
-                    src={top2?.avatar}
-                    alt={top2?.username}
-                    className="h-[64px] w-[64px] rounded-full border-[3px] border-[#38bdf8] object-cover shadow-lg shadow-sky-500/20"
-                    crossOrigin="anonymous"
-                  />
-                  <div className="relative -mt-[14px] flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#38bdf8] text-[12px] font-bold text-black shadow-md">
-                    2
-                  </div>
-                </div>
-              </div>
+                {/* 3. Tier Rows (4..N) */}
+                {rest.length > 0 && (
+                  <div className="flex w-full flex-col gap-2">
+                    {rest.map((item) => (
+                      <div
+                        key={item.rank}
+                        className="flex h-[60px] w-full items-center rounded-[12px] border border-white/6 bg-white/[0.04] px-4 transition-all hover:bg-white/[0.07]"
+                      >
+                        <div className="mr-3 flex w-[28px] items-center justify-center font-mono text-[14px] font-bold text-slate-400">
+                          #{item.rank}
+                        </div>
 
-              {/* Rank 1 (Center) */}
-              <div className="relative flex h-[265px] flex-[1.1] flex-col items-center justify-end">
-                {/* Pedestal Box */}
-                <div className="flex h-[178px] w-full flex-col items-center rounded-t-[14px] border-l border-r border-t-[3px] border-[#f59e0b] border-l-amber-500/25 border-r-amber-500/25 bg-gradient-to-b from-[#2d263b] to-[#1c1827] pt-[36px]">
-                  <div className="w-[145px] truncate text-center text-[16px] font-bold text-white">
-                    {top1?.username || "Winner"}
-                  </div>
-                  <div className="mt-[2px] text-[11px] text-slate-400">{top1?.handle || "@winner"}</div>
-                  <div className="mt-[10px] rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[12px] font-bold text-[#f59e0b]">
-                    Level {top1?.level ?? 1}
-                  </div>
-                  <div className="mt-[4px] text-[12px] font-semibold text-[#f59e0b]">{top1?.xp ?? 0} XP</div>
-                </div>
+                        <img
+                          src={item.avatar}
+                          alt={item.username}
+                          className="mr-3 h-[40px] w-[40px] rounded-full border border-white/10 bg-black/40 object-cover"
+                          crossOrigin="anonymous"
+                        />
 
-                {/* Crown, Avatar & Rank Badge sitting on top */}
-                <div className="absolute bottom-[146px] z-20 flex flex-col items-center">
-                  {/* Clean Vector SVG Crown */}
-                  <svg
-                    width="32"
-                    height="22"
-                    viewBox="0 0 34 24"
-                    fill="none"
-                    className="mb-1 drop-shadow-md"
-                  >
-                    <path
-                      d="M3 20h28v2H3v-2zm1.5-14l6.5 6 6-10 6 10 6.5-6 2 12H2.5l2-12z"
-                      fill="#f59e0b"
-                    />
-                    <path d="M17 2l-6 10 6-3 6 3-6-10z" fill="#fbbf24" />
-                    <circle cx="4.5" cy="5.5" r="1.8" fill="#fef08a" />
-                    <circle cx="17" cy="1.8" r="2.2" fill="#fef08a" />
-                    <circle cx="29.5" cy="5.5" r="1.8" fill="#fef08a" />
-                  </svg>
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-[15px] font-semibold text-white">
+                            {item.username}
+                          </div>
+                          <div className="text-[11px] text-slate-400 font-mono">{item.handle}</div>
+                        </div>
 
-                  <img
-                    src={top1?.avatar}
-                    alt={top1?.username}
-                    className="h-[72px] w-[72px] rounded-full border-[3px] border-[#f59e0b] object-cover shadow-xl shadow-amber-500/25"
-                    crossOrigin="anonymous"
-                  />
-                  <div className="relative -mt-[14px] flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#f59e0b] text-[13px] font-bold text-black shadow-md">
-                    1
+                        <div className="flex flex-col items-end">
+                          <div className="rounded bg-white/5 px-2 py-0.5 text-[10px] font-mono font-bold text-slate-300">
+                            LVL {item.level}
+                          </div>
+                          <div className="mt-1 font-mono text-[12px] font-semibold text-slate-400">
+                            {item.xp.toLocaleString()} XP
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              </div>
-
-              {/* Rank 3 (Right) */}
-              <div className="relative flex h-[218px] flex-1 flex-col items-center justify-end">
-                {/* Pedestal Box */}
-                <div className="flex h-[138px] w-full flex-col items-center rounded-t-[14px] border-l border-r border-t-[3px] border-[#f97316] border-l-orange-500/20 border-r-orange-500/20 bg-gradient-to-b from-[#2b2323] to-[#1b1717] pt-[34px]">
-                  <div className="w-[135px] truncate text-center text-[14px] font-semibold text-white">
-                    {top3?.username || "Player 3"}
-                  </div>
-                  <div className="mt-[2px] text-[11px] text-slate-400">{top3?.handle || "@player3"}</div>
-                  <div className="mt-[10px] rounded-full bg-orange-500/15 px-2 py-0.5 text-[12px] font-semibold text-[#f97316]">
-                    Level {top3?.level ?? 1}
-                  </div>
-                  <div className="mt-[4px] text-[12px] font-medium text-[#f97316]">{top3?.xp ?? 0} XP</div>
-                </div>
-
-                {/* Avatar & Rank Badge sitting on top */}
-                <div className="absolute bottom-[110px] z-20 flex flex-col items-center">
-                  <img
-                    src={top3?.avatar}
-                    alt={top3?.username}
-                    className="h-[64px] w-[64px] rounded-full border-[3px] border-[#f97316] object-cover shadow-lg shadow-orange-500/20"
-                    crossOrigin="anonymous"
-                  />
-                  <div className="relative -mt-[14px] flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#f97316] text-[12px] font-bold text-black shadow-md">
-                    3
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Ranks 4 to 10 Rows */}
-            <div className="flex w-full flex-col gap-2">
-              {rest.map((item) => (
-                <div
-                  key={item.rank}
-                  className="flex h-[68px] w-full items-center rounded-[12px] border border-white/6 bg-white/[0.04] px-4 transition-all hover:bg-white/[0.07]"
-                >
-                  <div className="mr-2.5 flex w-[36px] flex-col items-center">
-                    <span className="text-[18px] font-bold leading-5 text-white">{item.rank}</span>
-                    <span className="text-[10px] leading-3 text-slate-400">Rank</span>
-                  </div>
-
-                  <img
-                    src={item.avatar}
-                    alt={item.username}
-                    className="mr-3.5 h-[46px] w-[46px] rounded-full border-2 border-white/10 object-cover bg-black/40"
-                    crossOrigin="anonymous"
-                  />
-
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-[15px] font-semibold text-white">{item.username}</div>
-                    <div className="mt-[2px] text-[12px] text-slate-400">{item.handle}</div>
-                  </div>
-
-                  <div className="flex flex-col items-end">
-                    <div className="text-[13px] font-semibold text-slate-200">Level {item.level}</div>
-                    <div className="mt-[2px] text-[12px] text-slate-400">{item.xp} XP</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Bottom Info Bar */}
-      <div className="flex items-center justify-between border-t border-white/8 bg-black/30 px-5 py-2.5 text-xs text-slate-400">
-        <span>Gaming & Discord Bot Leaderboard Card</span>
+      {/* Bottom Telemetry Bar */}
+      <div className="flex items-center justify-between border-t border-white/8 bg-[#0a0c10]/80 px-4 py-2.5 text-xs text-slate-400 font-mono">
+        <span>Roster: <strong className="text-white font-mono">{items.length} players</strong> · Layout: <strong className="text-yellow-300">{layout.toUpperCase()}</strong></span>
         {previewPngUrl && (
           <a
             href={previewPngUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1 text-amber-400 hover:text-amber-300"
+            className="flex items-center gap-1 text-[#ff462b] hover:underline"
           >
-            <span>Open exported image</span>
+            <span>Inspect Raw PNG Buffer</span>
             <ExternalLink className="h-3 w-3" />
           </a>
         )}

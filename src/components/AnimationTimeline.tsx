@@ -1696,43 +1696,45 @@ export function AnimationTimeline() {
   return (
     <div className="space-y-4">
       {/* Top Banner Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/40 via-[#0e0a1e] to-indigo-950/40 p-4 shadow-xl backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/8 bg-[#0f1118] p-3.5 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30">
-            <Film className="h-5 w-5" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#141722] border border-white/10 text-white shadow-sm">
+            <Film className="h-4 w-4 text-[#ff462b]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-white">Animation Studio</h2>
-              <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-[10px] font-semibold text-purple-300 border border-purple-500/30">
-                GIF & WebP
+              <h2 className="font-['Space_Grotesk',sans-serif] text-sm font-bold text-white">
+                Animation Timeline Studio
+              </h2>
+              <span className="rounded bg-white/5 px-2 py-0.5 font-mono text-[10px] font-semibold text-slate-300 border border-white/10">
+                60 FPS · GIF / WebP
               </span>
             </div>
-            <p className="text-xs text-slate-400">
-              Interactive timeline, draggable tracks & layers, keyframe sliding, color palette & variable parsing
+            <p className="font-mono text-[10px] text-slate-400">
+              Multi-track keyframe engine, vector interpolation, layer transforms & particle synthesizer
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
           {/* Variable Manager Button */}
           <button
             onClick={() => setShowVariableModal(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-purple-500/30 bg-purple-950/40 px-3 py-2 text-xs font-semibold text-purple-200 hover:bg-purple-900/50 hover:border-purple-400 transition"
-            title="Quản lý biến mẫu ({userName}, {guildName}, {userAVTurl}...)"
+            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-slate-300 hover:text-white hover:bg-white/5 transition tactile-press"
+            title="Manage template variables ({userName}, {guildName}, {userAVTurl}...)"
           >
-            <SlidersHorizontal className="h-3.5 w-3.5 text-purple-400" />
-            <span>Biến số ({Object.keys(variables).length})</span>
+            <SlidersHorizontal className="h-3.5 w-3.5 text-[#ff462b]" />
+            <span>Variables ({Object.keys(variables).length})</span>
           </button>
 
           {/* Format selector */}
-          <div className="flex items-center rounded-xl bg-black/40 border border-white/10 p-0.5">
+          <div className="flex items-center rounded-lg bg-[#090a0f] border border-white/10 p-0.5">
             <button
               onClick={() => setFormat("gif")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`px-2.5 py-1 rounded text-[11px] font-semibold transition ${
                 format === "gif"
-                  ? "bg-purple-600 text-white shadow-sm"
+                  ? "bg-[#1d2232] text-white shadow-sm"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -1740,9 +1742,9 @@ export function AnimationTimeline() {
             </button>
             <button
               onClick={() => setFormat("webp")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`px-2.5 py-1 rounded text-[11px] font-semibold transition ${
                 format === "webp"
-                  ? "bg-purple-600 text-white shadow-sm"
+                  ? "bg-[#1d2232] text-white shadow-sm"
                   : "text-slate-400 hover:text-white"
               }`}
             >
@@ -1752,66 +1754,66 @@ export function AnimationTimeline() {
 
           <button
             onClick={() => openApiPayloadModal("unparsed")}
-            className="flex items-center gap-1.5 rounded-xl border border-purple-500/30 bg-purple-950/40 px-3 py-2 text-xs font-semibold text-purple-200 hover:bg-purple-900/50 hover:border-purple-400 transition"
-            title="Xem, cấu hình (chưa parse / đã parse) và xuất API JSON Payload"
+            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-slate-300 hover:text-white hover:bg-white/5 transition tactile-press"
+            title="Inspect API JSON Payload"
           >
-            <Code2 className="h-3.5 w-3.5 text-purple-400" />
-            <span>API Payload</span>
+            <Code2 className="h-3.5 w-3.5 text-slate-400" />
+            <span>API JSON</span>
           </button>
 
           <button
             onClick={handleCopySdkSnippet}
-            className="flex items-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-950/40 px-3 py-2 text-xs font-semibold text-cyan-200 hover:bg-cyan-900/50 hover:border-cyan-400 transition"
-            title="Sao chép snippet SDK Image Studio từ thiết kế hiện tại"
+            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#090a0f] px-2.5 py-1.5 text-slate-300 hover:text-white hover:bg-white/5 transition tactile-press"
+            title="Copy Image Studio Node/Python SDK snippet"
           >
-            <Terminal className="h-3.5 w-3.5 text-cyan-400" />
-            <span>{copiedSdk ? "Đã chép SDK!" : "Copy SDK"}</span>
+            <Terminal className="h-3.5 w-3.5 text-amber-400" />
+            <span>{copiedSdk ? "Copied SDK" : "Copy SDK"}</span>
           </button>
 
           <button
             onClick={exportCurrentFramePng}
             disabled={exporting || exportingFrame}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-emerald-900/30 transition hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50"
-            title={`Xuất ảnh tĩnh PNG chất lượng cao tại thời điểm frame hiện tại (${Math.round(time)}ms)`}
+            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#161a26] px-3 py-1.5 font-semibold text-slate-200 hover:text-white hover:bg-[#1e2334] transition tactile-press disabled:opacity-40"
+            title={`Export single frame PNG at playhead (${Math.round(time)}ms)`}
           >
             {exportingFrame ? (
-              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
             ) : (
-              <Camera className="h-3.5 w-3.5" />
+              <Camera className="h-3.5 w-3.5 text-emerald-400" />
             )}
-            <span>{exportingFrame ? "Exporting PNG..." : `Export Frame PNG (${Math.round(time)}ms)`}</span>
+            <span>{exportingFrame ? "Exporting..." : `Frame PNG (${Math.round(time)}ms)`}</span>
           </button>
 
           <button
             onClick={exportAnimation}
             disabled={exporting || exportingFrame}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-600/30 transition hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-lg bg-[#ff462b] px-3.5 py-1.5 font-semibold text-white shadow-md shadow-[#ff462b]/20 hover:bg-[#ea381f] disabled:opacity-40 transition tactile-press"
           >
             {exporting ? (
-              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
             ) : (
               <Download className="h-3.5 w-3.5" />
             )}
-            <span>{exporting ? "Rendering..." : `Export ${format.toUpperCase()}`}</span>
+            <span>{exporting ? "Rendering..." : `Render ${format.toUpperCase()}`}</span>
           </button>
         </div>
       </div>
 
       {/* Project (.istudio) & Command History Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#0d091d]/90 px-4 py-3 shadow-xl backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/8 bg-[#0f1118] px-3.5 py-2.5 shadow-xl font-mono text-xs">
         {/* Left: Project File Controls */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1.5 rounded-xl border border-purple-500/30 bg-black/50 px-3 py-1.5 text-xs shadow-inner">
-            <FileCode className="h-4 w-4 text-purple-400 shrink-0" />
+          <div className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-[#090a0f] px-2.5 py-1 text-xs shadow-inner">
+            <FileCode className="h-3.5 w-3.5 text-[#ff462b] shrink-0" />
             <input
               type="text"
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
-              placeholder="Tên project"
-              className="w-36 sm:w-48 bg-transparent text-xs font-semibold text-white outline-none focus:text-purple-200"
-              title="Bấm để đổi tên project"
+              placeholder="Project Name"
+              className="w-32 sm:w-44 bg-transparent text-xs font-semibold text-white outline-none focus:text-slate-100"
+              title="Click to rename project"
             />
-            <span className="rounded bg-purple-900/60 px-1.5 py-0.5 text-[10px] font-mono font-bold text-purple-300">
+            <span className="rounded bg-white/5 px-1 py-0.2 text-[9px] font-mono font-bold text-slate-400 border border-white/10">
               .istudio
             </span>
           </div>
@@ -1819,20 +1821,20 @@ export function AnimationTimeline() {
           {/* File operations: New, Open, Save, Save As, Import, Export */}
           <button
             onClick={handleNewProject}
-            className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white transition"
-            title="Tạo mới animation project (New)"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white transition tactile-press"
+            title="Create new project (New)"
           >
-            <FilePlus className="h-3.5 w-3.5 text-slate-400" />
-            <span>Mới</span>
+            <FilePlus className="h-3 w-3 text-slate-400" />
+            <span>New</span>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white transition"
-            title="Mở file .istudio hoặc .json từ máy tính (Open)"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white transition tactile-press"
+            title="Open .istudio or .json file from disk"
           >
-            <FolderOpen className="h-3.5 w-3.5 text-amber-400" />
-            <span>Mở</span>
+            <FolderOpen className="h-3 w-3 text-amber-400" />
+            <span>Open</span>
           </button>
           <input
             ref={fileInputRef}
@@ -1848,11 +1850,11 @@ export function AnimationTimeline() {
 
           <button
             onClick={handleQuickSave}
-            className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white transition"
-            title="Lưu nhanh vào bộ nhớ trình duyệt (Ctrl+S)"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white transition tactile-press"
+            title="Save to browser storage (Ctrl+S)"
           >
-            <Save className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Lưu</span>
+            <Save className="h-3 w-3 text-emerald-400" />
+            <span>Save</span>
           </button>
 
           <button
@@ -1860,11 +1862,11 @@ export function AnimationTimeline() {
               setSaveAsFilename(projectName);
               setShowSaveAsModal(true);
             }}
-            className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white transition"
-            title="Lưu với tên mới hoặc vị trí khác (Save As)"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white transition tactile-press"
+            title="Save with new name (Save As)"
           >
-            <Copy className="h-3.5 w-3.5 text-cyan-400" />
-            <span>Lưu thành...</span>
+            <Copy className="h-3 w-3 text-sky-400" />
+            <span>Save As</span>
           </button>
 
           <button
@@ -1873,25 +1875,25 @@ export function AnimationTimeline() {
               setImportJsonText("");
               setShowImportModal(true);
             }}
-            className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white transition"
-            title="Nhập dữ liệu project từ file hoặc dán JSON (Import)"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white transition tactile-press"
+            title="Import project JSON"
           >
-            <Upload className="h-3.5 w-3.5 text-sky-400" />
-            <span>Nhập</span>
+            <Upload className="h-3 w-3 text-slate-400" />
+            <span>Import</span>
           </button>
 
           <button
             onClick={handleSaveAsIStudio}
-            className="flex items-center gap-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 px-3 py-1.5 text-xs font-semibold text-indigo-200 hover:bg-indigo-900/60 hover:text-white transition shadow-sm"
-            title="Xuất tải về máy tính tệp dự án .istudio (Export)"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-[#161a26] px-2.5 py-1 text-[11px] font-semibold text-slate-200 hover:bg-[#1e2334] hover:text-white transition shadow-sm tactile-press"
+            title="Download .istudio project file"
           >
-            <FileDown className="h-3.5 w-3.5 text-indigo-400" />
-            <span>Xuất .istudio</span>
+            <FileDown className="h-3 w-3 text-[#ff462b]" />
+            <span>Export .istudio</span>
           </button>
 
           {lastSavedNotice && (
-            <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-mono animate-in fade-in ml-2">
-              <Check className="h-3.5 w-3.5" /> {lastSavedNotice}
+            <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-mono ml-2">
+              <Check className="h-3 w-3" /> {lastSavedNotice}
             </span>
           )}
         </div>

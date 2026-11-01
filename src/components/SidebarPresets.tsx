@@ -11,6 +11,7 @@ import {
   ChevronUp,
   X,
   FileCheck,
+  SlidersHorizontal,
 } from "lucide-react";
 import {
   getBuiltinPresets,
@@ -61,7 +62,7 @@ export function SidebarPresets({
   const handleApplyPreset = (preset: StoredPreset) => {
     setActivePresetId(preset.id);
     onLoadPreset(preset.data, preset.name);
-    showFeedback(`Đã áp dụng mẫu: "${preset.name}"`);
+    showFeedback(`Applied: "${preset.name}"`);
   };
 
   const handleSaveCurrent = (e: React.FormEvent) => {
@@ -95,77 +96,46 @@ export function SidebarPresets({
     setPresetNameInput("");
     setPresetDescInput("");
     setActiveTab("user");
-    showFeedback(`Đã lưu preset "${saved.name}" vào Local Storage!`);
+    showFeedback(`Preset saved to Local Storage`);
   };
 
   const handleDeleteUserPreset = (presetId: string, name: string) => {
     deleteUserPreset(generatorType, presetId);
     setUserPresets((prev) => prev.filter((p) => p.id !== presetId));
     if (activePresetId === presetId) setActivePresetId(null);
-    showFeedback(`Đã xóa preset "${name}"`);
+    showFeedback(`Deleted preset "${name}"`);
   };
 
-  // Color theme according to generatorType
-  const themeColor =
+  const domainAccent =
     generatorType === "song"
-      ? {
-          border: "border-purple-500/20",
-          bg: "bg-purple-950/20",
-          accent: "text-purple-400",
-          btn: "bg-purple-600 hover:bg-purple-500",
-          pillActive: "bg-purple-600 text-white shadow-purple-900/40",
-          ring: "ring-purple-400",
-        }
+      ? "text-amber-400"
       : generatorType === "profile"
-      ? {
-          border: "border-rose-500/20",
-          bg: "bg-rose-950/20",
-          accent: "text-rose-400",
-          btn: "bg-rose-600 hover:bg-rose-500",
-          pillActive: "bg-rose-600 text-white shadow-rose-900/40",
-          ring: "ring-rose-400",
-        }
+      ? "text-rose-400"
       : generatorType === "leaderboard"
-      ? {
-          border: "border-amber-500/20",
-          bg: "bg-amber-950/20",
-          accent: "text-amber-400",
-          btn: "bg-amber-600 hover:bg-amber-500",
-          pillActive: "bg-amber-600 text-white shadow-amber-900/40",
-          ring: "ring-amber-400",
-        }
-      : {
-          border: "border-indigo-500/20",
-          bg: "bg-indigo-950/20",
-          accent: "text-indigo-400",
-          btn: "bg-indigo-600 hover:bg-indigo-500",
-          pillActive: "bg-indigo-600 text-white shadow-indigo-900/40",
-          ring: "ring-indigo-400",
-        };
+      ? "text-yellow-400"
+      : "text-sky-400";
 
   return (
-    <div
-      className={`rounded-xl border ${themeColor.border} ${themeColor.bg} p-3.5 transition-all space-y-3`}
-    >
+    <div className="rounded-xl border border-white/8 bg-[#0f1118] p-3.5 space-y-3">
       {/* Header Bar */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black/40 border border-white/10 text-white">
-            <BookmarkCheck className={`h-4 w-4 ${themeColor.accent}`} />
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#141722] border border-white/10 text-white">
+            <BookmarkCheck className={`h-4 w-4 ${domainAccent}`} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-white tracking-wide">
-                Presets & Mẫu Cấu Hình
+              <span className="font-['Space_Grotesk',sans-serif] text-xs font-bold text-white tracking-wide">
+                Preset Catalog
               </span>
               {feedbackMsg && (
-                <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-medium text-emerald-300 border border-emerald-500/30 animate-fade-in">
+                <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-400 border border-emerald-500/25">
                   {feedbackMsg}
                 </span>
               )}
             </div>
-            <span className="text-[10px] text-slate-400">
-              Lưu & nạp nhanh cấu hình từ Local Storage
+            <span className="font-mono text-[10px] text-slate-400">
+              Curated layouts & user storage
             </span>
           </div>
         </div>
@@ -177,18 +147,18 @@ export function SidebarPresets({
               setPresetNameInput("");
               setShowSaveModal(true);
             }}
-            className={`flex items-center gap-1 rounded-lg ${themeColor.btn} px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm transition`}
-            title="Lưu cấu hình hiện tại thành preset trong Local Storage"
+            className="flex items-center gap-1 rounded-md border border-white/10 bg-[#161a26] px-2.5 py-1 text-[11px] font-medium text-slate-200 hover:text-white hover:bg-[#1e2334] transition tactile-press"
+            title="Save current configuration to browser storage"
           >
-            <Plus className="h-3 w-3" />
-            <span>Lưu mẫu</span>
+            <Plus className="h-3 w-3 text-[#ff462b]" />
+            <span>Save Custom</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsCollapsed((v) => !v)}
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-black/30 text-slate-400 hover:text-white hover:bg-white/5 transition"
-            title={isCollapsed ? "Mở rộng danh sách preset" : "Thu gọn"}
+            className="flex h-7 w-7 items-center justify-center rounded-md border border-white/8 bg-[#141722] text-slate-400 hover:text-white hover:bg-white/5 transition"
+            title={isCollapsed ? "Expand presets" : "Collapse"}
           >
             {isCollapsed ? (
               <ChevronDown className="h-3.5 w-3.5" />
@@ -201,38 +171,36 @@ export function SidebarPresets({
 
       {!isCollapsed && (
         <div className="space-y-2.5 pt-1">
-          {/* Tabs: Built-in Templates vs My Saved Presets */}
+          {/* Tabs: Curated Built-in vs User Stored */}
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
-            <div className="flex items-center gap-1 p-0.5 rounded-lg bg-black/40 border border-white/5 text-[11px]">
+            <div className="flex items-center gap-1 p-0.5 rounded-md bg-[#0a0c10] border border-white/5 text-[11px]">
               <button
                 type="button"
                 onClick={() => setActiveTab("builtin")}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded font-medium transition ${
                   activeTab === "builtin"
-                    ? `${themeColor.pillActive} font-semibold shadow-sm`
+                    ? "bg-[#1d2232] text-white shadow-sm font-semibold"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                <Sparkles className="h-3 w-3" />
-                <span>Mẫu có sẵn ({builtinPresets.length})</span>
+                <span>Curated ({builtinPresets.length})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveTab("user")}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded font-medium transition ${
                   activeTab === "user"
-                    ? `${themeColor.pillActive} font-semibold shadow-sm`
+                    ? "bg-[#1d2232] text-white shadow-sm font-semibold"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                <FolderHeart className="h-3 w-3" />
-                <span>Đã lưu của tôi ({userPresets.length})</span>
+                <span>My Presets ({userPresets.length})</span>
               </button>
             </div>
 
-            <span className="text-[10px] text-slate-500 hidden sm:inline font-mono">
-              localStorage
+            <span className="text-[10px] text-slate-400 hidden sm:inline font-mono">
+              STORAGE: READY
             </span>
           </div>
 
@@ -246,30 +214,30 @@ export function SidebarPresets({
                     key={p.id}
                     type="button"
                     onClick={() => handleApplyPreset(p)}
-                    className={`group relative flex flex-col items-start gap-1 rounded-xl border p-2.5 text-left transition-all ${
+                    className={`group relative flex flex-col items-start gap-1 rounded-lg border p-2.5 text-left transition-all ${
                       isActive
-                        ? `border-white/40 bg-black/60 shadow-md ring-1 ${themeColor.ring}`
-                        : "border-white/10 bg-black/30 hover:border-white/20 hover:bg-black/50"
+                        ? "border-[#ff462b]/50 bg-[#161a26] shadow-sm"
+                        : "border-white/5 bg-[#0a0c10]/60 hover:border-white/15 hover:bg-[#121520]"
                     }`}
                   >
-                    <div className="flex w-full items-center justify-between">
-                      <span className="text-xs font-bold text-white group-hover:text-purple-200 transition">
+                    <div className="flex w-full items-center justify-between gap-1">
+                      <span className="text-xs font-semibold text-white group-hover:text-slate-100 transition truncate">
                         {p.name}
                       </span>
                       {isActive ? (
-                        <span className="flex items-center gap-0.5 rounded bg-emerald-500/20 px-1 py-0.5 text-[9px] font-semibold text-emerald-400 border border-emerald-500/30">
+                        <span className="flex items-center gap-0.5 rounded bg-emerald-500/15 px-1 py-0.5 text-[9px] font-mono font-semibold text-emerald-400 border border-emerald-500/25 shrink-0">
                           <Check className="h-2.5 w-2.5" />
-                          <span>Đang dùng</span>
+                          <span>Active</span>
                         </span>
                       ) : (
                         p.badge && (
-                          <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-slate-400 border border-white/5">
+                          <span className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-[9px] text-slate-400 border border-white/5 shrink-0">
                             {p.badge}
                           </span>
                         )
                       )}
                     </div>
-                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-relaxed">
+                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-normal">
                       {p.description}
                     </p>
                   </button>
@@ -279,13 +247,13 @@ export function SidebarPresets({
           ) : (
             <div>
               {userPresets.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/10 bg-black/20 p-4 text-center">
-                  <Bookmark className="mx-auto h-5 w-5 text-slate-500 mb-1" />
-                  <p className="text-xs font-semibold text-slate-300">
-                    Chưa có preset nào được lưu
+                <div className="rounded-lg border border-dashed border-white/10 bg-[#0a0c10]/30 p-4 text-center">
+                  <Bookmark className="mx-auto h-4 w-4 text-slate-500 mb-1" />
+                  <p className="text-xs font-medium text-slate-300">
+                    No custom presets stored yet
                   </p>
-                  <p className="mt-0.5 text-[11px] text-slate-400">
-                    Bạn có thể chỉnh sửa cấu hình rồi bấm <strong>"+ Lưu mẫu"</strong> để lưu vào trình duyệt.
+                  <p className="mt-0.5 text-[10px] text-slate-400">
+                    Customize your canvas parameters and click "+ Save Custom" to store locally.
                   </p>
                 </div>
               ) : (
@@ -295,10 +263,10 @@ export function SidebarPresets({
                     return (
                       <div
                         key={p.id}
-                        className={`group relative flex flex-col justify-between gap-1.5 rounded-xl border p-2.5 text-left transition-all ${
+                        className={`group relative flex flex-col justify-between gap-1.5 rounded-lg border p-2.5 text-left transition-all ${
                           isActive
-                            ? `border-white/40 bg-black/60 shadow-md ring-1 ${themeColor.ring}`
-                            : "border-white/10 bg-black/30 hover:border-white/20 hover:bg-black/50"
+                            ? "border-[#ff462b]/50 bg-[#161a26]"
+                            : "border-white/5 bg-[#0a0c10]/60 hover:border-white/15 hover:bg-[#121520]"
                         }`}
                       >
                         <div
@@ -306,17 +274,17 @@ export function SidebarPresets({
                           className="cursor-pointer space-y-1"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-white group-hover:text-purple-200 transition">
+                            <span className="text-xs font-semibold text-white group-hover:text-slate-100 transition truncate">
                               {p.name}
                             </span>
                             {isActive ? (
-                              <span className="flex items-center gap-0.5 rounded bg-emerald-500/20 px-1 py-0.5 text-[9px] font-semibold text-emerald-400 border border-emerald-500/30">
+                              <span className="flex items-center gap-0.5 rounded bg-emerald-500/15 px-1 py-0.5 text-[9px] font-mono font-semibold text-emerald-400 border border-emerald-500/25">
                                 <Check className="h-2.5 w-2.5" />
-                                <span>Đang dùng</span>
+                                <span>Active</span>
                               </span>
                             ) : (
                               p.badge && (
-                                <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-slate-400 border border-white/5 truncate max-w-[100px]">
+                                <span className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-[9px] text-slate-400 border border-white/5 truncate max-w-[100px]">
                                   {p.badge}
                                 </span>
                               )
@@ -331,9 +299,9 @@ export function SidebarPresets({
                           <button
                             type="button"
                             onClick={() => handleApplyPreset(p)}
-                            className="text-[10px] font-semibold text-purple-400 hover:text-purple-300 transition"
+                            className="font-mono text-[10px] font-semibold text-slate-300 hover:text-white transition"
                           >
-                            Nạp mẫu này →
+                            Load Template →
                           </button>
                           <button
                             type="button"
@@ -342,7 +310,7 @@ export function SidebarPresets({
                               handleDeleteUserPreset(p.id, p.name);
                             }}
                             className="text-slate-500 hover:text-red-400 transition p-0.5 rounded"
-                            title="Xóa preset này khỏi Local Storage"
+                            title="Delete this preset from browser storage"
                           >
                             <Trash2 className="h-3 w-3" />
                           </button>
@@ -359,19 +327,23 @@ export function SidebarPresets({
 
       {/* Save Preset Modal */}
       {showSaveModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#120d26] p-5 shadow-2xl space-y-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+        >
+          <div className="relative w-full max-w-md rounded-xl border border-white/10 bg-[#0f1118] p-5 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-600/30 border border-purple-500/40 text-purple-300">
-                  <Bookmark className="h-4 w-4" />
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#141722] border border-white/10 text-white">
+                  <Bookmark className="h-4 w-4 text-[#ff462b]" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">
-                    Lưu Preset Mới vào Local Storage
+                  <h3 className="font-['Space_Grotesk',sans-serif] text-sm font-bold text-white">
+                    Save Custom Preset
                   </h3>
-                  <p className="text-[11px] text-slate-400">
-                    Lưu toàn bộ thông số hiện tại của {generatorType.toUpperCase()}
+                  <p className="font-mono text-[10px] text-slate-400 uppercase tracking-wider">
+                    {generatorType.toUpperCase()} · Local Storage
                   </p>
                 </div>
               </div>
@@ -387,8 +359,8 @@ export function SidebarPresets({
 
             <form onSubmit={handleSaveCurrent} className="space-y-3">
               <div>
-                <label className="text-xs font-semibold text-slate-200">
-                  Tên Preset <span className="text-rose-400">*</span>
+                <label className="text-xs font-medium text-slate-300">
+                  Preset Title <span className="text-[#ff462b]">*</span>
                 </label>
                 <input
                   type="text"
@@ -396,43 +368,43 @@ export function SidebarPresets({
                   autoFocus
                   value={presetNameInput}
                   onChange={(e) => setPresetNameInput(e.target.value)}
-                  placeholder="Ví dụ: Bảng Xếp Hạng Mùa 2, Profile Neon Cyber..."
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/50 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+                  placeholder="e.g. Neo Tokyo Billboard, Minimal Mono..."
+                  className="mt-1 w-full rounded-lg border border-white/10 bg-[#090a0f] px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-[#ff462b] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-200">
-                  Mô tả / Ghi chú (tùy chọn)
+                <label className="text-xs font-medium text-slate-300">
+                  Notes / Description (Optional)
                 </label>
                 <input
                   type="text"
                   value={presetDescInput}
                   onChange={(e) => setPresetDescInput(e.target.value)}
-                  placeholder="Ví dụ: Thiết kế dành riêng cho server Discord chính"
-                  className="mt-1 w-full rounded-xl border border-white/10 bg-black/50 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+                  placeholder="e.g. Optimized for 1440p displays and Discord embeds"
+                  className="mt-1 w-full rounded-lg border border-white/10 bg-[#090a0f] px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-[#ff462b] focus:outline-none"
                 />
               </div>
 
-              <div className="rounded-xl border border-white/5 bg-black/30 p-2.5 flex items-center justify-between text-[11px] text-slate-400">
-                <span>Dữ liệu sẽ được lưu an toàn trong:</span>
-                <span className="font-mono text-purple-300">Local Storage</span>
+              <div className="rounded-lg border border-white/5 bg-[#090a0f] p-2.5 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                <span>Storage Target:</span>
+                <span className="text-slate-300">Browser Local Storage</span>
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
                 <button
                   type="button"
                   onClick={() => setShowSaveModal(false)}
-                  className="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10"
+                  className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10"
                 >
-                  Hủy
+                  Cancel
                 </button>
                 <button
                   type="submit"
-                  className={`flex items-center gap-1.5 rounded-xl ${themeColor.btn} px-4 py-1.5 text-xs font-bold text-white shadow-md transition`}
+                  className="flex items-center gap-1.5 rounded-lg bg-[#ff462b] px-4 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#ea381f] transition tactile-press"
                 >
                   <FileCheck className="h-3.5 w-3.5" />
-                  <span>Lưu Preset</span>
+                  <span>Save Preset</span>
                 </button>
               </div>
             </form>

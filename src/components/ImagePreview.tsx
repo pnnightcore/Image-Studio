@@ -9,6 +9,9 @@ import {
   Check,
   Music,
   ExternalLink,
+  Layers,
+  ZoomIn,
+  Sparkles,
 } from "lucide-react";
 
 interface ImagePreviewProps {
@@ -66,7 +69,7 @@ export function ImagePreview({
       } else if (zoomMode === "50") {
         setScale(0.5);
       } else {
-        const availableWidth = containerRef.current.clientWidth - 40;
+        const availableWidth = containerRef.current.clientWidth - 48;
         const newScale = Math.min(1, Math.max(0.35, availableWidth / CANVAS_WIDTH));
         setScale(newScale);
       }
@@ -106,60 +109,41 @@ export function ImagePreview({
   );
 
   return (
-    <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0e0a1e]/90 shadow-2xl backdrop-blur-xl">
-      {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3.5">
+    <div className="flex flex-col rounded-xl border border-white/8 bg-[#0f1118] shadow-2xl overflow-hidden">
+      {/* Studio Stage Header Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/8 px-4 py-3 bg-[#0a0c10]/60">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
-            <h3 className="text-sm font-semibold text-white">Live Canvas Preview</h3>
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            <h3 className="font-['Space_Grotesk',sans-serif] text-xs font-bold uppercase tracking-wider text-white">
+              Studio Stage Viewport
+            </h3>
           </div>
-          <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-xs text-purple-300">
-            {CANVAS_WIDTH} × {height} px
+          <span className="font-mono text-[10px] text-slate-300 rounded border border-white/10 bg-white/5 px-2 py-0.5">
+            {CANVAS_WIDTH} × {height} PX
           </span>
-          <span className="hidden text-xs text-slate-400 sm:inline">
-            ({songs.length} tracks · {effectiveLayout === "grid" ? "Large Cards (<=10)" : "Video List (>10)"})
+          <span className="hidden text-[11px] font-mono text-slate-400 lg:inline">
+            [{songs.length} Tracks · {effectiveLayout.toUpperCase()}]
           </span>
         </div>
 
-        {/* Zoom & Action Controls */}
+        {/* Viewport Scale & Action Controls */}
         <div className="flex items-center gap-2">
           {/* Zoom controls */}
-          <div className="flex items-center rounded-lg border border-white/10 bg-black/40 p-0.5 text-xs text-slate-300">
-            <button
-              onClick={() => setZoomMode("fit")}
-              className={`rounded px-2 py-1 font-medium transition-colors ${
-                zoomMode === "fit" ? "bg-purple-600 text-white" : "hover:text-white"
-              }`}
-              title="Fit to view"
-            >
-              Fit
-            </button>
-            <button
-              onClick={() => setZoomMode("50")}
-              className={`rounded px-2 py-1 font-medium transition-colors ${
-                zoomMode === "50" ? "bg-purple-600 text-white" : "hover:text-white"
-              }`}
-            >
-              50%
-            </button>
-            <button
-              onClick={() => setZoomMode("75")}
-              className={`rounded px-2 py-1 font-medium transition-colors ${
-                zoomMode === "75" ? "bg-purple-600 text-white" : "hover:text-white"
-              }`}
-            >
-              75%
-            </button>
-            <button
-              onClick={() => setZoomMode("100")}
-              className={`rounded px-2 py-1 font-medium transition-colors ${
-                zoomMode === "100" ? "bg-purple-600 text-white" : "hover:text-white"
-              }`}
-              title="Original 1:1"
-            >
-              100%
-            </button>
+          <div className="flex items-center rounded-md border border-white/10 bg-[#090a0f] p-0.5 text-xs text-slate-300 font-mono">
+            {(["fit", "50", "75", "100"] as const).map((z) => (
+              <button
+                key={z}
+                onClick={() => setZoomMode(z)}
+                className={`rounded px-2 py-0.5 text-[11px] transition-colors ${
+                  zoomMode === z
+                    ? "bg-[#1d2232] text-white font-semibold"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {z === "fit" ? "Fit" : `${z}%`}
+              </button>
+            ))}
           </div>
 
           {/* Particle System Ambience Selector */}
@@ -174,53 +158,53 @@ export function ImagePreview({
           {lastGeneratedBlob && (
             <button
               onClick={handleCopyBlob}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/10"
-              title="Copy image to clipboard"
+              className="flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-200 hover:bg-white/10 transition tactile-press"
+              title="Copy PNG buffer to system clipboard"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-              <span>{copied ? "Copied!" : "Copy"}</span>
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
           )}
 
-          {/* Generate PNG Action Button */}
+          {/* Export PNG */}
           <button
             onClick={onGenerate}
             disabled={isGenerating || songs.length === 0}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-1.5 text-xs font-semibold text-white shadow-lg shadow-purple-600/30 transition-all hover:from-purple-500 hover:to-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-md bg-[#ff462b] px-3 py-1 text-xs font-semibold text-white shadow-sm hover:bg-[#ea381f] disabled:cursor-not-allowed disabled:opacity-40 transition-all tactile-press"
           >
             {isGenerating ? (
               <>
-                <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <span>Exporting...</span>
               </>
             ) : (
               <>
                 <Download className="h-3.5 w-3.5" />
-                <span>Export PNG</span>
+                <span>Render</span>
               </>
             )}
           </button>
         </div>
       </div>
 
-      {/* Canvas Viewport Area */}
+      {/* Canvas Stage Viewport Area with Precision Grid */}
       <div
         ref={containerRef}
-        className="relative flex min-h-[480px] flex-1 items-start justify-center overflow-auto p-6"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(91, 0, 184, 0.15) 0%, transparent 70%), #06040d",
-        }}
+        className="relative flex min-h-[460px] flex-1 items-start justify-center overflow-auto p-6 bg-studio-stage"
       >
         {songs.length === 0 ? (
           <div className="my-auto flex flex-col items-center justify-center p-8 text-center text-slate-500">
-            <Music className="mb-3 h-12 w-12 text-slate-600" />
-            <p className="text-base font-medium text-slate-400">No tracks to preview</p>
-            <p className="mt-1 text-xs">Click "Load Sample" or paste track items on the left</p>
+            <Music className="mb-3 h-10 w-10 text-slate-600" />
+            <p className="font-['Space_Grotesk',sans-serif] text-sm font-semibold text-slate-400">
+              Canvas is Empty
+            </p>
+            <p className="mt-1 font-mono text-[11px] text-slate-500">
+              Add track items or load a curated template from the left inspector.
+            </p>
           </div>
         ) : (
           <div
-            className="transition-transform duration-150 ease-out origin-top"
+            className="transition-transform duration-150 ease-out origin-top shadow-2xl"
             style={{
               transform: `scale(${scale})`,
               width: `${CANVAS_WIDTH}px`,
@@ -266,7 +250,7 @@ export function ImagePreview({
 
               {/* Grid / List Content */}
               {effectiveLayout === "grid" ? (
-                /* Large Card Grid layout (<= 10 tracks, Image 1 style) */
+                /* Large Card Grid layout (<= 10 tracks) */
                 <div className="mt-[12px] flex flex-col gap-[16px]">
                   {gridGroups.map((group, rIdx) => (
                     <div key={rIdx} className="flex flex-row gap-[16px]">
@@ -284,7 +268,7 @@ export function ImagePreview({
                   ))}
                 </div>
               ) : effectiveLayout === "list" ? (
-                /* 2-column Video List layout (> 10 tracks, Image 2 style) */
+                /* 2-column Video List layout (> 10 tracks) */
                 <div className="mt-[12px] flex flex-col gap-[8px]">
                   {dualColRows.map(([leftSong, rightSong], rowIdx) => (
                     <div key={rowIdx} className="flex flex-row gap-[14px]">
@@ -317,19 +301,14 @@ export function ImagePreview({
         )}
       </div>
 
-      {/* Bottom Info Bar */}
-      <div className="flex flex-wrap items-center justify-between border-t border-white/8 bg-black/30 px-5 py-2.5 text-xs text-slate-400">
-        <div className="flex items-center gap-3">
-          <span>Render: <strong className="text-white font-mono">{CANVAS_WIDTH} × {height} px</strong></span>
-          <span className="text-slate-600">·</span>
-          <span>
-            Mode:{" "}
-            <strong className="text-purple-300">
-              {songs.length <= 10 ? "Large Cards (<=10 tracks)" : "Video List (>10 tracks)"}
-            </strong>
-          </span>
-          <span className="text-slate-600">·</span>
-          <span>Tracks: <strong className="text-purple-300 font-mono">{songs.length} / 20</strong></span>
+      {/* Bottom Stage Telemetry Bar */}
+      <div className="flex flex-wrap items-center justify-between border-t border-white/8 bg-[#0a0c10]/80 px-4 py-2.5 text-xs text-slate-400 font-mono">
+        <div className="flex items-center gap-3 text-[11px]">
+          <span>Resolution: <strong className="text-white">{CANVAS_WIDTH} × {height} px</strong></span>
+          <span className="text-slate-600">|</span>
+          <span>Layout: <strong className="text-amber-300">{effectiveLayout.toUpperCase()}</strong></span>
+          <span className="text-slate-600">|</span>
+          <span>Tracks: <strong className="text-white">{songs.length} / 20</strong></span>
         </div>
 
         {previewPngUrl && (
@@ -337,9 +316,9 @@ export function ImagePreview({
             href={previewPngUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1 text-purple-400 hover:text-purple-300"
+            className="flex items-center gap-1 text-[#ff462b] hover:underline"
           >
-            <span>Open exported image</span>
+            <span>Inspect Raw PNG Buffer</span>
             <ExternalLink className="h-3 w-3" />
           </a>
         )}
@@ -348,7 +327,7 @@ export function ImagePreview({
   );
 }
 
-/* Video List Component (matching Image 2) */
+/* Video List Component */
 function VideoListItem({ song }: { song: SongResult }) {
   const [failed, setFailed] = useState(false);
   const subtitle = song.author
@@ -392,7 +371,7 @@ function VideoListItem({ song }: { song: SongResult }) {
   );
 }
 
-/* Grid Card Component (matching Image 1) */
+/* Grid Card Component */
 function GridCardItem({ song, cols = 4 }: { song: SongResult; cols?: number }) {
   const [failed, setFailed] = useState(false);
   const subtitle = song.author
@@ -425,7 +404,6 @@ function GridCardItem({ song, cols = 4 }: { song: SongResult; cols?: number }) {
             <Music className="h-8 w-8" />
           </div>
         )}
-        {/* Track index badge in top-left corner */}
         <div
           className={`absolute top-[8px] left-[8px] flex items-center justify-center rounded-full bg-black/80 font-bold text-white shadow-md border border-white/30 font-mono ${
             is5Cols ? "h-[26px] w-[26px] text-[11px]" : "h-[30px] w-[30px] text-[13px]"
@@ -433,7 +411,6 @@ function GridCardItem({ song, cols = 4 }: { song: SongResult; cols?: number }) {
         >
           {song.index}
         </div>
-        {/* Play icon overlay */}
         <div
           className={`absolute bottom-[8px] right-[8px] flex items-center justify-center rounded-full bg-black/80 text-white shadow-md border border-white/30 ${
             is5Cols ? "h-[32px] w-[32px] text-[11px]" : "h-[38px] w-[38px] text-[13px]"
