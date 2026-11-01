@@ -12,6 +12,7 @@ import {
   X,
   FileCheck,
   SlidersHorizontal,
+  Terminal,
 } from "lucide-react";
 import {
   getBuiltinPresets,
@@ -63,6 +64,20 @@ export function SidebarPresets({
     setActivePresetId(preset.id);
     onLoadPreset(preset.data, preset.name);
     showFeedback(`Applied: "${preset.name}"`);
+  };
+
+  const handleCopySdkSnippet = async (preset: StoredPreset, ev: React.MouseEvent) => {
+    ev.stopPropagation();
+    const method = generatorType;
+    const snippet = `import { ImageStudio } from "image-studio";
+
+const studio = new ImageStudio();
+
+const image = await studio.${method}(${JSON.stringify(preset.data, null, 2)});
+await image.save("${preset.id || "preset"}.png");
+`;
+    await navigator.clipboard.writeText(snippet);
+    showFeedback(`Copied SDK snippet for "${preset.name}"!`);
   };
 
   const handleSaveCurrent = (e: React.FormEvent) => {
@@ -237,9 +252,20 @@ export function SidebarPresets({
                         )
                       )}
                     </div>
-                    <p className="text-[10px] text-slate-400 line-clamp-1 leading-normal">
-                      {p.description}
-                    </p>
+                    <div className="flex w-full items-center justify-between pt-1 border-t border-white/5 mt-0.5">
+                      <p className="text-[10px] text-slate-400 line-clamp-1 leading-normal flex-1">
+                        {p.description}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={(ev) => handleCopySdkSnippet(p, ev)}
+                        className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-amber-400 px-1.5 py-0.5 rounded hover:bg-white/5 transition shrink-0 ml-1.5"
+                        title="Sao chép mã gọi SDK cho preset này"
+                      >
+                        <Terminal className="h-3 w-3 text-amber-400" />
+                        <span>SDK</span>
+                      </button>
+                    </div>
                   </button>
                 );
               })}
@@ -303,17 +329,28 @@ export function SidebarPresets({
                           >
                             Load Template →
                           </button>
-                          <button
-                            type="button"
-                            onClick={(ev) => {
-                              ev.stopPropagation();
-                              handleDeleteUserPreset(p.id, p.name);
-                            }}
-                            className="text-slate-500 hover:text-red-400 transition p-0.5 rounded"
-                            title="Delete this preset from browser storage"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={(ev) => handleCopySdkSnippet(p, ev)}
+                              className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-amber-400 px-1.5 py-0.5 rounded hover:bg-white/5 transition"
+                              title="Sao chép mã gọi SDK cho preset này"
+                            >
+                              <Terminal className="h-3 w-3 text-amber-400" />
+                              <span>SDK</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(ev) => {
+                                ev.stopPropagation();
+                                handleDeleteUserPreset(p.id, p.name);
+                              }}
+                              className="text-slate-500 hover:text-red-400 transition p-0.5 rounded"
+                              title="Delete this preset from browser storage"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     );

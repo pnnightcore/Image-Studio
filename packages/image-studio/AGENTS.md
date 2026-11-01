@@ -10,8 +10,24 @@ Image Studio is a full-stack image generation project for social cards, profile/
 - `api/`: route handlers for serverless execution
 - `server.ts`: local runtime entry point
 - `packages/image-studio/`: published SDK package
+  - `src/patterns/`: pre-bundled starter patterns (`welcome`, `music`, `rank-up`, etc.), registry, and types (`StudioPattern`)
+  - `src/client.ts`: client implementation (`animatePattern`, `framePattern`, `resolvePattern`)
 - `docs/` and `README.md`: product and API documentation
 - `test/` and `packages/image-studio/test/`: validation coverage
+
+## Patterns architecture & Web-to-SDK export
+
+- **`StudioPattern`**: A typed visual blueprint containing `canvas` (elements, particles, background), `tracks` (keyframes, easing curves), timeline settings (`duration`, `fps`, `format`), and `defaultVariables`.
+- **SDK Execution**: `studio.animatePattern(pattern, options)` and `studio.framePattern(pattern, options)` support:
+  1. Built-in pattern IDs (`"welcome"`, `"cyber-rotation"`, etc.)
+  2. Direct `StudioPattern` objects (imported from a downloaded `.ts` file or declared in code)
+  3. Remote HTTP/HTTPS URLs (fetches pattern JSON dynamically from GitHub, CDN, S3, or Gist)
+  4. Raw JSON strings
+- **Web Export Workflow**: End-users design patterns on the web app (`/animation`) and export to their own project:
+  - Native browser save (`window.showSaveFilePicker`): writes `my-banner.ts` or `my-banner.json` directly into the user's project folder.
+  - Direct file download (`.ts` / `.json`) or clipboard copy.
+  - Exported TypeScript modules import from the published package: `import type { StudioPattern } from "image-studio";`.
+- **Maintainer Presets Sync**: Run `npm run export:patterns` to synchronize starter animation presets from `src/lib/animation-presets.ts` into `packages/image-studio/src/patterns/`.
 
 ## Rules for AI contributors
 

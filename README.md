@@ -57,6 +57,7 @@ Image Studio provides a full-featured visual creation suite optimized for Discor
   - **7 Built-in Starter Templates**: *Welcome Card*, *Cyber Dynamic Entrance*, *Now Playing Wave*, *Rank Up / XP*, *✨ Spark Magic Banner*, *🌸 Sakura Petals Anime*, and *🎵 Music Neon Wave*.
   - **Template Variables**: Automatically parse `{userName}`, `{guildName}`, `{userAVTurl}` or custom variables inside Text Content and Image URLs, with 1-click insert chips and live preview.
   - **API Payload Inspector (Compact Keyframes)**: View, edit, and export API JSON payloads in **⚡ Siêu ngắn (Compact Keyframes)** format (~50 lines instead of 3,000 lines, reducing payload size by ~98% by defining base canvas + keyframe tracks). Supports unparsed template variables (`{vars}`) or resolved values, syntax check, live editor, download `.json`, cURL generator, and instant test render.
+  - **Export Pattern Straight to SDK Package**: 1-click export of visual timeline patterns directly into `packages/image-studio/src/patterns/<id>.ts` with automatic registry update in `patterns/index.ts`, typed TypeScript generation, `.ts` file download, and ready-to-run SDK execution snippet (`studio.animatePattern(...)`).
   - **Particle Effects System**: Ambient particles with customizable shapes: `spark` (diamond stars), `petals` (cherry blossoms), `snow` (snowflakes), `fire` (flame embers), `stars` (night cosmos), and `music` (neon notes).
   - **Color Palette & Native Picker**: Built-in color picker with curated swatch palette (White, Purple Glow, Violet, Neon Pink, Rose, Amber, Gold, Emerald, Cyan, Blue, etc.) for text, backgrounds, and progress bars.
   - **Export Options**: Export high-quality **GIF** and **Animated WebP** with custom FPS (10, 12, 15, 20, 24) and duration, or extract instantaneous single PNG frames.
@@ -393,6 +394,6 @@ Notes / limits on Cloudflare:
 
 ## TypeScript SDK
 
-[`packages/image-studio`](packages/image-studio/README.md) is the typed SDK (`image-studio`) with retries, fail-over between hosts (e.g. Cloudflare → Vercel), typed errors and helpers for discord.js / Workers.
+[`packages/image-studio`](packages/image-studio/README.md) is the typed SDK (`image-studio`) with retries, fail-over between hosts (e.g. Cloudflare → Vercel), typed errors, built-in & exported patterns (`studio.animatePattern("welcome")`), and helpers for discord.js / Workers.
 Server and SDK share one HTTP contract (`src/server/contract.ts`): JSON errors with a `code`, size/timing headers, and capabilities in `GET /api/stats`.
 Checks: `npm run typecheck` (type-level drift guard), `npm run sdk:test`, `npm run smoke:handlers`.

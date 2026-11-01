@@ -206,3 +206,44 @@ test("toImageSource", async () => {
   assert.match(await toImageSource(new Blob([fakePng(1, 1) as unknown as BlobPart], { type: "image/png" })), /^data:image\/png;base64,/);
   await assert.rejects(toImageSource(new Uint8Array([1, 2, 3])), /Unrecognised/);
 });
+
+test("patterns: animatePattern and framePattern with built-in and custom patterns", async () => {
+  const { fetchImpl, calls } = mockFetch([() => png(), () => png()]);
+  const studio = new ImageStudio({ baseUrl: "https://api.test", fetch: fetchImpl });
+
+  // 1. animatePattern by ID
+  const anim = await studio.animatePattern("welcome", {
+    variables: { userName: "Tester" },
+    format: "webp",
+  });
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].init.method, "POST");
+  const animBody = JSON.parse(calls[0].init.body as string);
+  assert.equal(animBody.type, "animated");
+  assert.equal(animBody.data.format, "webp");
+  assert.equal(animBody.data.templateVariables.userName, "Tester");
+  assert.equal(anim.width, 930);
+
+  // 2. framePattern by ID
+  await studio.framePattern("welcome", { time: 500, variables: { userName: "Tester" } });
+  assert.equal(calls.length, 2);
+  const frameBody = JSON.parse(calls[1].init.body as string);
+  assert.equal(frameBody.data.format, "png");
+  assert.equal(frameBody.data.frameTime, 500);
+
+  // 3. invalid pattern ID throws ImageStudioError
+  await assert.rejects(studio.animatePattern("unknown-pattern-123"), /Unknown pattern/);
+
+  // 4. remote URL pattern
+  const remoteCanvas = { title: "Remote", width: 500, height: 200, background: "#111", elements: [] };
+  const { fetchImpl: remoteFetch, calls: remoteCalls } = mockFetch([
+    () => json(200, { canvas: remoteCanvas, duration: 1000, fps: 10 }),
+    () => png(),
+  ]);
+  const remoteStudio = new ImageStudio({ baseUrl: "https://api.test", fetch: remoteFetch });
+  await remoteStudio.animatePattern("https://cdn.example/my-pattern.json");
+  assert.equal(remoteCalls.length, 2);
+  assert.equal(remoteCalls[0].url, "https://cdn.example/my-pattern.json");
+  const remoteBody = JSON.parse(remoteCalls[1].init.body as string);
+  assert.equal(remoteBody.data.duration, 1000);
+});

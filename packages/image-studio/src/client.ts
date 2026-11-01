@@ -15,6 +15,13 @@ import {
   type SongRequest,
   type SongResult,
 } from "./types.js";
+import {
+  patterns,
+  getPattern,
+  type StudioPattern,
+  type PatternRenderOptions,
+  type PatternFrameOptions,
+} from "./patterns/index.js";
 
 /** Server-side limits (also published by `GET /api/stats` → `limits`). Used to fail fast. */
 export const DEFAULT_LIMITS = { maxFrames: 60, maxDurationMs: 10_000, maxLoop: 65_535 } as const;
@@ -63,6 +70,7 @@ export interface PresetAnimationOptions {
   loop?: number;
   variables?: Record<string, string>;
 }
+export type { PatternRenderOptions, PatternFrameOptions };
 
 const RESERVED_VARIABLES = new Set(["preset", "time", "frameTime", "frame", "frameIndex", "format", "fps", "duration", "loop"]);
 
@@ -112,6 +120,7 @@ export function assertAnimationLimits(data: AnimatedData, limits: { maxFrames: n
 export class ImageStudio {
   readonly baseUrls: string[];
   private readonly transport: Transport;
+  private readonly customFetch: typeof fetch;
   private statsCache?: Promise<ServerStats>;
 
   constructor(options: ImageStudioOptions = {}) {
@@ -126,6 +135,7 @@ export class ImageStudio {
     if (!fetchImpl) throw new ImageStudioError("INVALID_REQUEST", "No global fetch available: pass `fetch` in the options (Node 18+ has one built in).");
 
     this.baseUrls = baseUrls;
+    this.customFetch = fetchImpl;
     this.transport = new Transport({
       baseUrls,
       fetch: fetchImpl,
@@ -214,6 +224,118 @@ export class ImageStudio {
         query: { preset, format, fps: options.fps, duration: options.duration, loop: options.loop, ...checkVariables(options.variables) },
         accept: format === "webp" ? "image/webp" : "image/gif",
       },
+      call
+    );
+  }
+
+  /**
+   * Resolves a StudioPattern from:
+   * 1. A StudioPattern object
+   * 2. A remote HTTP/HTTPS URL returning pattern JSON
+   * 3. A JSON string representation of a pattern
+   * 4. A pre-bundled or registered pattern ID (e.g. "welcome")
+   */
+  async resolvePattern(pattern: StudioPattern | string): Promise<StudioPattern> {
+    if (typeof pattern !== "string") return pattern;
+
+    // 1. Remote HTTP/HTTPS URL
+    if (pattern.startsWith("http://") || pattern.startsWith("https://")) {
+      try {
+        const res = await this.customFetch(pattern);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const parsed = data && typeof data === "object" && "canvas" in data ? data : data?.pattern;
+        if (parsed && typeof parsed === "object" && parsed.canvas) {
+          return parsed as StudioPattern;
+        }
+        throw new Error("Response JSON does not contain a valid pattern canvas.");
+      } catch (err: any) {
+        throw invalid(`Failed to load remote pattern from "${pattern}": ${err?.message || err}`, {
+          field: "pattern",
+          url: pattern,
+        });
+      }
+    }
+
+    // 2. Direct JSON string
+    if (pattern.trim().startsWith("{") && pattern.trim().endsWith("}")) {
+      try {
+        const data = JSON.parse(pattern);
+        const parsed = data?.canvas ? data : data?.pattern;
+        if (parsed?.canvas) return parsed as StudioPattern;
+      } catch {}
+    }
+
+    // 3. Registered pattern ID
+    const resolved = getPattern(pattern);
+    if (resolved) return resolved;
+
+    throw invalid(
+      `Unknown pattern "${pattern}". Available: ${Object.keys(patterns).join(
+        ", "
+      )}. You can also pass a StudioPattern object, remote URL, or raw JSON.`,
+      { field: "pattern" }
+    );
+  }
+
+  /**
+   * Render an animation from a StudioPattern (or registered pattern ID / remote URL) with optional variable overrides.
+   */
+  async animatePattern(
+    pattern: StudioPattern | string,
+    options: PatternRenderOptions = {},
+    call: CallOptions = {}
+  ): Promise<GeneratedImage> {
+    const resolved = await this.resolvePattern(pattern);
+    const mergedVariables = {
+      ...(resolved.defaultVariables ?? {}),
+      ...(options.variables ?? {}),
+    };
+    return this.animate(
+      {
+        title: resolved.name || resolved.canvas.title || "animation",
+        format: options.format ?? (resolved.format === "webp" ? "webp" : "gif"),
+        duration: options.duration ?? resolved.duration ?? 2000,
+        fps: options.fps ?? resolved.fps ?? 15,
+        loop: options.loop ?? 0,
+        canvas: resolved.canvas,
+        tracks: resolved.tracks ?? [],
+        templateVariables: mergedVariables,
+      },
+      call
+    );
+  }
+
+  /**
+   * Render a single PNG frame from a StudioPattern (or registered pattern ID / remote URL).
+   */
+  async framePattern(
+    pattern: StudioPattern | string,
+    options: PatternFrameOptions = {},
+    call: CallOptions = {}
+  ): Promise<GeneratedImage> {
+    const resolved = await this.resolvePattern(pattern);
+    const mergedVariables = {
+      ...(resolved.defaultVariables ?? {}),
+      ...(options.variables ?? {}),
+    };
+    const duration = resolved.duration ?? 2000;
+    const time =
+      options.time !== undefined
+        ? options.time
+        : options.frame !== undefined
+        ? undefined
+        : Math.round(duration * 0.4);
+
+    return this.frame(
+      {
+        title: resolved.name || resolved.canvas.title || "frame",
+        format: "png",
+        canvas: resolved.canvas,
+        tracks: resolved.tracks ?? [],
+        templateVariables: mergedVariables,
+      },
+      { time, index: options.frame },
       call
     );
   }

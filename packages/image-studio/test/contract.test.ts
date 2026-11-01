@@ -8,6 +8,7 @@ import { ImageStudio, ImageStudioError, BUILTIN_PRESET_IDS, DEFAULT_LIMITS } fro
 import { ApiError, buildFrameRequest, describeServer, errorToPayload, validateGenerateRequest } from "../../../src/server/contract.js";
 import { UnsupportedOnRuntimeError } from "../../../src/lib/runtime.js";
 import { createSdkExportSnippet, createIStudioProject } from "../../../src/lib/project-file.js";
+import { generatePatternTypeScript, generatePatternSdkUsage } from "../../../src/lib/pattern-export.js";
 
 const canvas = { title: "c", width: 100, height: 50, background: "#000", elements: [] };
 
@@ -104,6 +105,37 @@ test("project export can be converted to a ready-to-run SDK snippet", () => {
   assert.match(snippet, /new ImageStudio\(\{ baseUrl: "https:\/\/example.test" \}\)/);
   assert.match(snippet, /await studio\.animate\(/);
   assert.match(snippet, /templateVariables: \{\s*"userName": "Alex"/s);
+});
+
+test("pattern export generates valid TypeScript module and SDK usage", () => {
+  const pattern = {
+    id: "test-cyber",
+    name: "Test Cyber Banner",
+    description: "Cyberpunk animated banner",
+    duration: 1500,
+    fps: 12,
+    format: "gif" as const,
+    defaultVariables: { userName: "Nova" },
+    canvas: {
+      title: "Test Cyber Banner",
+      width: 930,
+      height: 280,
+      background: "#090614",
+      elements: [{ id: "tag", type: "text" as const, x: 20, y: 20, width: 200, height: 40, content: "CYBER {userName}" }],
+    },
+    tracks: [{ elementId: "tag", keyframes: [{ time: 0, x: 20 }, { time: 500, x: 40 }] }],
+  };
+
+  const tsCodeExternal = generatePatternTypeScript(pattern);
+  assert.match(tsCodeExternal, /import type \{ StudioPattern \} from "image-studio";/);
+  assert.match(tsCodeExternal, /export const testCyberPattern: StudioPattern = \{/);
+  assert.match(tsCodeExternal, /"id": "test-cyber"/);
+
+  const tsCodeInternal = generatePatternTypeScript(pattern, { importSource: "./types.js" });
+  assert.match(tsCodeInternal, /import type \{ StudioPattern \} from "\.\/types\.js";/);
+
+  const usage = generatePatternSdkUsage(pattern);
+  assert.match(usage, /studio\.animatePattern/);
 });
 
 test("constants shared by both sides do not drift", () => {

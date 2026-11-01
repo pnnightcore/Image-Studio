@@ -33,10 +33,92 @@ return card.toResponse(); // Workers / Next.js / Hono
 | `frame(data, { time \| index })`                                                            | `POST /api/animation/frame`           | PNG                                         |
 | `presetFrame(preset, { time \| frame, variables })`                                         | `GET /api/animation/frame`            | PNG                                         |
 | `presetAnimation(preset, { format, fps, duration, loop, variables })`                       | `GET /api/animation/frame?format=gif` | GIF / WebP                                  |
+| `animatePattern(pattern, { variables, duration, fps, format, loop })`                       | `POST /api/generate`                  | GIF / WebP                                  |
+| `framePattern(pattern, { time \| frame, variables })`                                       | `POST /api/animation/frame`           | PNG                                         |
 | `generate(request)`                                                                         | `POST /api/generate`                  | any (low level)                             |
 | `stats()` / `capabilities()`                                                                | `GET /api/stats`                      | counter + runtime, formats, limits, presets |
 
 Avatars / icons accept `string` (URL or data URI), `Uint8Array`, `ArrayBuffer` or `Blob`; bytes are sent as data URIs. Song items are numbered automatically.
+
+## Patterns & Web-to-SDK Workflow
+
+A **Pattern** (`StudioPattern`) is a reusable, parameterized visual template containing canvas layout, multi-track keyframe animations, typography, particles, and default template variables (`{userName}`, `{guildName}`, etc.).
+
+You can visually design patterns on the **Image Studio Web** (`/animation`) and use them with the `image-studio` SDK in 3 flexible ways:
+
+### 1. Using Built-in Patterns (Bundled with SDK)
+
+The SDK ships with 7 pre-bundled starter patterns: `welcome`, `cyber-rotation`, `music`, `rank-up`, `spark-magic`, `sakura-petals`, `music-neon`.
+
+```ts
+import { ImageStudio, patterns } from "image-studio";
+
+const studio = new ImageStudio();
+
+// Render animated GIF or WebP by pattern ID
+const animation = await studio.animatePattern("welcome", {
+  variables: { userName: "Nova", guildName: "Alpha Squad" },
+});
+await animation.save("welcome.gif");
+
+// Or capture a single PNG frame at 350ms
+const frame = await studio.framePattern("welcome", {
+  time: 350,
+  variables: { userName: "Nova" },
+});
+await frame.save("welcome-preview.png");
+```
+
+### 2. Exporting Custom Patterns from Web Studio to Your Project
+
+When using the published npm package in your own application (Discord bot, backend, microservice):
+
+1. Open **Image Studio Web** (`http://localhost:3000` or deployed URL) and navigate to **Animation Studio** (`/animation`).
+2. Visually arrange layers, keyframe tracks, particles, and template variables (`{userName}`, `{guildName}`, etc.).
+3. Click **"Export Pattern"** in the top action bar (or inside the API Payload Inspector).
+4. Choose an export option:
+   - **📁 Lưu thẳng vào thư mục dự án**: Opens native browser folder picker (`window.showSaveFilePicker`) to save `my-banner.ts` directly into your project's directory (e.g. `src/patterns/`).
+   - **📥 Tải .ts / .json**: Downloads the typed TypeScript module or JSON file.
+   - **📋 Sao chép code**: Copies the ready-to-run pattern code to your clipboard.
+5. In your project, import the exported pattern and execute it:
+
+```ts
+import { ImageStudio } from "image-studio";
+import { myBannerPattern } from "./patterns/my-banner.js";
+
+const studio = new ImageStudio();
+
+const image = await studio.animatePattern(myBannerPattern, {
+  variables: { userName: "Nova", guildName: "Alpha Squad" },
+});
+await image.save("my-banner.gif");
+```
+
+### 3. Dynamic Remote Loading via URL (No Code Redeploy / No Publish)
+
+The SDK can dynamically load and execute pattern JSON files from any HTTP/HTTPS URL (GitHub Raw, S3, CDN, or your own asset server):
+
+```ts
+const image = await studio.animatePattern(
+  "https://raw.githubusercontent.com/my-org/my-bot/main/patterns/event-banner.json",
+  {
+    variables: { userName: "Alice" },
+    format: "webp",
+    duration: 1800,
+  }
+);
+await image.save("event.webp");
+```
+
+### Pattern Methods Reference
+
+| Method | Argument | Returns |
+| --- | --- | --- |
+| `animatePattern(pattern, options?, call?)` | `pattern`: pattern ID (`string`), `StudioPattern` object, or remote JSON URL (`string`) | `Promise<GeneratedImage>` (GIF / WebP) |
+| `framePattern(pattern, options?, call?)` | `pattern`: pattern ID (`string`), `StudioPattern` object, or remote JSON URL (`string`) | `Promise<GeneratedImage>` (PNG) |
+| `resolvePattern(pattern)` | Resolves ID, URL, or JSON into a typed `StudioPattern` | `Promise<StudioPattern>` |
+| `patterns` | Dictionary of all pre-bundled patterns (`patterns.welcome`, etc.) | `Record<string, StudioPattern>` |
+| `registerPattern(pattern)` | Dynamically register custom pattern into runtime registry | `void` |
 
 ### `GeneratedImage`
 

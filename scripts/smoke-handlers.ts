@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import vercelGenerate from "../api/generate.js";
 import vercelFrame from "../api/animation/frame.js";
 import vercelStats from "../api/stats.js";
+import vercelExportPattern from "../api/export-pattern.js";
 import { handler as netlifyGenerate } from "../netlify/functions/generate.js";
 import { handler as netlifyFrame } from "../netlify/functions/frame.js";
 import { handler as netlifyStats } from "../netlify/functions/stats.js";
@@ -37,6 +38,23 @@ r = await call(vercelFrame, { method: "GET", query: { preset: "zzz" } });
 assert.equal(r.statusCode, 400);
 r = await call(vercelStats, { method: "GET" });
 assert.equal(r.body.runtime, "node");
+
+r = await call(vercelExportPattern, {
+  method: "POST",
+  body: {
+    pattern: {
+      id: "welcome",
+      name: "Welcome Card",
+      canvas: { title: "Welcome Card", width: 930, height: 280, background: "#000", elements: [] },
+    },
+  },
+});
+assert.equal(r.statusCode, 200);
+assert.equal(r.body.patternId, "welcome");
+assert.ok(r.body.tsCode.includes("welcomePattern"));
+
+r = await call(vercelExportPattern, { method: "POST", body: {} });
+assert.equal(r.statusCode, 400);
 
 // ---- Netlify
 const ev = (httpMethod: string, extra: any = {}) => ({ httpMethod, headers: {}, queryStringParameters: {}, ...extra });

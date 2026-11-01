@@ -48,7 +48,9 @@ import {
   FileDown,
   FileCode,
   Upload,
+  Package,
 } from "lucide-react";
+import { ExportSdkPatternModal } from "./ExportSdkPatternModal";
 
 import {
   executeCommand,
@@ -322,6 +324,7 @@ export function AnimationTimeline() {
 
   // API Payload modal state (unparsed vs parsed, animation vs frame-png)
   const [showApiPayloadModal, setShowApiPayloadModal] = useState<boolean>(false);
+  const [showExportPatternModal, setShowExportPatternModal] = useState<boolean>(false);
   const [payloadMode, setPayloadMode] = useState<"unparsed" | "parsed">("unparsed");
   const [payloadTarget, setPayloadTarget] = useState<"animation" | "frame-png">("animation");
   const [editablePayloadJson, setEditablePayloadJson] = useState<string>("");
@@ -1768,6 +1771,15 @@ export function AnimationTimeline() {
           >
             <Terminal className="h-3.5 w-3.5 text-amber-400" />
             <span>{copiedSdk ? "Copied SDK" : "Copy SDK"}</span>
+          </button>
+
+          <button
+            onClick={() => setShowExportPatternModal(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-purple-500/30 bg-purple-950/40 px-2.5 py-1.5 text-purple-200 hover:text-white hover:bg-purple-900/50 transition tactile-press"
+            title="Xuất pattern hiện tại thẳng về packages/image-studio"
+          >
+            <Package className="h-3.5 w-3.5 text-purple-400" />
+            <span>Export Pattern</span>
           </button>
 
           <button
@@ -4133,6 +4145,19 @@ export function AnimationTimeline() {
                   )}
                   <span>{copiedCurl ? "Đã chép cURL!" : "Sao chép cURL"}</span>
                 </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowApiPayloadModal(false);
+                    setShowExportPatternModal(true);
+                  }}
+                  className="flex items-center gap-1.5 rounded-xl border border-purple-500/30 bg-purple-950/40 px-3 py-1.5 text-xs font-semibold text-purple-200 hover:bg-purple-900/60 transition"
+                  title="Xuất pattern này sang packages/image-studio"
+                >
+                  <Package className="h-3.5 w-3.5 text-purple-400" />
+                  <span>Xuất về SDK</span>
+                </button>
               </div>
 
               <div className="flex items-center gap-2">
@@ -4415,6 +4440,27 @@ export function AnimationTimeline() {
           </div>
         </div>
       )}
+
+      {/* Export to SDK Pattern Modal */}
+      <ExportSdkPatternModal
+        isOpen={showExportPatternModal}
+        onClose={() => setShowExportPatternModal(false)}
+        initialPattern={{
+          id: projectName || canvas.title || "animation-pattern",
+          name: projectName || canvas.title || "Animation Pattern",
+          description: `Pattern created in Image Studio (${canvas.width}x${canvas.height})`,
+          duration,
+          fps,
+          format,
+          canvas: {
+            ...canvas,
+            title: projectName || canvas.title || "Animation",
+            elements: canvas.elements || [],
+          },
+          tracks: cleanTracks,
+          defaultVariables: variables,
+        }}
+      />
     </div>
   );
 }

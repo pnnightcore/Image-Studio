@@ -16,6 +16,7 @@
     "smoke:http": "tsx scripts/smoke-http.ts",
     "typecheck": "tsc --noEmit",
     "smoke:handlers": "tsx scripts/smoke-handlers.ts",
+    "export:patterns": "tsx scripts/export-pattern.ts",
     "sdk:test": "npm --prefix packages/image-studio test && tsx --test packages/image-studio/test/contract.test.ts",
     "sdk:build": "npm --prefix packages/image-studio run build"
   },

@@ -15,6 +15,7 @@ import {
   renderRequest,
   validateGenerateRequest,
 } from "./src/server/contract";
+import { savePatternToSdkPackage } from "./src/server/pattern-storage";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,6 +74,25 @@ async function startServer() {
     } catch (error) {
       if (error instanceof ApiError && error.status === 405) res.setHeader("Allow", "GET, POST, OPTIONS");
       return sendError(res, "Frame generation", error);
+    }
+  });
+
+  // Dedicated API endpoint to export pattern straight into packages/image-studio
+  app.post(["/api/dev/export-sdk-pattern", "/api/export-pattern"], async (req, res) => {
+    try {
+      const pattern = req.body?.pattern || req.body;
+      if (!pattern || typeof pattern !== "object" || !pattern.id || !pattern.canvas) {
+        return sendError(
+          res,
+          "Pattern export",
+          new ApiError(400, "INVALID_REQUEST", "Invalid pattern: 'id' and 'canvas' are required.")
+        );
+      }
+      const result = await savePatternToSdkPackage(pattern, __dirname);
+      for (const [k, v] of Object.entries(CORS_HEADERS)) res.setHeader(k, v);
+      return res.status(200).json(result);
+    } catch (error) {
+      return sendError(res, "Pattern export", error);
     }
   });
 
