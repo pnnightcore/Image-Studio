@@ -48,25 +48,147 @@ You can visually design patterns on the **Image Studio Web** (`/animation`) and 
 
 ### 1. Using Built-in Patterns (Bundled with SDK)
 
-The SDK ships with 7 pre-bundled starter patterns: `welcome`, `cyber-rotation`, `music`, `rank-up`, `spark-magic`, `sakura-petals`, `music-neon`.
+The SDK ships with **15 pre-bundled visual patterns** ready to render by ID or imported directly from `"image-studio"`:
 
+| Pattern ID | Name | Duration | Default Variables | Category |
+| --- | --- | --- | --- | --- |
+| `welcome` | Welcome Card | 1500 ms | `{ userName, guildName, userAVTurl }` | Classic |
+| `cyber-rotation` | 3D Cyber Rotation | 1800 ms | `{ userName, guildName, userAVTurl }` | Cyber |
+| `music` | Lo-Fi Music Player | 1600 ms | `{ userName, userAVTurl }` | Music |
+| `rank-up` | Rank Up Level Progression | 1500 ms | `{ userName, userAVTurl }` | Gaming |
+| `spark-magic` | Magical Sparkles Burst | 1500 ms | `{ userName, userAVTurl }` | Classic |
+| `sakura-petals` | Falling Sakura Petals | 1500 ms | `{ userName, userAVTurl }` | Classic |
+| `music-neon` | Neon Vinyl Wave | 1600 ms | `{ userName, userAVTurl }` | Music |
+| `cyber-bento-hud` | Cyber Bento Grid HUD | 1800 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
+| `hacker-terminal` | Matrix Netrunner Terminal | 1800 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
+| `space-boarding-pass` | Sci-Fi Space Flight Pass | 1600 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
+| `vinyl-turntable` | Spinning Vinyl Turntable | 2400 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
+| `tcg-hologram` | Holographic TCG Trading Card | 1600 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
+| `vs-battle-duel` | Arcade Fighting VS Battle Clash | 1600 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
+| `gacha-lootbox` | RPG Gacha SSR Summon (5-Star) | 1800 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
+| `retro-synthwave-sunset` | 80s Outrun Synthwave Sunset | 1800 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
+
+#### Option A: Call by Pattern ID string
 ```ts
-import { ImageStudio, patterns } from "image-studio";
+import { ImageStudio } from "image-studio";
 
 const studio = new ImageStudio();
 
 // Render animated GIF or WebP by pattern ID
-const animation = await studio.animatePattern("welcome", {
-  variables: { userName: "Nova", guildName: "Alpha Squad" },
+const animation = await studio.animatePattern("gacha-lootbox", {
+  variables: { userName: "Nova", userAVTurl: "https://github.com/shadcn.png" },
+  format: "gif",
 });
-await animation.save("welcome.gif");
+await animation.save("gacha-summon.gif"); // Direct local file save (Node / Bun)
 
-// Or capture a single PNG frame at 350ms
-const frame = await studio.framePattern("welcome", {
-  time: 350,
-  variables: { userName: "Nova" },
+// Or extract a single high-res PNG frame at 600ms
+const frame = await studio.framePattern("retro-synthwave-sunset", {
+  time: 600,
+  variables: { userName: "CyberPilot" },
 });
-await frame.save("welcome-preview.png");
+await frame.save("synthwave-frame.png");
+```
+
+#### Option B: Call with Typed Pattern Import
+```ts
+import { ImageStudio, gachaLootboxPattern, retroSynthwaveSunsetPattern } from "image-studio";
+
+const studio = new ImageStudio();
+
+const animation = await studio.animatePattern(gachaLootboxPattern, {
+  variables: { userName: "Eldoria Knight" },
+});
+await animation.save("lootbox.gif");
+```
+
+### 2. Passing Custom / Inline Pattern Objects (Build from Scratch)
+
+You can pass a custom `StudioPattern` object directly in the request to render on-demand without needing to save to disk or publish:
+
+```ts
+import { ImageStudio, type StudioPattern } from "image-studio";
+
+const studio = new ImageStudio();
+
+const customPattern: StudioPattern = {
+  id: "welcome-card-animation",
+  name: "Welcome Card Animation",
+  description: "Pattern created in Image Studio (930x280)",
+  duration: 500,
+  fps: 12,
+  format: "gif",
+  defaultVariables: {
+    userAVTurl: "https://github.com/shadcn.png",
+    userName: "ziji",
+    guildName: "Hội Vô Danh 2",
+  },
+  canvas: {
+    title: "Welcome Card Animation",
+    width: 930,
+    height: 280,
+    background: "linear-gradient(135deg, #090614 0%, #1e1035 50%, #4a1d6e 100%)",
+    elements: [
+      {
+        id: "avatar",
+        type: "avatar",
+        x: 445,
+        y: 96,
+        width: 140,
+        height: 140,
+        imageUrl: "{userAVTurl}",
+        borderRadius: 999,
+        border: "4px solid rgba(168, 85, 247, 0.6)",
+      },
+      {
+        id: "title",
+        type: "text",
+        x: 257,
+        y: 36,
+        width: 650,
+        height: 52,
+        content: "Welcome, {userName}!",
+        color: "#ffffff",
+        fontSize: 44,
+        fontWeight: 700,
+        textShadow: "0 0 16px rgba(192, 132, 252, 0.75), 2px 3px 6px rgba(0, 0, 0, 0.9)",
+      },
+    ],
+  },
+  tracks: [
+    {
+      elementId: "avatar",
+      keyframes: [
+        { time: 0, x: 20, y: 40, width: 110, height: 110, rotation: -12, scaleX: 0.8, scaleY: 0.8, opacity: 0, easing: "bounce" },
+        { time: 450, x: 445, y: 96, width: 140, height: 140, rotation: 6, scaleX: 1.05, scaleY: 1.05, opacity: 1, easing: "ease-out" },
+        { time: 500, x: 445, y: 96, width: 140, height: 140, rotation: 0, scaleX: 1, scaleY: 1, opacity: 1, easing: "ease-in-out" },
+      ],
+    },
+    {
+      elementId: "title",
+      keyframes: [
+        { time: 200, x: 160, y: 55, width: 650, height: 52, rotation: -2, scaleX: 0.95, opacity: 0, easing: "ease-out" },
+        { time: 450, x: 257, y: 36, width: 650, height: 52, rotation: 0, scaleX: 1, opacity: 1, easing: "ease-in-out" },
+      ],
+    },
+  ],
+};
+
+// 1. Download / Save a single PNG frame at 20ms with custom variables
+const frame = await studio.framePattern(customPattern, {
+  time: 20,
+  variables: {
+    userName: "ziji",
+    userAVTurl: "https://github.com/shadcn.png",
+  },
+});
+await frame.save("welcome-custom-frame.png");
+
+// 2. Download / Save the full animated GIF
+const animation = await studio.animatePattern(customPattern, {
+  variables: { userName: "ziji" },
+  format: "gif",
+});
+await animation.save("welcome-custom.gif");
 ```
 
 ### 2. Exporting Custom Patterns from Web Studio to Your Project

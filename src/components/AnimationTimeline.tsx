@@ -49,6 +49,7 @@ import {
   FileCode,
   Upload,
   Package,
+  Search,
 } from "lucide-react";
 import { ExportSdkPatternModal } from "./ExportSdkPatternModal";
 
@@ -332,6 +333,8 @@ export function AnimationTimeline() {
   const [copiedCurl, setCopiedCurl] = useState<boolean>(false);
   const [copiedSdk, setCopiedSdk] = useState<boolean>(false);
   const [isTestingRender, setIsTestingRender] = useState<boolean>(false);
+  const [templateFilter, setTemplateFilter] = useState<string>("");
+  const [templateCategory, setTemplateCategory] = useState<string>("all");
 
   // Drag & drop state for reordering layers / tracks
   const [draggedElementIndex, setDraggedElementIndex] = useState<number | null>(null);
@@ -2018,23 +2021,104 @@ export function AnimationTimeline() {
         <div className="space-y-4">
           {/* Quick Presets */}
           <div className="rounded-2xl border border-white/10 bg-[#0e0a1e]/80 p-4 shadow-xl backdrop-blur-md">
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-2.5 flex items-center justify-between">
               <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-300">
                 <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-                Templates
+                Templates ({PRESETS.length})
               </span>
             </div>
-            <div className="space-y-1.5">
-              {PRESETS.map((preset) => (
+
+            {/* Quick Filter */}
+            <div className="relative mb-2">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-purple-400/60" />
+              <input
+                type="text"
+                value={templateFilter}
+                onChange={(e) => setTemplateFilter(e.target.value)}
+                placeholder="Search card templates..."
+                className="w-full rounded-lg border border-white/10 bg-black/40 pl-8 pr-7 py-1 text-xs text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+              />
+              {templateFilter && (
                 <button
-                  key={preset.id}
-                  onClick={() => loadPreset(preset)}
-                  className="w-full text-left rounded-xl border border-white/5 bg-white/[0.03] p-2.5 transition hover:border-purple-500/40 hover:bg-purple-950/30"
+                  type="button"
+                  onClick={() => setTemplateFilter("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
                 >
-                  <div className="text-xs font-semibold text-white">{preset.name}</div>
-                  <div className="text-[11px] text-slate-400 line-clamp-1">{preset.description}</div>
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1 overflow-x-auto pb-1 mb-2.5 custom-scrollbar text-[10px]">
+              {[
+                { id: "all", label: "Tất cả", count: PRESETS.length },
+                { id: "breakthrough", label: "✦ Đột phá", count: PRESETS.filter((p) => p.category === "breakthrough").length },
+                { id: "cyber", label: "Cyber", count: PRESETS.filter((p) => p.category === "cyber").length },
+                { id: "gaming", label: "Gaming", count: PRESETS.filter((p) => p.category === "gaming").length },
+                { id: "music", label: "Music", count: PRESETS.filter((p) => p.category === "music").length },
+                { id: "classic", label: "Classic", count: PRESETS.filter((p) => p.category === "classic").length },
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setTemplateCategory(cat.id)}
+                  className={`shrink-0 rounded-lg px-2 py-0.5 font-medium transition ${
+                    templateCategory === cat.id
+                      ? "bg-purple-600 text-white shadow-sm shadow-purple-600/30"
+                      : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {cat.label} ({cat.count})
                 </button>
               ))}
+            </div>
+
+            <div className="space-y-1.5 max-h-[340px] overflow-y-auto pr-1 custom-scrollbar">
+              {PRESETS.filter((preset) => {
+                if (templateCategory !== "all" && preset.category !== templateCategory) return false;
+                if (!templateFilter.trim()) return true;
+                const q = templateFilter.toLowerCase().trim();
+                return (
+                  preset.name.toLowerCase().includes(q) ||
+                  preset.description.toLowerCase().includes(q) ||
+                  preset.id.toLowerCase().includes(q) ||
+                  (preset.badge && preset.badge.toLowerCase().includes(q))
+                );
+              }).map((preset) => {
+                const isActive = canvas.title === preset.canvas.title;
+                return (
+                  <button
+                    key={preset.id}
+                    onClick={() => loadPreset(preset)}
+                    className={`w-full text-left rounded-xl border p-2.5 transition ${
+                      isActive
+                        ? "border-purple-500/60 bg-purple-950/40 shadow-sm"
+                        : "border-white/5 bg-white/[0.03] hover:border-purple-500/40 hover:bg-purple-950/20"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <div className="text-xs font-semibold text-white truncate flex items-center gap-1.5">
+                        {preset.category === "breakthrough" && (
+                          <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
+                        )}
+                        <span>{preset.name}</span>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {preset.badge && (
+                          <span className="rounded bg-purple-500/15 px-1.5 py-0.5 text-[9px] font-mono text-purple-300 border border-purple-500/20">
+                            {preset.badge}
+                          </span>
+                        )}
+                        <span className="rounded bg-black/40 px-1.5 py-0.5 text-[9px] font-mono text-slate-400 border border-white/5">
+                          {preset.duration / 1000}s
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-[11px] text-slate-400 line-clamp-1">{preset.description}</div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 

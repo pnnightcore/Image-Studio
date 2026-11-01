@@ -4,7 +4,7 @@
  */
 import satori from "satori";
 import sharp, { type Metadata } from "sharp";
-import { setRuntime, type RuntimeAdapter } from "./runtime.js";
+import { setRuntime, sanitizeSatoriElement, type RuntimeAdapter } from "./runtime.js";
 
 const metadataCache = new WeakMap<object, Promise<Metadata>>();
 
@@ -24,7 +24,7 @@ export const nodeRuntime: RuntimeAdapter = {
     "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
 
   async renderSvg(element, options) {
-    return satori(element as any, options as any);
+    return satori(sanitizeSatoriElement(element) as any, options as any);
   },
 
   async svgToPng(svg) {

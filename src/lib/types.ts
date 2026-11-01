@@ -3,10 +3,19 @@ export type { ParticleConfig, ParticlePresetId, ParticleShape };
 
 export type GeneratorType = "song" | "profile" | "leaderboard" | "quote" | "animated";
 
+export type SongLayout = "auto" | "list" | "grid" | "classic" | "showcase" | "compact-queue";
 export interface SongResult { index: number; avatar: string; displayName: string; time: string; source: string; author?: string; views?: string; }
-export interface SongGenerateRequest { type?: "song"; title: string; items: SongResult[]; layout?: "auto" | "list" | "grid" | "classic"; particleConfig?: ParticleConfig; }
+export interface SongGenerateRequest { type?: "song"; title: string; items: SongResult[]; layout?: SongLayout; particleConfig?: ParticleConfig; }
 
-export type ProfileTheme = "ruby-poly" | "cyber-neon" | "glass-minimal" | "gold-legend";
+export type ProfileTheme =
+  | "ruby-poly"
+  | "cyber-neon"
+  | "glass-minimal"
+  | "gold-legend"
+  | "cosmic-void"
+  | "frost-glacier"
+  | "sakura-duelist"
+  | "hacker-terminal";
 export interface ProfileData {
   username: string;
   balance: string;
@@ -22,7 +31,15 @@ export interface ProfileData {
 }
 export interface ProfileGenerateRequest { type: "profile"; data: ProfileData; particleConfig?: ParticleConfig; }
 
-export type LeaderboardLayout = "podium" | "compact-list" | "cyber-grid" | "minimal-cards";
+export type LeaderboardLayout =
+  | "podium"
+  | "compact-list"
+  | "cyber-grid"
+  | "minimal-cards"
+  | "versus-duel"
+  | "hall-of-fame"
+  | "tier-division"
+  | "terminal-matrix";
 export interface LeaderboardItem { rank: number; username: string; handle: string; avatar: string; level: number; xp: number; }
 export interface LeaderboardData {
   guildIcon: string;
@@ -34,7 +51,15 @@ export interface LeaderboardData {
 }
 export interface LeaderboardGenerateRequest { type: "leaderboard"; data: LeaderboardData; particleConfig?: ParticleConfig; }
 
-export type QuoteLayout = "split-portrait" | "centered-minimal" | "modern-card" | "neon-cyber";
+export type QuoteLayout =
+  | "split-portrait"
+  | "centered-minimal"
+  | "modern-card"
+  | "neon-cyber"
+  | "magazine-editorial"
+  | "polaroid-vintage"
+  | "speech-bubble"
+  | "code-terminal";
 export interface QuoteData {
   quote: string;
   author: string;

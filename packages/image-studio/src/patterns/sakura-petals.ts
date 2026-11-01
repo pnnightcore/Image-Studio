@@ -107,7 +107,7 @@ export const sakuraPetalsPattern: StudioPattern = {
     }
   ],
   "category": "builtin",
-  "createdAt": "2026-11-01T11:46:55.477Z"
+  "createdAt": "2026-11-01T15:13:18.818Z"
 };
 
 export default sakuraPetalsPattern;

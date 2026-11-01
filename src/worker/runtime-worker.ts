@@ -15,7 +15,7 @@ import yogaWasm from "satori/yoga.wasm";
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
 import resvgWasm from "@resvg/resvg-wasm/index_bg.wasm";
 import { GIFEncoder, quantize, applyPalette } from "gifenc";
-import { setRuntime, UnsupportedOnRuntimeError, type RuntimeAdapter } from "../lib/runtime.js";
+import { setRuntime, sanitizeSatoriElement, UnsupportedOnRuntimeError, type RuntimeAdapter } from "../lib/runtime.js";
 import { MIME_BY_KIND, decodeGifFrameAt, encodePngRgba, sniffImage } from "./image-codecs.js";
 
 const MAX_INLINE_IMAGE_BYTES = 2 * 1024 * 1024;
@@ -47,7 +47,7 @@ export const workerRuntime: RuntimeAdapter = {
 
   async renderSvg(element, options) {
     await ensureReady();
-    return satori(element as any, options as any);
+    return satori(sanitizeSatoriElement(element) as any, options as any);
   },
 
   async svgToPng(svg) {

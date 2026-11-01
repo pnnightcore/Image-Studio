@@ -557,6 +557,357 @@ export function ProfilePreview({
                 </div>
               </div>
             )}
+
+            {/* 5. Cosmic Void (Deep Space Astral & Nebula Sovereign) */}
+            {theme === "cosmic-void" && (
+              <div
+                className="relative flex h-full w-full items-center p-8 overflow-hidden rounded-[24px] border-2 border-purple-500/50 font-sans"
+                style={{
+                  background:
+                    "radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.35) 0%, transparent 65%), radial-gradient(circle at 20% 80%, rgba(79, 70, 229, 0.25) 0%, transparent 50%), linear-gradient(135deg, #060412 0%, #0d0724 45%, #180d38 100%)",
+                  boxShadow: "0 0 40px rgba(168, 85, 247, 0.3)",
+                }}
+              >
+                {/* Nebula Star Dust Background */}
+                <div className="pointer-events-none absolute -top-10 -right-10 h-64 w-64 rounded-full bg-purple-600/20 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-10 -left-10 h-64 w-64 rounded-full bg-indigo-600/20 blur-3xl" />
+
+                {/* Left Avatar */}
+                <div className="relative z-10 flex flex-col items-center shrink-0">
+                  <div className="h-[135px] w-[135px] rounded-full p-1 bg-gradient-to-tr from-purple-600 via-fuchsia-400 to-indigo-400 shadow-2xl shadow-purple-600/50">
+                    <img
+                      src={data.avatar}
+                      alt={data.username}
+                      className="h-full w-full rounded-full object-cover bg-black"
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                  <div className="relative -mt-3.5 z-20 rounded-full bg-purple-950/90 border border-purple-400/60 px-3 py-0.5 text-[10px] font-bold text-purple-200 font-mono shadow-lg">
+                    ★ ASTRAL Lv.{data.level ?? 88}
+                  </div>
+                </div>
+
+                {/* Right Content */}
+                <div className="relative z-10 ml-8 flex flex-1 flex-col justify-between h-full py-1">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-mono tracking-widest text-purple-300/80 uppercase">
+                        <span>◈ VOID SOVEREIGNTY ◈</span>
+                      </div>
+                      <div className="rounded-lg bg-purple-900/40 border border-purple-400/50 px-3 py-0.5 text-xs font-mono font-bold text-purple-200 shadow-[0_0_12px_rgba(168,85,247,0.4)]">
+                        {data.rank ?? "#1"} SOVEREIGN
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <h2 className="text-[34px] font-bold text-purple-100 tracking-wide drop-shadow-[0_0_12px_rgba(192,132,252,0.6)]">
+                        {data.username || "Astral_Valkyrie"}
+                      </h2>
+                      {data.badge && (
+                        <span className="rounded-full bg-purple-500/20 border border-purple-400/50 px-3 py-0.5 text-xs font-bold text-purple-300">
+                          {data.badge}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Starlight Gauge */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs font-mono text-purple-300">
+                      <span>Starlight Singularity XP</span>
+                      <span className="font-bold text-fuchsia-300">
+                        {data.currentXp ?? 0} / {data.requiredXp ?? 100} XP ({percent}%)
+                      </span>
+                    </div>
+                    <div className="h-4 w-full rounded-full bg-black/60 border border-purple-500/40 p-0.5 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-400 shadow-[0_0_15px_#c084fc] transition-all duration-300"
+                        style={{ width: `${Math.max(2, percent)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Bottom Stats */}
+                  <div className="flex items-center justify-between border-t border-purple-500/20 pt-3 text-xs font-mono">
+                    <div className="flex items-center gap-3">
+                      <span className="rounded bg-purple-950/70 border border-purple-500/40 px-3 py-1 font-bold text-purple-300">
+                        TIER {data.level ?? 88}
+                      </span>
+                      <span className="text-purple-300/80 font-sans">
+                        {data.title || "Cosmic Realm Ruler"}
+                      </span>
+                    </div>
+
+                    <div className="font-bold text-purple-200 text-sm">
+                      STAR_CORE: {data.balance || "0 xu"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 6. Frost Glacier (Crystalline Arctic Frost Monarch) */}
+            {theme === "frost-glacier" && (
+              <div
+                className="relative flex h-full w-full items-center p-8 overflow-hidden rounded-[20px] border-2 border-sky-400/60 font-sans"
+                style={{
+                  background:
+                    "radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.3) 0%, transparent 60%), linear-gradient(135deg, #03131e 0%, #062238 50%, #0b3450 100%)",
+                  boxShadow: "0 0 35px rgba(56, 189, 248, 0.3)",
+                }}
+              >
+                {/* Crystalline Corner Notches */}
+                <div className="pointer-events-none absolute top-2 left-2 text-sky-400 text-xs font-mono">❄</div>
+                <div className="pointer-events-none absolute top-2 right-2 text-sky-400 text-xs font-mono">❄</div>
+                <div className="pointer-events-none absolute bottom-2 left-2 text-sky-400 text-xs font-mono">❄</div>
+                <div className="pointer-events-none absolute bottom-2 right-2 text-sky-400 text-xs font-mono">❄</div>
+
+                {/* Left Avatar */}
+                <div className="relative z-10 flex flex-col items-center shrink-0">
+                  <div className="h-[135px] w-[135px] rounded-2xl p-1 bg-gradient-to-tr from-sky-400 via-cyan-300 to-blue-500 shadow-2xl shadow-cyan-500/40 rotate-1">
+                    <img
+                      src={data.avatar}
+                      alt={data.username}
+                      className="h-full w-full rounded-2xl object-cover bg-black -rotate-1"
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                  <div className="relative -mt-3.5 z-20 rounded-md bg-sky-950/90 border border-sky-400/60 px-3 py-0.5 text-[10px] font-bold text-sky-200 font-mono shadow-md">
+                    ❄️ CRYO Lv.{data.level ?? 75}
+                  </div>
+                </div>
+
+                {/* Right Content */}
+                <div className="relative z-10 ml-8 flex flex-1 flex-col justify-between h-full py-1">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs font-mono tracking-widest text-sky-300 uppercase font-semibold">
+                        ABSOLUTE ZERO MONARCH
+                      </div>
+                      <div className="rounded-lg bg-sky-900/40 border border-sky-400/50 px-3 py-0.5 text-xs font-mono font-bold text-sky-200">
+                        {data.rank ?? "#1"} APEX
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <h2 className="text-[34px] font-bold text-sky-100 tracking-wide drop-shadow-[0_0_12px_rgba(56,189,248,0.7)]">
+                        {data.username || "FrostMonarch"}
+                      </h2>
+                      {data.badge && (
+                        <span className="rounded-md bg-sky-500/20 border border-sky-400/50 px-2.5 py-0.5 text-xs font-bold text-sky-200">
+                          {data.badge}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Glacier XP Progress Bar */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs font-mono text-sky-200">
+                      <span>Permafrost Cryo Engine</span>
+                      <span className="font-bold text-cyan-300">
+                        {data.currentXp ?? 0} / {data.requiredXp ?? 100} XP ({percent}%)
+                      </span>
+                    </div>
+                    <div className="h-4 w-full rounded-md bg-black/60 border border-sky-500/40 p-0.5 overflow-hidden">
+                      <div
+                        className="h-full rounded-md bg-gradient-to-r from-sky-500 via-cyan-300 to-white shadow-[0_0_15px_#38bdf8] transition-all duration-300"
+                        style={{ width: `${Math.max(2, percent)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Bottom Stats */}
+                  <div className="flex items-center justify-between border-t border-sky-500/20 pt-3 text-xs font-mono">
+                    <div className="flex items-center gap-3">
+                      <span className="rounded bg-sky-950/70 border border-sky-500/40 px-3 py-1 font-bold text-sky-300">
+                        FROST TIER {data.level ?? 75}
+                      </span>
+                      <span className="text-sky-200/80 font-sans">
+                        {data.title || "Glacial Sovereign"}
+                      </span>
+                    </div>
+
+                    <div className="font-bold text-sky-300 text-sm">
+                      FROST_CRYSTALS: {data.balance || "0 xu"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 7. Sakura Duelist (Anime Japanese Cherry Blossom Samurai) */}
+            {theme === "sakura-duelist" && (
+              <div
+                className="relative flex h-full w-full items-center p-8 overflow-hidden rounded-[24px] border-2 border-pink-400/50 font-sans"
+                style={{
+                  background:
+                    "radial-gradient(circle at 85% 15%, rgba(244, 114, 182, 0.3) 0%, transparent 60%), linear-gradient(135deg, #1c0919 0%, #2b0b26 45%, #421038 100%)",
+                  boxShadow: "0 0 35px rgba(244, 114, 182, 0.25)",
+                }}
+              >
+                {/* Kanji Watermark */}
+                <div className="pointer-events-none absolute right-6 top-4 text-7xl font-serif text-pink-500/10 select-none">
+                  桜
+                </div>
+
+                {/* Left Avatar */}
+                <div className="relative z-10 flex flex-col items-center shrink-0">
+                  <div className="h-[135px] w-[135px] rounded-full p-1 bg-gradient-to-tr from-pink-500 via-rose-300 to-amber-200 shadow-2xl shadow-pink-500/40">
+                    <img
+                      src={data.avatar}
+                      alt={data.username}
+                      className="h-full w-full rounded-full object-cover bg-black"
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                  <div className="relative -mt-3.5 z-20 rounded-full bg-pink-950/90 border border-pink-400/60 px-3 py-0.5 text-[10px] font-bold text-pink-200 font-mono shadow-md">
+                    🌸 BLADE Lv.{data.level ?? 50}
+                  </div>
+                </div>
+
+                {/* Right Content */}
+                <div className="relative z-10 ml-8 flex flex-1 flex-col justify-between h-full py-1">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs font-mono tracking-widest text-pink-300/90 uppercase font-semibold">
+                        BUSHIDO DUELIST GUILD
+                      </div>
+                      <div className="rounded-full bg-pink-900/40 border border-pink-400/50 px-3.5 py-0.5 text-xs font-mono font-bold text-pink-200">
+                        {data.rank ?? "#1"} DAN
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <h2 className="text-[34px] font-bold text-pink-100 tracking-wide drop-shadow-[0_0_12px_rgba(244,114,182,0.6)]">
+                        {data.username || "Sakura_Duelist"}
+                      </h2>
+                      {data.badge && (
+                        <span className="rounded-full bg-pink-500/20 border border-pink-400/50 px-3 py-0.5 text-xs font-bold text-pink-200">
+                          {data.badge}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Sakura Progress Bar */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs font-mono text-pink-200">
+                      <span>Petal Sword Mastery XP</span>
+                      <span className="font-bold text-amber-200">
+                        {data.currentXp ?? 0} / {data.requiredXp ?? 100} XP ({percent}%)
+                      </span>
+                    </div>
+                    <div className="h-4 w-full rounded-full bg-black/60 border border-pink-500/40 p-0.5 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-pink-500 via-rose-400 to-amber-200 shadow-md transition-all duration-300"
+                        style={{ width: `${Math.max(2, percent)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Bottom Stats */}
+                  <div className="flex items-center justify-between border-t border-pink-500/20 pt-3 text-xs font-mono">
+                    <div className="flex items-center gap-3">
+                      <span className="rounded bg-pink-950/70 border border-pink-500/40 px-3 py-1 font-bold text-pink-300">
+                        DAN {data.level ?? 50}
+                      </span>
+                      <span className="text-pink-200/80 font-sans">
+                        {data.title || "Crimson Blade"}
+                      </span>
+                    </div>
+
+                    <div className="font-bold text-pink-300 text-sm">
+                      RYU: {data.balance || "0 xu"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 8. Hacker Terminal (Matrix Cyber Dossier / Terminal ID) */}
+            {theme === "hacker-terminal" && (
+              <div
+                className="relative flex h-full w-full flex-col justify-between p-6 overflow-hidden rounded-[16px] border-2 border-emerald-500/70 font-mono"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.15) 0%, transparent 70%), #05080c",
+                  boxShadow: "0 0 35px rgba(34, 197, 94, 0.25)",
+                }}
+              >
+                {/* Terminal Titlebar */}
+                <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2.5 text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
+                      <div className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
+                      <div className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
+                    </div>
+                    <span className="text-emerald-400/80 ml-2 font-bold">[AGENT DOSSIER // LEVEL 5 SECURITY]</span>
+                  </div>
+                  <div className="text-emerald-400 font-bold tracking-wider">
+                    SYS_ID: 0x{data.level ?? 64} // {data.rank ?? "#1"}
+                  </div>
+                </div>
+
+                {/* Main Content Body */}
+                <div className="flex items-center gap-6 my-2">
+                  {/* Square Avatar */}
+                  <div className="relative shrink-0">
+                    <div className="h-[105px] w-[105px] rounded-lg border-2 border-emerald-400/80 p-0.5 bg-black shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                      <img
+                        src={data.avatar}
+                        alt={data.username}
+                        className="h-full w-full rounded-md object-cover"
+                        crossOrigin="anonymous"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right Details */}
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-emerald-500 font-bold text-lg">{">"}</span>
+                        <h2 className="text-[28px] font-bold text-emerald-300 tracking-wider">
+                          root@{data.username || "neon_hacker"}:~#
+                        </h2>
+                      </div>
+                      {data.badge && (
+                        <span className="rounded bg-emerald-950/80 border border-emerald-500/60 px-2.5 py-0.5 text-xs font-bold text-emerald-300">
+                          {data.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Progress Matrix Blocks */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs text-emerald-400">
+                        <span>BUFFER_EXP: [{data.currentXp ?? 0}/{data.requiredXp ?? 100}]</span>
+                        <span className="font-bold">{percent}% LOADED</span>
+                      </div>
+                      <div className="h-3.5 w-full bg-black border border-emerald-500/50 p-0.5 rounded">
+                        <div
+                          className="h-full bg-emerald-400 shadow-[0_0_10px_#22c55e] transition-all duration-300"
+                          style={{ width: `${Math.max(2, percent)}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Terminal Bottom Statusline */}
+                <div className="flex items-center justify-between border-t border-emerald-500/30 pt-2 text-[11px] text-emerald-400/80">
+                  <div className="flex items-center gap-4">
+                    <span>CLEARANCE: <strong className="text-white">TIER {data.level ?? 64}</strong></span>
+                    <span>ROLE: <strong className="text-white">{data.title || "Netrunner Elite"}</strong></span>
+                  </div>
+                  <div className="text-emerald-300 font-bold">
+                    CREDITS: {data.balance || "0 xu"}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

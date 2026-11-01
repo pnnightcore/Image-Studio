@@ -430,6 +430,207 @@ export function QuotePreview({
                 </div>
               </div>
             )}
+
+            {/* 5. Layout: Magazine Editorial (High-Fashion / TIME Editorial) */}
+            {data.layout === "magazine-editorial" && (
+              <div
+                className="relative flex h-full w-full items-center justify-between p-10 overflow-hidden font-serif border-2 border-amber-300/40"
+                style={{
+                  background: "radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 60%), #07070a",
+                }}
+              >
+                {/* Left Typography Column */}
+                <div className="flex flex-col justify-between h-full max-w-[550px] z-10 py-2">
+                  <div className="flex items-center gap-3">
+                    <span className="font-sans text-[11px] font-bold tracking-[3px] text-amber-400 uppercase">
+                      ISSUE // 2026 EDITORIAL
+                    </span>
+                    <div className="h-0.5 w-12 bg-amber-400/40" />
+                  </div>
+
+                  <div className="relative my-auto py-4">
+                    <div className="text-6xl text-amber-400/30 font-serif leading-none -mb-6 select-none">“</div>
+                    <p className="text-[30px] font-bold leading-[42px] text-white tracking-wide">
+                      {data.quote || "Quote text"}
+                    </p>
+                  </div>
+
+                  <div className="border-t border-amber-500/20 pt-4 font-sans flex items-center justify-between">
+                    <div>
+                      <div className="text-lg font-bold text-amber-300 tracking-wider uppercase font-serif">
+                        {data.author}
+                      </div>
+                      <div className="text-xs text-slate-400">{data.tag || data.handle}</div>
+                    </div>
+                    <span className="text-[10px] font-mono tracking-widest text-slate-500 uppercase">
+                      |||| | |||||| ||||
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right Portrait Bleed */}
+                <div className="relative h-[420px] w-[350px] shrink-0 overflow-hidden rounded-2xl border border-amber-400/30 shadow-2xl">
+                  <img
+                    src={data.avatar}
+                    alt={data.author}
+                    className="h-full w-full object-cover filter contrast-110"
+                    crossOrigin="anonymous"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 font-sans text-xs font-mono text-amber-300 font-bold">
+                    PORTRAIT ARCHIVE 2026
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 6. Layout: Vintage Polaroid Snapshot */}
+            {data.layout === "polaroid-vintage" && (
+              <div
+                className="relative flex h-full w-full items-center justify-between p-12 overflow-hidden border border-stone-800"
+                style={{
+                  background: "radial-gradient(circle at 50% 50%, #1c1917 0%, #0c0a09 100%)",
+                }}
+              >
+                {/* Left Tilted Polaroid Photo */}
+                <div className="relative shrink-0 -rotate-2 transform">
+                  {/* Tape */}
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 h-5 w-20 bg-amber-200/40 rounded-sm rotate-1 z-20 shadow-sm" />
+                  <div className="flex flex-col items-center bg-[#fafaf9] p-3.5 pb-8 rounded shadow-2xl shadow-black/80 border border-stone-300">
+                    <div className="h-[240px] w-[240px] overflow-hidden bg-black rounded-sm">
+                      <img
+                        src={data.avatar}
+                        alt={data.author}
+                        className="h-full w-full object-cover sepia-[0.3]"
+                        crossOrigin="anonymous"
+                      />
+                    </div>
+                    <span className="mt-3 text-xs font-serif font-bold text-stone-800 tracking-wider">
+                      {data.author}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right Handwritten Quote */}
+                <div className="flex flex-col justify-between h-full max-w-[500px] ml-12 py-6 font-serif">
+                  <div className="flex items-center justify-between text-xs text-amber-200/60 font-mono">
+                    <span>HISTORICAL ARCHIVE</span>
+                    <span>1984 VINTAGE</span>
+                  </div>
+
+                  <div className="my-auto py-2">
+                    <p className="text-[28px] font-medium leading-[42px] text-stone-100 italic">
+                      "{data.quote || "Quote text"}"
+                    </p>
+                  </div>
+
+                  <div className="border-t border-stone-800 pt-4 flex items-center justify-between font-sans">
+                    <div>
+                      <div className="text-base font-bold text-amber-300 font-serif">{data.author}</div>
+                      <div className="text-xs text-stone-400">{data.tag || data.handle}</div>
+                    </div>
+                    <div className="h-10 w-10 rounded-full border-2 border-amber-400/40 flex items-center justify-center text-[8px] font-mono text-amber-300 uppercase rotate-12">
+                      SEAL
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 7. Layout: Anime Comic Speech Balloon */}
+            {data.layout === "speech-bubble" && (
+              <div
+                className="relative flex h-full w-full items-center justify-between p-10 overflow-hidden border-2 border-pink-400/40"
+                style={{
+                  background: "radial-gradient(circle at 10% 20%, rgba(244, 114, 182, 0.15) 0%, transparent 60%), #0f0714",
+                }}
+              >
+                {/* Left Comic Speech Bubble */}
+                <div className="relative flex-1 bg-white/[0.08] backdrop-blur-md rounded-3xl p-8 border-2 border-pink-400/60 mr-8 shadow-[0_0_25px_rgba(244,114,182,0.2)]">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="rounded-full bg-pink-500/20 px-3 py-0.5 text-xs font-bold text-pink-300 border border-pink-400/40">
+                      ✦ MANGA DIALOG
+                    </span>
+                  </div>
+                  <p className="text-[28px] font-bold leading-[40px] text-white">
+                    "{data.quote || "Quote text"}"
+                  </p>
+                  <div className="mt-4 flex items-center justify-between border-t border-pink-400/20 pt-3">
+                    <span className="text-lg font-bold text-pink-300 font-mono">// {data.author}</span>
+                    <span className="text-xs text-slate-400">{data.tag || data.handle}</span>
+                  </div>
+                </div>
+
+                {/* Right Character Cut-in */}
+                <div className="relative shrink-0">
+                  <div className="h-[260px] w-[260px] rounded-3xl overflow-hidden border-4 border-pink-400 shadow-[0_0_30px_rgba(244,114,182,0.4)]">
+                    <img
+                      src={data.avatar}
+                      alt={data.author}
+                      className="h-full w-full object-cover"
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 8. Layout: Developer IDE Terminal Quote */}
+            {data.layout === "code-terminal" && (
+              <div
+                className="relative flex h-full w-full flex-col justify-between p-8 overflow-hidden rounded-xl border-2 border-emerald-500/60 bg-[#05080c] font-mono shadow-[0_0_30px_rgba(34,197,94,0.2)]"
+              >
+                {/* Titlebar */}
+                <div className="flex items-center justify-between border-b border-emerald-500/30 pb-3 text-xs text-emerald-400">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                      <div className="h-3 w-3 rounded-full bg-red-500" />
+                      <div className="h-3 w-3 rounded-full bg-yellow-500" />
+                      <div className="h-3 w-3 rounded-full bg-green-500" />
+                    </div>
+                    <span className="ml-3 font-bold">src/philosophy/{data.author.toLowerCase().replace(/\s+/g, "_")}.ts</span>
+                  </div>
+                  <span className="text-emerald-500/80">TypeScript 5.8 // UTF-8</span>
+                </div>
+
+                {/* Code Window with Gutter */}
+                <div className="flex items-start gap-6 my-auto py-2">
+                  <div className="flex flex-col text-slate-600 select-none text-right font-mono text-sm space-y-1">
+                    <span>01</span>
+                    <span>02</span>
+                    <span>03</span>
+                    <span>04</span>
+                    <span>05</span>
+                    <span>06</span>
+                  </div>
+                  <div className="space-y-1 text-sm font-mono flex-1">
+                    <div className="text-slate-500">// Quotation by {data.author} ({data.tag})</div>
+                    <div>
+                      <span className="text-purple-400">const</span>{" "}
+                      <span className="text-cyan-300">quote</span>:{" "}
+                      <span className="text-emerald-400">Wisdom</span> = {"{"}
+                    </div>
+                    <div className="pl-6 text-emerald-300">
+                      <span className="text-amber-300">content</span>:{" "}
+                      <span className="text-white text-lg font-bold">"{data.quote}"</span>,
+                    </div>
+                    <div className="pl-6 text-slate-300">
+                      <span className="text-amber-300">author</span>: <span className="text-cyan-300">"{data.author}"</span>,
+                    </div>
+                    <div className="pl-6 text-slate-300">
+                      <span className="text-amber-300">verified</span>: <span className="text-purple-400">true</span>
+                    </div>
+                    <div>{"};"}</div>
+                  </div>
+                </div>
+
+                {/* Statusline */}
+                <div className="flex items-center justify-between border-t border-emerald-500/30 pt-2.5 text-xs text-emerald-400">
+                  <span>NORMAL | main | 100% PASS</span>
+                  <span>{data.handle}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

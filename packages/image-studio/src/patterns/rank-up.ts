@@ -140,7 +140,7 @@ export const rankUpPattern: StudioPattern = {
     }
   ],
   "category": "builtin",
-  "createdAt": "2026-11-01T11:46:55.472Z"
+  "createdAt": "2026-11-01T15:13:18.814Z"
 };
 
 export default rankUpPattern;

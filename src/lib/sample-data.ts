@@ -63,7 +63,7 @@ export const sampleSongs: SongResult[] = [
   },
   {
     index: 7,
-    avatar: "https://i.ytimg.com/vi/MsHvLrs6sjk/hq720.jpg",
+    avatar: "https://i.ytimg.com/vi/858Eq25HpXg/hq720.jpg",
     displayName: "Midnight Coding & Deep Work Beats",
     time: "01:30:15",
     source: "youtube",
@@ -81,7 +81,7 @@ export const sampleSongs: SongResult[] = [
   },
   {
     index: 9,
-    avatar: "https://i.ytimg.com/vi/eC5Mt-CQsk4/hqdefault.jpg",
+    avatar: "https://i.ytimg.com/vi/0fCckxq7css/hqdefault.jpg",
     displayName: "Tokyo Night Cyberpunk Synth & Chill",
     time: "00:42:18",
     source: "youtube",
@@ -230,7 +230,7 @@ export const presetSamples: PresetSample[] = [
 export const defaultProfileData: ProfileData = {
   username: "__ziji",
   balance: "13080 xu",
-  avatar: "https://i.ytimg.com/vi/MsHvLrs6sjk/hq720.jpg",
+  avatar: "https://i.ytimg.com/vi/858Eq25HpXg/hq720.jpg",
   level: 16,
   currentXp: 0,
   requiredXp: 801,
@@ -246,7 +246,7 @@ export const defaultLeaderboardData: LeaderboardData = {
       rank: 1,
       username: "Ziji",
       handle: "@xxxxxxziji",
-      avatar: "https://i.ytimg.com/vi/MsHvLrs6sjk/hq720.jpg",
+      avatar: "https://i.ytimg.com/vi/858Eq25HpXg/hq720.jpg",
       level: 16,
       xp: 1,
     },
@@ -262,7 +262,7 @@ export const defaultLeaderboardData: LeaderboardData = {
       rank: 3,
       username: "deleted_user_b11c1c2d4b",
       handle: "@xxxxx4b07",
-      avatar: "https://i.ytimg.com/vi/eC5Mt-CQsk4/hqdefault.jpg",
+      avatar: "https://i.ytimg.com/vi/0fCckxq7css/hqdefault.jpg",
       level: 6,
       xp: 64,
     },
@@ -330,5 +330,5 @@ export const defaultQuoteData: QuoteData = {
   author: "Ziji",
   handle: "@__ziji",
   tag: "Ziji Execute#9575",
-  avatar: "https://i.ytimg.com/vi/MsHvLrs6sjk/hq720.jpg",
+  avatar: "https://i.ytimg.com/vi/858Eq25HpXg/hq720.jpg",
 };

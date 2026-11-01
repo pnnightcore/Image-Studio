@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import type {
   GeneratorType,
   SongResult,
+  SongLayout,
   ProfileData,
   LeaderboardData,
   QuoteData,
@@ -208,7 +209,7 @@ export default function App() {
   // State for generators
   const [songTitle, setSongTitle] = useState<string>("Trending Top Hits");
   const [songs, setSongs] = useState<SongResult[]>(sampleSongs);
-  const [songLayout, setSongLayout] = useState<"auto" | "list" | "grid" | "classic">("auto");
+  const [songLayout, setSongLayout] = useState<SongLayout>("auto");
 
   const [profileData, setProfileData] = useState<ProfileData>(defaultProfileData);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData>(defaultLeaderboardData);

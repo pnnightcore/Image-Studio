@@ -13,6 +13,7 @@ import type {
   QuoteData,
   CustomCanvasData,
   AnyGenerateRequest,
+  SongLayout,
 } from "./types.js";
 import {
   CANVAS_WIDTH,
@@ -460,6 +461,234 @@ function renderGridCardItem(song: (SongResult & { avatarUri: string }) | null, c
   };
 }
 
+function renderShowcaseHeroItem(song: SongResult & { avatarUri: string }) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        width: "1102px",
+        height: "165px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 24px",
+        background: "linear-gradient(90deg, #180e06 0%, #120a1c 50%, #0a0614 100%)",
+        border: "2px solid rgba(251, 191, 36, 0.5)",
+        borderRadius: "16px",
+      },
+      children: [
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", alignItems: "center" },
+            children: [
+              {
+                type: "img",
+                props: {
+                  src: song.avatarUri,
+                  style: {
+                    width: "125px",
+                    height: "125px",
+                    borderRadius: "12px",
+                    objectFit: "cover",
+                    border: "1px solid rgba(251, 191, 36, 0.4)",
+                  },
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    flexDirection: "column",
+                    marginLeft: "24px",
+                    maxWidth: "680px",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "6px",
+                        },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(245, 158, 11, 0.2)",
+                                color: "#fcd34d",
+                                border: "1px solid rgba(251, 191, 36, 0.4)",
+                                borderRadius: "4px",
+                                padding: "2px 8px",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                              },
+                              children: "★ FEATURED MASTER #1",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: "#ffffff",
+                          fontSize: "24px",
+                          fontWeight: 700,
+                          lineHeight: "30px",
+                          marginBottom: "4px",
+                        },
+                        children: song.displayName,
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          color: "#cbd5e1",
+                          fontSize: "13px",
+                          display: "flex",
+                          alignItems: "center",
+                        },
+                        children: `${song.author || "Artist"} • ${song.time}${song.views ? ` • ${song.views}` : ""}`,
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+            },
+            children: [
+              {
+                type: "span",
+                props: {
+                  style: {
+                    color: "#fcd34d",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    letterSpacing: "1px",
+                  },
+                  children: "MASTER HI-RES",
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+}
+
+function renderCompactQueueItem(song: SongResult & { avatarUri: string }) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        width: "1102px",
+        height: "52px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "0 16px",
+        background: "rgba(255, 255, 255, 0.04)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
+        borderRadius: "12px",
+        marginBottom: "6px",
+      },
+      children: [
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", alignItems: "center" },
+            children: [
+              {
+                type: "span",
+                props: {
+                  style: {
+                    color: "#f59e0b",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    width: "28px",
+                  },
+                  children: String(song.index).padStart(2, "0"),
+                },
+              },
+              {
+                type: "img",
+                props: {
+                  src: song.avatarUri,
+                  style: {
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "8px",
+                    objectFit: "cover",
+                    marginLeft: "8px",
+                    marginRight: "16px",
+                  },
+                },
+              },
+              {
+                type: "span",
+                props: {
+                  style: {
+                    color: "#ffffff",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    maxWidth: "580px",
+                  },
+                  children: song.displayName,
+                },
+              },
+              song.author
+                ? {
+                    type: "span",
+                    props: {
+                      style: {
+                        color: "#94a3b8",
+                        fontSize: "12px",
+                        marginLeft: "12px",
+                        maxWidth: "220px",
+                      },
+                      children: `— ${song.author}`,
+                    },
+                  }
+                : null,
+            ].filter(Boolean),
+          },
+        },
+        {
+          type: "span",
+          props: {
+            style: {
+              background: "rgba(0, 0, 0, 0.5)",
+              color: "#fcd34d",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "6px",
+              padding: "2px 8px",
+              fontSize: "12px",
+              fontWeight: 700,
+            },
+            children: song.time,
+          },
+        },
+      ],
+    },
+  };
+}
+
 function renderSongCard(song: (SongResult & { avatarUri: string }) | null) {
   if (!song) {
     return {
@@ -570,7 +799,7 @@ function renderSongCard(song: (SongResult & { avatarUri: string }) | null) {
 export async function generateSongImage(request: {
   title: string;
   items: SongResult[];
-  layout?: "auto" | "list" | "grid" | "classic";
+  layout?: SongLayout;
 }): Promise<{ png: Buffer; height: number }> {
   const songs = request.items || [];
   if (songs.length === 0) {
@@ -578,7 +807,7 @@ export async function generateSongImage(request: {
   }
 
   // Automatic adaptive layout: <= 10 tracks -> Large card grid, > 10 tracks -> 2-column video list
-  const effectiveLayout: "list" | "grid" | "classic" =
+  const effectiveLayout: SongLayout =
     request.layout && request.layout !== "auto"
       ? request.layout
       : songs.length <= 10
@@ -608,7 +837,29 @@ export async function generateSongImage(request: {
 
   let contentRows: any[];
 
-  if (effectiveLayout === "grid") {
+  if (effectiveLayout === "showcase") {
+    const hero = processedSongs[0];
+    const heroNode = hero ? renderShowcaseHeroItem(hero) : null;
+    const subSongs = processedSongs.slice(1);
+    const half = Math.ceil(subSongs.length / 2);
+    const left = subSongs.slice(0, half);
+    const right = subSongs.slice(half);
+    const rows = Array.from({ length: half }, (_, i) => [left[i] || null, right[i] || null]);
+    const subNodes = rows.map(([a, b]) => ({
+      type: "div",
+      props: {
+        style: {
+          display: "flex",
+          flexDirection: "row",
+          gap: `${COL_GAP}px`,
+        },
+        children: [renderVideoListItem(a), renderVideoListItem(b)],
+      },
+    }));
+    contentRows = [heroNode, ...subNodes].filter(Boolean);
+  } else if (effectiveLayout === "compact-queue") {
+    contentRows = processedSongs.map((item) => renderCompactQueueItem(item));
+  } else if (effectiveLayout === "grid") {
     // Large cards: 4 columns for <= 8 tracks, 5 columns for 9-10 tracks
     const cols = processedSongs.length <= 8 ? 4 : 5;
     const groupCount = Math.ceil(processedSongs.length / cols);
@@ -735,7 +986,6 @@ export async function generateSongImage(request: {
           width: `${CANVAS_WIDTH}px`,
           height: `${height}px`,
           pointerEvents: "none",
-          zIndex: 999,
         },
         children: pNodes,
       },
@@ -878,7 +1128,6 @@ function renderProfileRubyPoly(data: ProfileData, avatarUri: string, percent: nu
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              zIndex: 2,
             },
             children: [
               {
@@ -1984,6 +2233,936 @@ function renderProfileGoldLegend(data: ProfileData, avatarUri: string, percent: 
   };
 }
 
+function renderProfileCosmicVoid(data: ProfileData, avatarUri: string, percent: number) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        width: `${PROFILE_WIDTH}px`,
+        height: `${PROFILE_HEIGHT}px`,
+        display: "flex",
+        alignItems: "center",
+        padding: "24px 36px",
+        borderRadius: "24px",
+        background:
+          "radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.35) 0%, transparent 65%), linear-gradient(135deg, #060412 0%, #0d0724 45%, #180d38 100%)",
+        border: "2px solid rgba(168, 85, 247, 0.5)",
+        position: "relative",
+        overflow: "hidden",
+      },
+      children: [
+        // Left Avatar with Astral Ring
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: {
+                    width: "135px",
+                    height: "135px",
+                    borderRadius: "999px",
+                    padding: "3px",
+                    background: "linear-gradient(135deg, #9333ea, #e879f9, #818cf8)",
+                    display: "flex",
+                  },
+                  children: [
+                    {
+                      type: "img",
+                      props: {
+                        src: avatarUri,
+                        style: { width: "100%", height: "100%", borderRadius: "999px", objectFit: "cover" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: {
+                    marginTop: "-14px",
+                    background: "rgba(15, 6, 32, 0.95)",
+                    border: "1px solid rgba(192, 132, 252, 0.6)",
+                    borderRadius: "999px",
+                    padding: "2px 10px",
+                    color: "#e9d5ff",
+                    fontSize: "10px",
+                    fontWeight: 700,
+                  },
+                  children: `★ ASTRAL Lv.${data.level ?? 88}`,
+                },
+              },
+            ],
+          },
+        },
+
+        // Right Content
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              marginLeft: "32px",
+              flex: 1,
+              height: "100%",
+              padding: "4px 0",
+            },
+            children: [
+              // Top
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column" },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", justifyContent: "space-between" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#c084fc", fontSize: "11px", fontWeight: 700, letterSpacing: "1px" },
+                              children: "◈ VOID SOVEREIGNTY ◈",
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(147, 51, 234, 0.25)",
+                                border: "1px solid rgba(192, 132, 252, 0.5)",
+                                borderRadius: "8px",
+                                padding: "2px 10px",
+                                color: "#e9d5ff",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                              },
+                              children: `${data.rank ?? "#1"} SOVEREIGN`,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", marginTop: "6px" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#f3e8ff", fontSize: "32px", fontWeight: 700 },
+                              children: data.username || "Astral_Valkyrie",
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(168, 85, 247, 0.2)",
+                                border: "1px solid rgba(168, 85, 247, 0.5)",
+                                borderRadius: "999px",
+                                padding: "2px 10px",
+                                color: "#d8b4fe",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                                marginLeft: "12px",
+                              },
+                              children: data.badge || "🌌 VOID SOVEREIGN",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+
+              // Progress
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column" },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#d8b4fe", marginBottom: "4px" },
+                        children: [
+                          { type: "span", props: { children: "Starlight Singularity XP" } },
+                          { type: "span", props: { style: { fontWeight: 700, color: "#f0abfc" }, children: `${data.currentXp ?? 0} / ${data.requiredXp ?? 100} (${percent}%)` } },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          width: "100%",
+                          height: "16px",
+                          borderRadius: "999px",
+                          background: "rgba(0, 0, 0, 0.6)",
+                          border: "1px solid rgba(168, 85, 247, 0.4)",
+                          padding: "2px",
+                          display: "flex",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                width: `${Math.max(2, percent)}%`,
+                                height: "100%",
+                                borderRadius: "999px",
+                                background: "linear-gradient(90deg, #6366f1, #a855f7, #f472b6)",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+
+              // Bottom Stats
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "1px solid rgba(168, 85, 247, 0.25)",
+                    paddingTop: "8px",
+                    fontSize: "12px",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { background: "rgba(88, 28, 135, 0.7)", border: "1px solid rgba(168, 85, 247, 0.4)", borderRadius: "4px", padding: "2px 8px", color: "#d8b4fe", fontWeight: 700 },
+                              children: `TIER ${data.level ?? 88}`,
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: { style: { color: "rgba(216, 180, 254, 0.8)", marginLeft: "10px" }, children: data.title || "Cosmic Realm Ruler" },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "span",
+                      props: { style: { color: "#e9d5ff", fontWeight: 700, fontSize: "13px" }, children: `STAR_CORE: ${data.balance || "0 xu"}` },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+}
+
+function renderProfileFrostGlacier(data: ProfileData, avatarUri: string, percent: number) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        width: `${PROFILE_WIDTH}px`,
+        height: `${PROFILE_HEIGHT}px`,
+        display: "flex",
+        alignItems: "center",
+        padding: "24px 36px",
+        borderRadius: "20px",
+        background:
+          "radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.3) 0%, transparent 60%), linear-gradient(135deg, #03131e 0%, #062238 50%, #0b3450 100%)",
+        border: "2px solid rgba(56, 189, 248, 0.6)",
+        position: "relative",
+        overflow: "hidden",
+      },
+      children: [
+        // Left Avatar with Cryo Frame
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: {
+                    width: "135px",
+                    height: "135px",
+                    borderRadius: "16px",
+                    padding: "3px",
+                    background: "linear-gradient(135deg, #38bdf8, #67e8f9, #3b82f6)",
+                    display: "flex",
+                  },
+                  children: [
+                    {
+                      type: "img",
+                      props: {
+                        src: avatarUri,
+                        style: { width: "100%", height: "100%", borderRadius: "14px", objectFit: "cover" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: {
+                    marginTop: "-14px",
+                    background: "rgba(3, 19, 30, 0.95)",
+                    border: "1px solid rgba(56, 189, 248, 0.6)",
+                    borderRadius: "6px",
+                    padding: "2px 10px",
+                    color: "#e0f2fe",
+                    fontSize: "10px",
+                    fontWeight: 700,
+                  },
+                  children: `❄️ CRYO Lv.${data.level ?? 75}`,
+                },
+              },
+            ],
+          },
+        },
+
+        // Right Content
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              marginLeft: "32px",
+              flex: 1,
+              height: "100%",
+              padding: "4px 0",
+            },
+            children: [
+              // Top
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column" },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", justifyContent: "space-between" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#38bdf8", fontSize: "11px", fontWeight: 700, letterSpacing: "1px" },
+                              children: "ABSOLUTE ZERO MONARCH",
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(14, 165, 233, 0.25)",
+                                border: "1px solid rgba(56, 189, 248, 0.5)",
+                                borderRadius: "8px",
+                                padding: "2px 10px",
+                                color: "#e0f2fe",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                              },
+                              children: `${data.rank ?? "#1"} APEX`,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", marginTop: "6px" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#e0f2fe", fontSize: "32px", fontWeight: 700 },
+                              children: data.username || "FrostMonarch",
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(56, 189, 248, 0.2)",
+                                border: "1px solid rgba(56, 189, 248, 0.5)",
+                                borderRadius: "6px",
+                                padding: "2px 10px",
+                                color: "#bae6fd",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                                marginLeft: "12px",
+                              },
+                              children: data.badge || "❄️ FROST MONARCH",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+
+              // Progress
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column" },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#bae6fd", marginBottom: "4px" },
+                        children: [
+                          { type: "span", props: { children: "Permafrost Cryo Engine" } },
+                          { type: "span", props: { style: { fontWeight: 700, color: "#7dd3fc" }, children: `${data.currentXp ?? 0} / ${data.requiredXp ?? 100} (${percent}%)` } },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          width: "100%",
+                          height: "16px",
+                          borderRadius: "6px",
+                          background: "rgba(0, 0, 0, 0.6)",
+                          border: "1px solid rgba(56, 189, 248, 0.4)",
+                          padding: "2px",
+                          display: "flex",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                width: `${Math.max(2, percent)}%`,
+                                height: "100%",
+                                borderRadius: "4px",
+                                background: "linear-gradient(90deg, #0284c7, #38bdf8, #e0f2fe)",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+
+              // Bottom Stats
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "1px solid rgba(56, 189, 248, 0.25)",
+                    paddingTop: "8px",
+                    fontSize: "12px",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { background: "rgba(3, 105, 161, 0.7)", border: "1px solid rgba(56, 189, 248, 0.4)", borderRadius: "4px", padding: "2px 8px", color: "#bae6fd", fontWeight: 700 },
+                              children: `FROST TIER ${data.level ?? 75}`,
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: { style: { color: "rgba(186, 230, 253, 0.8)", marginLeft: "10px" }, children: data.title || "Glacial Sovereign" },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "span",
+                      props: { style: { color: "#7dd3fc", fontWeight: 700, fontSize: "13px" }, children: `CRYSTALS: ${data.balance || "0 xu"}` },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+}
+
+function renderProfileSakuraDuelist(data: ProfileData, avatarUri: string, percent: number) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        width: `${PROFILE_WIDTH}px`,
+        height: `${PROFILE_HEIGHT}px`,
+        display: "flex",
+        alignItems: "center",
+        padding: "24px 36px",
+        borderRadius: "24px",
+        background:
+          "radial-gradient(circle at 85% 15%, rgba(244, 114, 182, 0.3) 0%, transparent 60%), linear-gradient(135deg, #1c0919 0%, #2b0b26 45%, #421038 100%)",
+        border: "2px solid rgba(244, 114, 182, 0.5)",
+        position: "relative",
+        overflow: "hidden",
+      },
+      children: [
+        // Left Avatar with Sakura Ring
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: {
+                    width: "135px",
+                    height: "135px",
+                    borderRadius: "999px",
+                    padding: "3px",
+                    background: "linear-gradient(135deg, #ec4899, #fda4af, #f59e0b)",
+                    display: "flex",
+                  },
+                  children: [
+                    {
+                      type: "img",
+                      props: {
+                        src: avatarUri,
+                        style: { width: "100%", height: "100%", borderRadius: "999px", objectFit: "cover" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: {
+                    marginTop: "-14px",
+                    background: "rgba(28, 9, 25, 0.95)",
+                    border: "1px solid rgba(244, 114, 182, 0.6)",
+                    borderRadius: "999px",
+                    padding: "2px 10px",
+                    color: "#fce7f3",
+                    fontSize: "10px",
+                    fontWeight: 700,
+                  },
+                  children: `🌸 BLADE Lv.${data.level ?? 50}`,
+                },
+              },
+            ],
+          },
+        },
+
+        // Right Content
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              marginLeft: "32px",
+              flex: 1,
+              height: "100%",
+              padding: "4px 0",
+            },
+            children: [
+              // Top
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column" },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", justifyContent: "space-between" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#f472b6", fontSize: "11px", fontWeight: 700, letterSpacing: "1px" },
+                              children: "BUSHIDO DUELIST GUILD",
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(236, 72, 153, 0.25)",
+                                border: "1px solid rgba(244, 114, 182, 0.5)",
+                                borderRadius: "999px",
+                                padding: "2px 10px",
+                                color: "#fce7f3",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                              },
+                              children: `${data.rank ?? "#1"} DAN`,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", marginTop: "6px" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#fce7f3", fontSize: "32px", fontWeight: 700 },
+                              children: data.username || "Sakura_Duelist",
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(236, 72, 153, 0.2)",
+                                border: "1px solid rgba(244, 114, 182, 0.5)",
+                                borderRadius: "999px",
+                                padding: "2px 10px",
+                                color: "#fbcfe8",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                                marginLeft: "12px",
+                              },
+                              children: data.badge || "🗡️ SAKURA DUELIST",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+
+              // Progress
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column" },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", justifyContent: "space-between", fontSize: "12px", color: "#fbcfe8", marginBottom: "4px" },
+                        children: [
+                          { type: "span", props: { children: "Petal Sword Mastery XP" } },
+                          { type: "span", props: { style: { fontWeight: 700, color: "#fef08a" }, children: `${data.currentXp ?? 0} / ${data.requiredXp ?? 100} (${percent}%)` } },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          width: "100%",
+                          height: "16px",
+                          borderRadius: "999px",
+                          background: "rgba(0, 0, 0, 0.6)",
+                          border: "1px solid rgba(244, 114, 182, 0.4)",
+                          padding: "2px",
+                          display: "flex",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                width: `${Math.max(2, percent)}%`,
+                                height: "100%",
+                                borderRadius: "999px",
+                                background: "linear-gradient(90deg, #ec4899, #f43f5e, #fef08a)",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+
+              // Bottom Stats
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "1px solid rgba(244, 114, 182, 0.25)",
+                    paddingTop: "8px",
+                    fontSize: "12px",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { background: "rgba(131, 24, 67, 0.7)", border: "1px solid rgba(244, 114, 182, 0.4)", borderRadius: "4px", padding: "2px 8px", color: "#fbcfe8", fontWeight: 700 },
+                              children: `DAN ${data.level ?? 50}`,
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: { style: { color: "rgba(251, 207, 232, 0.8)", marginLeft: "10px" }, children: data.title || "Crimson Blade" },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "span",
+                      props: { style: { color: "#f472b6", fontWeight: 700, fontSize: "13px" }, children: `RYU: ${data.balance || "0 xu"}` },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+}
+
+function renderProfileHackerTerminal(data: ProfileData, avatarUri: string, percent: number) {
+  return {
+    type: "div",
+    props: {
+      style: {
+        width: `${PROFILE_WIDTH}px`,
+        height: `${PROFILE_HEIGHT}px`,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "16px 24px",
+        borderRadius: "16px",
+        background: "#05080c",
+        border: "2px solid rgba(34, 197, 94, 0.7)",
+        position: "relative",
+        overflow: "hidden",
+      },
+      children: [
+        // Titlebar
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderBottom: "1px solid rgba(34, 197, 94, 0.3)",
+              paddingBottom: "8px",
+              fontSize: "11px",
+              color: "#4ade80",
+            },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", alignItems: "center" },
+                  children: [
+                    { type: "div", props: { style: { width: "10px", height: "10px", borderRadius: "999px", background: "#ef4444", marginRight: "6px" } } },
+                    { type: "div", props: { style: { width: "10px", height: "10px", borderRadius: "999px", background: "#f59e0b", marginRight: "6px" } } },
+                    { type: "div", props: { style: { width: "10px", height: "10px", borderRadius: "999px", background: "#10b981", marginRight: "12px" } } },
+                    { type: "span", props: { style: { fontWeight: 700 }, children: "[AGENT DOSSIER // LEVEL 5 SECURITY]" } },
+                  ],
+                },
+              },
+              {
+                type: "span",
+                props: { style: { fontWeight: 700 }, children: `SYS_ID: 0x${data.level ?? 64} // ${data.rank ?? "#1"}` },
+              },
+            ],
+          },
+        },
+
+        // Middle Body
+        {
+          type: "div",
+          props: {
+            style: { display: "flex", alignItems: "center", margin: "10px 0" },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: {
+                    width: "105px",
+                    height: "105px",
+                    borderRadius: "8px",
+                    border: "2px solid rgba(74, 222, 128, 0.8)",
+                    padding: "2px",
+                    background: "#000000",
+                    display: "flex",
+                    flexShrink: 0,
+                  },
+                  children: [
+                    {
+                      type: "img",
+                      props: {
+                        src: avatarUri,
+                        style: { width: "100%", height: "100%", borderRadius: "6px", objectFit: "cover" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", flexDirection: "column", marginLeft: "24px", flex: 1 },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", justifyContent: "space-between" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { color: "#4ade80", fontSize: "28px", fontWeight: 700 },
+                              children: `root@${data.username || "neon_hacker"}:~#`,
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                background: "rgba(5, 46, 22, 0.8)",
+                                border: "1px solid rgba(34, 197, 94, 0.6)",
+                                borderRadius: "4px",
+                                padding: "2px 8px",
+                                color: "#86efac",
+                                fontSize: "11px",
+                                fontWeight: 700,
+                              },
+                              children: data.badge || "⚡ CYBERPUNK NETRUNNER",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#4ade80", marginTop: "8px", marginBottom: "4px" },
+                        children: [
+                          { type: "span", props: { children: `BUFFER_EXP: [${data.currentXp ?? 0}/${data.requiredXp ?? 100}]` } },
+                          { type: "span", props: { style: { fontWeight: 700 }, children: `${percent}% LOADED` } },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          width: "100%",
+                          height: "14px",
+                          background: "#000000",
+                          border: "1px solid rgba(34, 197, 94, 0.5)",
+                          padding: "2px",
+                          display: "flex",
+                          borderRadius: "4px",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                width: `${Math.max(2, percent)}%`,
+                                height: "100%",
+                                background: "linear-gradient(90deg, #15803d, #22c55e, #86efac)",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+
+        // Bottom Statusline
+        {
+          type: "div",
+          props: {
+            style: {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderTop: "1px solid rgba(34, 197, 94, 0.3)",
+              paddingTop: "8px",
+              fontSize: "11px",
+              color: "rgba(74, 222, 128, 0.8)",
+            },
+            children: [
+              {
+                type: "div",
+                props: {
+                  style: { display: "flex", alignItems: "center" },
+                  children: [
+                    { type: "span", props: { children: `CLEARANCE: TIER ${data.level ?? 64} · ROLE: ${data.title || "Netrunner Elite"}` } },
+                  ],
+                },
+              },
+              {
+                type: "span",
+                props: { style: { color: "#86efac", fontWeight: 700 }, children: `CREDITS: ${data.balance || "0 xu"}` },
+              },
+            ],
+          },
+        },
+      ],
+    },
+  };
+}
+
 export async function generateProfileImage(data: ProfileData): Promise<{ png: Buffer; height: number }> {
   const avatarUri = await imageToDataUri(data.avatar, 180);
   const percent = Math.min(100, Math.max(0, Math.round((data.currentXp / (data.requiredXp || 1)) * 100)));
@@ -1996,6 +3175,14 @@ export async function generateProfileImage(data: ProfileData): Promise<{ png: Bu
     element = renderProfileGlassMinimal(data, avatarUri, percent);
   } else if (theme === "gold-legend") {
     element = renderProfileGoldLegend(data, avatarUri, percent);
+  } else if (theme === "cosmic-void") {
+    element = renderProfileCosmicVoid(data, avatarUri, percent);
+  } else if (theme === "frost-glacier") {
+    element = renderProfileFrostGlacier(data, avatarUri, percent);
+  } else if (theme === "sakura-duelist") {
+    element = renderProfileSakuraDuelist(data, avatarUri, percent);
+  } else if (theme === "hacker-terminal") {
+    element = renderProfileHackerTerminal(data, avatarUri, percent);
   } else {
     element = renderProfileRubyPoly(data, avatarUri, percent);
   }
@@ -2013,7 +3200,6 @@ export async function generateProfileImage(data: ProfileData): Promise<{ png: Bu
           width: `${PROFILE_WIDTH}px`,
           height: `${PROFILE_HEIGHT}px`,
           pointerEvents: "none",
-          zIndex: 999,
         },
         children: pNodes,
       },
@@ -2353,6 +3539,7 @@ export async function generateLeaderboardImage(data: LeaderboardData): Promise<{
                     type: "div",
                     props: {
                       style: {
+                        display: "flex",
                         position: "relative",
                         width: "48px",
                         height: "48px",
@@ -2657,6 +3844,782 @@ export async function generateLeaderboardImage(data: LeaderboardData): Promise<{
               },
             };
           }),
+        },
+      },
+    ];
+  } else if (layout === "versus-duel") {
+    const p1Uri = top1 ? itemUris[items.indexOf(top1)] || FALLBACK_AVATAR : FALLBACK_AVATAR;
+    const p2Uri = top2 ? itemUris[items.indexOf(top2)] || FALLBACK_AVATAR : FALLBACK_AVATAR;
+    const p1Xp = top1?.xp || 1;
+    const p2Xp = top2?.xp || 1;
+    const totalDuelXp = p1Xp + p2Xp;
+    const p1WidthPercent = Math.round((p1Xp / totalDuelXp) * 100);
+    const p2WidthPercent = 100 - p1WidthPercent;
+    const remainingDuel = items.slice(2);
+
+    bodyElements = [
+      {
+        type: "div",
+        props: {
+          style: {
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          },
+          children: [
+            // Head-to-Head Clash Banner
+            {
+              type: "div",
+              props: {
+                style: {
+                  width: "100%",
+                  height: "210px",
+                  borderRadius: "16px",
+                  border: "2px solid rgba(245, 158, 11, 0.5)",
+                  background:
+                    "linear-gradient(90deg, rgba(69, 10, 10, 0.5) 0%, #0e1017 50%, rgba(8, 51, 68, 0.5) 100%)",
+                  padding: "16px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                },
+                children: [
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        fontSize: "11px",
+                        fontFamily: "monospace",
+                      },
+                      children: [
+                        {
+                          type: "span",
+                          props: {
+                            style: { color: "#f87171", fontWeight: 700, letterSpacing: "1px" },
+                            children: "CHALLENGER (RANK #1)",
+                          },
+                        },
+                        {
+                          type: "span",
+                          props: {
+                            style: {
+                              background: "rgba(245, 158, 11, 0.2)",
+                              border: "1px solid rgba(251, 191, 36, 0.4)",
+                              color: "#fcd34d",
+                              fontWeight: 700,
+                              padding: "2px 10px",
+                              borderRadius: "6px",
+                            },
+                            children: "RIVALRY CLASH",
+                          },
+                        },
+                        {
+                          type: "span",
+                          props: {
+                            style: { color: "#38bdf8", fontWeight: 700, letterSpacing: "1px" },
+                            children: "DEFENDER (RANK #2)",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "0 12px",
+                      },
+                      children: [
+                        {
+                          type: "div",
+                          props: {
+                            style: { display: "flex", flexDirection: "column", alignItems: "center" },
+                            children: [
+                              {
+                                type: "img",
+                                props: {
+                                  src: p1Uri,
+                                  width: 68,
+                                  height: 68,
+                                  style: {
+                                    width: "68px",
+                                    height: "68px",
+                                    borderRadius: "999px",
+                                    border: "2px solid #ef4444",
+                                    objectFit: "cover",
+                                  },
+                                },
+                              },
+                              {
+                                type: "div",
+                                props: {
+                                  style: { color: "#ffffff", fontSize: "14px", fontWeight: 700, marginTop: "6px" },
+                                  children: top1?.username || "Player 1",
+                                },
+                              },
+                              {
+                                type: "div",
+                                props: {
+                                  style: { color: "#f87171", fontSize: "11px", fontWeight: 600, fontFamily: "monospace" },
+                                  children: `${top1?.xp?.toLocaleString() || 0} XP`,
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: { display: "flex", flexDirection: "column", alignItems: "center" },
+                            children: [
+                              {
+                                type: "div",
+                                props: {
+                                  style: {
+                                    width: "44px",
+                                    height: "44px",
+                                    borderRadius: "999px",
+                                    background: "linear-gradient(135deg, #ef4444, #f59e0b)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: "#ffffff",
+                                    fontWeight: 800,
+                                    fontSize: "14px",
+                                    border: "2px solid rgba(255, 255, 255, 0.3)",
+                                  },
+                                  children: "VS",
+                                },
+                              },
+                              {
+                                type: "span",
+                                props: {
+                                  style: { fontSize: "9px", color: "#94a3b8", marginTop: "4px", fontFamily: "monospace" },
+                                  children: "BATTLE ARENA",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: { display: "flex", flexDirection: "column", alignItems: "center" },
+                            children: [
+                              {
+                                type: "img",
+                                props: {
+                                  src: p2Uri,
+                                  width: 68,
+                                  height: 68,
+                                  style: {
+                                    width: "68px",
+                                    height: "68px",
+                                    borderRadius: "999px",
+                                    border: "2px solid #38bdf8",
+                                    objectFit: "cover",
+                                  },
+                                },
+                              },
+                              {
+                                type: "div",
+                                props: {
+                                  style: { color: "#ffffff", fontSize: "14px", fontWeight: 700, marginTop: "6px" },
+                                  children: top2?.username || "Player 2",
+                                },
+                              },
+                              {
+                                type: "div",
+                                props: {
+                                  style: { color: "#38bdf8", fontSize: "11px", fontWeight: 600, fontFamily: "monospace" },
+                                  children: `${top2?.xp?.toLocaleString() || 0} XP`,
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        width: "100%",
+                        height: "8px",
+                        borderRadius: "999px",
+                        background: "rgba(0, 0, 0, 0.6)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        display: "flex",
+                        overflow: "hidden",
+                      },
+                      children: [
+                        {
+                          type: "div",
+                          props: {
+                            style: {
+                              width: `${p1WidthPercent}%`,
+                              height: "100%",
+                              background: "#ef4444",
+                            },
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: {
+                              width: `${p2WidthPercent}%`,
+                              height: "100%",
+                              background: "#38bdf8",
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+            // Remaining competitors
+            ...remainingDuel.map((item) => {
+              const uri = itemUris[items.indexOf(item)] || FALLBACK_AVATAR;
+              return {
+                type: "div",
+                props: {
+                  style: {
+                    width: "100%",
+                    height: "64px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "0 14px",
+                    borderRadius: "12px",
+                    background: "rgba(255, 255, 255, 0.03)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", gap: "12px" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { width: "24px", color: "#94a3b8", fontSize: "12px", fontFamily: "monospace", fontWeight: 700 },
+                              children: `#${item.rank}`,
+                            },
+                          },
+                          {
+                            type: "img",
+                            props: {
+                              src: uri,
+                              width: 40,
+                              height: 40,
+                              style: { width: "40px", height: "40px", borderRadius: "8px", objectFit: "cover" },
+                            },
+                          },
+                          {
+                            type: "div",
+                            props: {
+                              style: { display: "flex", flexDirection: "column" },
+                              children: [
+                                {
+                                  type: "div",
+                                  props: { style: { color: "#ffffff", fontSize: "14px", fontWeight: 600 }, children: item.username },
+                                },
+                                {
+                                  type: "div",
+                                  props: { style: { color: "#94a3b8", fontSize: "11px", fontFamily: "monospace" }, children: item.handle },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", flexDirection: "column", alignItems: "flex-end" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                fontSize: "10px",
+                                fontFamily: "monospace",
+                                color: "#cbd5e1",
+                                background: "rgba(255, 255, 255, 0.05)",
+                                padding: "2px 8px",
+                                borderRadius: "4px",
+                              },
+                              children: `LVL ${item.level}`,
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: { fontSize: "12px", fontFamily: "monospace", fontWeight: 700, color: "#fcd34d", marginTop: "3px" },
+                              children: `${item.xp.toLocaleString()} XP`,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              };
+            }),
+          ],
+        },
+      },
+    ];
+  } else if (layout === "hall-of-fame") {
+    const remainingHof = items.slice(1);
+    bodyElements = [
+      {
+        type: "div",
+        props: {
+          style: {
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          },
+          children: [
+            // Grand Sovereign Centerpiece
+            {
+              type: "div",
+              props: {
+                style: {
+                  width: "100%",
+                  height: "230px",
+                  borderRadius: "16px",
+                  border: "2px solid rgba(245, 158, 11, 0.6)",
+                  background: "linear-gradient(180deg, #241a06 0%, #141006 50%, #0a0803 100%)",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "20px",
+                },
+                children: [
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        letterSpacing: "2px",
+                        color: "#fcd34d",
+                        marginBottom: "6px",
+                      },
+                      children: "❖ GRAND SOVEREIGN OF THE REALM ❖",
+                    },
+                  },
+                  {
+                    type: "img",
+                    props: {
+                      src: top1Uri,
+                      width: 84,
+                      height: 84,
+                      style: {
+                        width: "84px",
+                        height: "84px",
+                        borderRadius: "999px",
+                        border: "3px solid #f59e0b",
+                        objectFit: "cover",
+                      },
+                    },
+                  },
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        color: "#fef08a",
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        marginTop: "10px",
+                      },
+                      children: top1?.username || "Grand Champion",
+                    },
+                  },
+                  {
+                    type: "div",
+                    props: {
+                      style: {
+                        color: "#fbbf24",
+                        fontSize: "12px",
+                        fontWeight: 600,
+                        fontFamily: "monospace",
+                        marginTop: "2px",
+                      },
+                      children: `${top1?.xp?.toLocaleString() || 0} CHAMPION EXP`,
+                    },
+                  },
+                ],
+              },
+            },
+            // Remaining guild knights
+            ...remainingHof.map((item) => {
+              const uri = itemUris[items.indexOf(item)] || FALLBACK_AVATAR;
+              return {
+                type: "div",
+                props: {
+                  style: {
+                    width: "100%",
+                    height: "64px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "0 14px",
+                    borderRadius: "12px",
+                    background: "rgba(69, 26, 3, 0.2)",
+                    border: "1px solid rgba(245, 158, 11, 0.2)",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", alignItems: "center", gap: "12px" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: { width: "24px", color: "#fcd34d", fontSize: "14px", fontWeight: 700, textAlign: "center" },
+                              children: `#${item.rank}`,
+                            },
+                          },
+                          {
+                            type: "img",
+                            props: {
+                              src: uri,
+                              width: 40,
+                              height: 40,
+                              style: { width: "40px", height: "40px", borderRadius: "999px", border: "1px solid rgba(245, 158, 11, 0.4)", objectFit: "cover" },
+                            },
+                          },
+                          {
+                            type: "div",
+                            props: {
+                              style: { display: "flex", flexDirection: "column" },
+                              children: [
+                                {
+                                  type: "div",
+                                  props: { style: { color: "#ffffff", fontSize: "14px", fontWeight: 600 }, children: item.username },
+                                },
+                                {
+                                  type: "div",
+                                  props: { style: { color: "#94a3b8", fontSize: "11px", fontFamily: "monospace" }, children: item.handle },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      type: "div",
+                      props: {
+                        style: { display: "flex", flexDirection: "column", alignItems: "flex-end" },
+                        children: [
+                          {
+                            type: "span",
+                            props: {
+                              style: {
+                                fontSize: "10px",
+                                fontFamily: "monospace",
+                                color: "#fef08a",
+                                background: "rgba(245, 158, 11, 0.2)",
+                                border: "1px solid rgba(245, 158, 11, 0.3)",
+                                padding: "2px 8px",
+                                borderRadius: "4px",
+                              },
+                              children: `RANK ${item.rank}`,
+                            },
+                          },
+                          {
+                            type: "span",
+                            props: {
+                              style: { fontSize: "12px", fontFamily: "monospace", fontWeight: 700, color: "#fcd34d", marginTop: "3px" },
+                              children: `${item.xp.toLocaleString()} XP`,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              };
+            }),
+          ],
+        },
+      },
+    ];
+  } else if (layout === "tier-division") {
+    bodyElements = [
+      {
+        type: "div",
+        props: {
+          style: {
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          },
+          children: items.map((item, idx) => {
+            const isSTier = item.rank <= 2;
+            const isATier = item.rank > 2 && item.rank <= 5;
+            const tierLabel = isSTier ? "S-TIER" : isATier ? "A-TIER" : "B-TIER";
+            const tierColor = isSTier ? "#c084fc" : isATier ? "#38bdf8" : "#10b981";
+            const uri = itemUris[idx] || FALLBACK_AVATAR;
+
+            return {
+              type: "div",
+              props: {
+                style: {
+                  width: "100%",
+                  height: "66px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "0 16px",
+                  borderRadius: "12px",
+                  background: isSTier
+                    ? "rgba(147, 51, 234, 0.12)"
+                    : isATier
+                      ? "rgba(14, 165, 233, 0.08)"
+                      : "rgba(255, 255, 255, 0.03)",
+                  border: `1px solid ${tierColor}44`,
+                },
+                children: [
+                  {
+                    type: "div",
+                    props: {
+                      style: { display: "flex", alignItems: "center", gap: "14px" },
+                      children: [
+                        {
+                          type: "span",
+                          props: {
+                            style: {
+                              padding: "2px 8px",
+                              borderRadius: "4px",
+                              fontSize: "10px",
+                              fontFamily: "monospace",
+                              fontWeight: 700,
+                              background: `${tierColor}20`,
+                              color: tierColor,
+                              border: `1px solid ${tierColor}55`,
+                            },
+                            children: tierLabel,
+                          },
+                        },
+                        {
+                          type: "img",
+                          props: {
+                            src: uri,
+                            width: 40,
+                            height: 40,
+                            style: { width: "40px", height: "40px", borderRadius: "8px", border: `1px solid ${tierColor}`, objectFit: "cover" },
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: { display: "flex", flexDirection: "column" },
+                            children: [
+                              {
+                                type: "div",
+                                props: {
+                                  style: { color: "#ffffff", fontSize: "14px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" },
+                                  children: [
+                                    { type: "span", props: { children: item.username } },
+                                    { type: "span", props: { style: { color: "#94a3b8", fontSize: "11px", fontWeight: 400, fontFamily: "monospace" }, children: `#${item.rank}` } },
+                                  ],
+                                },
+                              },
+                              {
+                                type: "div",
+                                props: { style: { color: "#94a3b8", fontSize: "11px", fontFamily: "monospace" }, children: item.handle },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: "div",
+                    props: {
+                      style: { display: "flex", flexDirection: "column", alignItems: "flex-end" },
+                      children: [
+                        {
+                          type: "span",
+                          props: { style: { fontSize: "10px", fontFamily: "monospace", color: "#94a3b8" }, children: `LVL ${item.level}` },
+                        },
+                        {
+                          type: "span",
+                          props: { style: { fontSize: "12px", fontFamily: "monospace", fontWeight: 700, color: tierColor, marginTop: "2px" }, children: `${item.xp.toLocaleString()} XP` },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            };
+          }),
+        },
+      },
+    ];
+  } else if (layout === "terminal-matrix") {
+    bodyElements = [
+      {
+        type: "div",
+        props: {
+          style: {
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: "12px",
+            border: "2px solid rgba(16, 185, 129, 0.6)",
+            background: "#05080c",
+            padding: "16px",
+            fontFamily: "monospace",
+          },
+          children: [
+            // Titlebar
+            {
+              type: "div",
+              props: {
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderBottom: "1px solid rgba(16, 185, 129, 0.3)",
+                  paddingBottom: "8px",
+                  fontSize: "11px",
+                  color: "#34d399",
+                  marginBottom: "12px",
+                },
+                children: [
+                  {
+                    type: "div",
+                    props: {
+                      style: { display: "flex", alignItems: "center", gap: "8px" },
+                      children: [
+                        {
+                          type: "div",
+                          props: {
+                            style: { width: "8px", height: "8px", borderRadius: "999px", background: "#10b981" },
+                          },
+                        },
+                        {
+                          type: "span",
+                          props: { children: "[NETRUNNER LEADERBOARD // LIVE RECON]" },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    type: "span",
+                    props: { style: { color: "rgba(16, 185, 129, 0.8)" }, children: `TOTAL AGENTS: ${items.length}` },
+                  },
+                ],
+              },
+            },
+            // Rows
+            {
+              type: "div",
+              props: {
+                style: { display: "flex", flexDirection: "column", gap: "6px" },
+                children: items.map((item, idx) => {
+                  const uri = itemUris[idx] || FALLBACK_AVATAR;
+                  return {
+                    type: "div",
+                    props: {
+                      style: {
+                        height: "54px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderRadius: "8px",
+                        border: "1px solid rgba(16, 185, 129, 0.25)",
+                        background: "rgba(0, 0, 0, 0.5)",
+                        padding: "0 12px",
+                      },
+                      children: [
+                        {
+                          type: "div",
+                          props: {
+                            style: { display: "flex", alignItems: "center", gap: "10px" },
+                            children: [
+                              {
+                                type: "span",
+                                props: {
+                                  style: { fontWeight: 700, color: "#34d399", fontSize: "12px", width: "20px" },
+                                  children: String(item.rank).padStart(2, "0"),
+                                },
+                              },
+                              {
+                                type: "img",
+                                props: {
+                                  src: uri,
+                                  width: 32,
+                                  height: 32,
+                                  style: { width: "32px", height: "32px", borderRadius: "4px", border: "1px solid rgba(16, 185, 129, 0.6)", objectFit: "cover" },
+                                },
+                              },
+                              {
+                                type: "span",
+                                props: {
+                                  style: { fontSize: "13px", fontWeight: 700, color: "#6ee7b7" },
+                                  children: `root@${item.username}:~#`,
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          type: "div",
+                          props: {
+                            style: { display: "flex", alignItems: "center", gap: "12px", fontSize: "12px" },
+                            children: [
+                              {
+                                type: "span",
+                                props: { style: { color: "rgba(16, 185, 129, 0.8)" }, children: `LVL.${item.level}` },
+                              },
+                              {
+                                type: "span",
+                                props: {
+                                  style: {
+                                    background: "rgba(6, 78, 59, 0.8)",
+                                    border: "1px solid rgba(16, 185, 129, 0.4)",
+                                    padding: "2px 8px",
+                                    borderRadius: "4px",
+                                    fontWeight: 700,
+                                    color: "#6ee7b7",
+                                  },
+                                  children: `${item.xp.toLocaleString()} EXP`,
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  };
+                }),
+              },
+            },
+          ],
         },
       },
     ];
@@ -3267,7 +5230,6 @@ export async function generateLeaderboardImage(data: LeaderboardData): Promise<{
           width: `${LEADERBOARD_WIDTH}px`,
           height: `${height}px`,
           pointerEvents: "none",
-          zIndex: 999,
         },
         children: pNodes,
       },
@@ -3838,6 +5800,626 @@ export async function generateQuoteImage(data: QuoteData): Promise<{ png: Buffer
         ],
       },
     };
+  } else if (layout === "magazine-editorial") {
+    element = {
+      type: "div",
+      props: {
+        style: {
+          width: `${QUOTE_WIDTH}px`,
+          height: `${QUOTE_HEIGHT}px`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "40px 48px",
+          background:
+            "radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.15) 0%, transparent 60%), #07070a",
+          border: "2px solid rgba(245, 158, 11, 0.4)",
+          position: "relative",
+          overflow: "hidden",
+        },
+        children: [
+          // Left Typography Column
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "100%",
+                maxWidth: "540px",
+              },
+              children: [
+                // Top Tag
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex", alignItems: "center", gap: "12px" },
+                    children: [
+                      {
+                        type: "span",
+                        props: {
+                          style: {
+                            fontSize: "11px",
+                            fontWeight: 700,
+                            letterSpacing: "3px",
+                            color: "#fbbf24",
+                            fontFamily: "monospace",
+                          },
+                          children: "ISSUE // 2026 EDITORIAL",
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: { width: "48px", height: "2px", background: "rgba(251, 191, 36, 0.4)" },
+                        },
+                      },
+                    ],
+                  },
+                },
+                // Middle Quote
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex", flexDirection: "column", position: "relative" },
+                    children: [
+                      {
+                        type: "div",
+                        props: {
+                          style: {
+                            fontSize: "60px",
+                            color: "rgba(251, 191, 36, 0.3)",
+                            lineHeight: "50px",
+                            marginBottom: "8px",
+                          },
+                          children: "“",
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: {
+                            fontSize: "28px",
+                            fontWeight: 700,
+                            lineHeight: "42px",
+                            color: "#ffffff",
+                            letterSpacing: "0.5px",
+                          },
+                          children: data.quote || "Quote text",
+                        },
+                      },
+                    ],
+                  },
+                },
+                // Bottom Author & Barcode
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      borderTop: "1px solid rgba(245, 158, 11, 0.2)",
+                      paddingTop: "16px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    },
+                    children: [
+                      {
+                        type: "div",
+                        props: {
+                          style: { display: "flex", flexDirection: "column" },
+                          children: [
+                            {
+                              type: "div",
+                              props: {
+                                style: { fontSize: "18px", fontWeight: 700, color: "#fef08a", letterSpacing: "1px" },
+                                children: (data.author || "Author").toUpperCase(),
+                              },
+                            },
+                            {
+                              type: "div",
+                              props: {
+                                style: { fontSize: "12px", color: "#94a3b8", marginTop: "2px" },
+                                children: data.tag || data.handle || "@author",
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: "span",
+                        props: {
+                          style: { fontSize: "11px", fontFamily: "monospace", letterSpacing: "2px", color: "#64748b" },
+                          children: "|||| | |||||| ||||",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          // Right Portrait
+          {
+            type: "div",
+            props: {
+              style: {
+                width: "340px",
+                height: "410px",
+                borderRadius: "16px",
+                border: "1px solid rgba(251, 191, 36, 0.4)",
+                overflow: "hidden",
+                position: "relative",
+                display: "flex",
+              },
+              children: [
+                {
+                  type: "img",
+                  props: {
+                    src: avatarUri,
+                    width: 340,
+                    height: 410,
+                    style: { width: "340px", height: "410px", objectFit: "cover" },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+  } else if (layout === "polaroid-vintage") {
+    element = {
+      type: "div",
+      props: {
+        style: {
+          width: `${QUOTE_WIDTH}px`,
+          height: `${QUOTE_HEIGHT}px`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "48px 56px",
+          background: "radial-gradient(circle at 50% 50%, #1c1917 0%, #0c0a09 100%)",
+          border: "1px solid #292524",
+          position: "relative",
+          overflow: "hidden",
+        },
+        children: [
+          // Left Polaroid Photo
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                background: "#fafaf9",
+                padding: "14px 14px 28px 14px",
+                borderRadius: "4px",
+                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.8)",
+                border: "1px solid #d6d3d1",
+                position: "relative",
+              },
+              children: [
+                {
+                  type: "img",
+                  props: {
+                    src: avatarUri,
+                    width: 240,
+                    height: 240,
+                    style: { width: "240px", height: "240px", borderRadius: "2px", objectFit: "cover" },
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      marginTop: "12px",
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      color: "#292524",
+                      letterSpacing: "1px",
+                    },
+                    children: data.author || "Author",
+                  },
+                },
+              ],
+            },
+          },
+          // Right Handwritten Quote
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "100%",
+                maxWidth: "520px",
+                marginLeft: "40px",
+                padding: "16px 0",
+              },
+              children: [
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      fontSize: "11px",
+                      color: "rgba(253, 230, 138, 0.6)",
+                      fontFamily: "monospace",
+                    },
+                    children: [
+                      { type: "span", props: { children: "HISTORICAL ARCHIVE" } },
+                      { type: "span", props: { children: "1984 VINTAGE" } },
+                    ],
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      fontSize: "27px",
+                      fontWeight: 500,
+                      lineHeight: "42px",
+                      color: "#f5f5f4",
+                      fontStyle: "italic",
+                    },
+                    children: `"${data.quote || "Quote text"}"`,
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      borderTop: "1px solid #292524",
+                      paddingTop: "14px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    },
+                    children: [
+                      {
+                        type: "div",
+                        props: {
+                          style: { display: "flex", flexDirection: "column" },
+                          children: [
+                            {
+                              type: "div",
+                              props: { style: { fontSize: "16px", fontWeight: 700, color: "#fcd34d" }, children: data.author },
+                            },
+                            {
+                              type: "div",
+                              props: { style: { fontSize: "12px", color: "#a8a29e" }, children: data.tag || data.handle },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: {
+                            width: "42px",
+                            height: "42px",
+                            borderRadius: "999px",
+                            border: "2px solid rgba(251, 191, 36, 0.4)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "9px",
+                            fontFamily: "monospace",
+                            fontWeight: 700,
+                            color: "#fcd34d",
+                          },
+                          children: "SEAL",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+  } else if (layout === "speech-bubble") {
+    element = {
+      type: "div",
+      props: {
+        style: {
+          width: `${QUOTE_WIDTH}px`,
+          height: `${QUOTE_HEIGHT}px`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "40px",
+          background:
+            "radial-gradient(circle at 10% 20%, rgba(244, 114, 182, 0.15) 0%, transparent 60%), #0f0714",
+          border: "2px solid rgba(244, 114, 182, 0.4)",
+          borderRadius: "16px",
+          position: "relative",
+          overflow: "hidden",
+        },
+        children: [
+          // Left Manga Dialog Box
+          {
+            type: "div",
+            props: {
+              style: {
+                flex: 1,
+                height: "100%",
+                background: "rgba(255, 255, 255, 0.08)",
+                borderRadius: "24px",
+                padding: "32px",
+                border: "2px solid rgba(244, 114, 182, 0.6)",
+                marginRight: "32px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              },
+              children: [
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex" },
+                    children: [
+                      {
+                        type: "span",
+                        props: {
+                          style: {
+                            background: "rgba(236, 72, 153, 0.2)",
+                            border: "1px solid rgba(244, 114, 182, 0.5)",
+                            borderRadius: "999px",
+                            padding: "3px 12px",
+                            fontSize: "12px",
+                            fontWeight: 700,
+                            color: "#f472b6",
+                          },
+                          children: "✦ MANGA DIALOG",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      fontSize: "27px",
+                      fontWeight: 700,
+                      lineHeight: "40px",
+                      color: "#ffffff",
+                    },
+                    children: `"${data.quote || "Quote text"}"`,
+                  },
+                },
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      borderTop: "1px solid rgba(244, 114, 182, 0.2)",
+                      paddingTop: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    },
+                    children: [
+                      {
+                        type: "span",
+                        props: {
+                          style: { fontSize: "17px", fontWeight: 700, color: "#f472b6", fontFamily: "monospace" },
+                          children: `// ${data.author || "Author"}`,
+                        },
+                      },
+                      {
+                        type: "span",
+                        props: { style: { fontSize: "12px", color: "#94a3b8" }, children: data.tag || data.handle },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          // Right Cut-in Avatar
+          {
+            type: "div",
+            props: {
+              style: {
+                width: "260px",
+                height: "260px",
+                borderRadius: "24px",
+                overflow: "hidden",
+                border: "4px solid #f472b6",
+                display: "flex",
+              },
+              children: [
+                {
+                  type: "img",
+                  props: {
+                    src: avatarUri,
+                    width: 260,
+                    height: 260,
+                    style: { width: "260px", height: "260px", objectFit: "cover" },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    };
+  } else if (layout === "code-terminal") {
+    const authorSlug = (data.author || "author").toLowerCase().replace(/\s+/g, "_");
+    element = {
+      type: "div",
+      props: {
+        style: {
+          width: `${QUOTE_WIDTH}px`,
+          height: `${QUOTE_HEIGHT}px`,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "32px",
+          background: "#05080c",
+          border: "2px solid rgba(16, 185, 129, 0.6)",
+          borderRadius: "16px",
+          fontFamily: "monospace",
+        },
+        children: [
+          // Titlebar
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderBottom: "1px solid rgba(16, 185, 129, 0.3)",
+                paddingBottom: "12px",
+                fontSize: "12px",
+                color: "#34d399",
+              },
+              children: [
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex", alignItems: "center", gap: "8px" },
+                    children: [
+                      {
+                        type: "div",
+                        props: {
+                          style: { display: "flex", gap: "6px" },
+                          children: [
+                            { type: "div", props: { style: { width: "12px", height: "12px", borderRadius: "999px", background: "#ef4444" } } },
+                            { type: "div", props: { style: { width: "12px", height: "12px", borderRadius: "999px", background: "#eab308" } } },
+                            { type: "div", props: { style: { width: "12px", height: "12px", borderRadius: "999px", background: "#22c55e" } } },
+                          ],
+                        },
+                      },
+                      {
+                        type: "span",
+                        props: { style: { marginLeft: "12px", fontWeight: 700 }, children: `src/philosophy/${authorSlug}.ts` },
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: "span",
+                  props: { style: { color: "rgba(16, 185, 129, 0.8)" }, children: "TypeScript 5.8 // UTF-8" },
+                },
+              ],
+            },
+          },
+          // Code Window
+          {
+            type: "div",
+            props: {
+              style: { display: "flex", alignItems: "flex-start", gap: "24px", padding: "12px 0" },
+              children: [
+                // Gutter line numbers
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex", flexDirection: "column", color: "#475569", fontSize: "14px", lineHeight: "28px" },
+                    children: [
+                      { type: "span", props: { children: "01" } },
+                      { type: "span", props: { children: "02" } },
+                      { type: "span", props: { children: "03" } },
+                      { type: "span", props: { children: "04" } },
+                      { type: "span", props: { children: "05" } },
+                      { type: "span", props: { children: "06" } },
+                    ],
+                  },
+                },
+                // Code lines
+                {
+                  type: "div",
+                  props: {
+                    style: { display: "flex", flexDirection: "column", fontSize: "14px", lineHeight: "28px", flex: 1 },
+                    children: [
+                      {
+                        type: "div",
+                        props: { style: { color: "#64748b" }, children: `// Quotation by ${data.author || "Author"} (${data.tag || "Philosophy"})` },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: { display: "flex", gap: "6px" },
+                          children: [
+                            { type: "span", props: { style: { color: "#c084fc" }, children: "const" } },
+                            { type: "span", props: { style: { color: "#67e8f9" }, children: "quote" } },
+                            { type: "span", props: { style: { color: "#ffffff" }, children: ":" } },
+                            { type: "span", props: { style: { color: "#34d399" }, children: "Wisdom" } },
+                            { type: "span", props: { style: { color: "#ffffff" }, children: "= {" } },
+                          ],
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: { paddingLeft: "24px", display: "flex", gap: "6px" },
+                          children: [
+                            { type: "span", props: { style: { color: "#fcd34d" }, children: "content:" } },
+                            { type: "span", props: { style: { color: "#ffffff", fontWeight: 700, fontSize: "16px" }, children: `"${data.quote || "Quote text"}",` } },
+                          ],
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: { paddingLeft: "24px", display: "flex", gap: "6px" },
+                          children: [
+                            { type: "span", props: { style: { color: "#fcd34d" }, children: "author:" } },
+                            { type: "span", props: { style: { color: "#67e8f9" }, children: `"${data.author || "Author"}",` } },
+                          ],
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: {
+                          style: { paddingLeft: "24px", display: "flex", gap: "6px" },
+                          children: [
+                            { type: "span", props: { style: { color: "#fcd34d" }, children: "verified:" } },
+                            { type: "span", props: { style: { color: "#c084fc" }, children: "true" } },
+                          ],
+                        },
+                      },
+                      {
+                        type: "div",
+                        props: { style: { color: "#ffffff" }, children: "};" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          // Statusline
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderTop: "1px solid rgba(16, 185, 129, 0.3)",
+                paddingTop: "10px",
+                fontSize: "12px",
+                color: "#34d399",
+              },
+              children: [
+                { type: "span", props: { children: "NORMAL | main | 100% PASS" } },
+                { type: "span", props: { children: data.handle || "@terminal" } },
+              ],
+            },
+          },
+        ],
+      },
+    };
   } else {
     // 1. Split Cinema (Original)
     element = {
@@ -3905,7 +6487,6 @@ export async function generateQuoteImage(data: QuoteData): Promise<{ png: Buffer
                 justifyContent: "center",
                 alignItems: "center",
                 padding: "0 40px",
-                zIndex: 3,
               },
               children: [
                 {
@@ -3960,7 +6541,6 @@ export async function generateQuoteImage(data: QuoteData): Promise<{ png: Buffer
                 color: "#4b5563",
                 fontSize: "14px",
                 fontFamily: "monospace",
-                zIndex: 4,
               },
               children: data.tag || "Ziji#9575",
             },
@@ -3983,7 +6563,6 @@ export async function generateQuoteImage(data: QuoteData): Promise<{ png: Buffer
           width: `${QUOTE_WIDTH}px`,
           height: `${QUOTE_HEIGHT}px`,
           pointerEvents: "none",
-          zIndex: 999,
         },
         children: pNodes,
       },
@@ -4010,10 +6589,11 @@ export async function generateCustomCanvasImage(data: CustomCanvasData): Promise
   const width = data.width || 900;
   const height = data.height || 400;
   const elements = data.elements || [];
+  const sortedElements = [...elements].sort((a, b) => (a.zIndex ?? 0) - (b.zIndex ?? 0));
 
   // Pre-process any image / avatar elements to base64 Data URIs
   const processedElements = await Promise.all(
-    elements.map(async (el) => {
+    sortedElements.map(async (el) => {
       if ((el.type === "image" || el.type === "avatar") && el.imageUrl) {
         const size = Math.max(el.width, el.height) * 2;
         const uri = await imageToDataUri(el.imageUrl, Math.min(600, Math.max(96, size)));
@@ -4032,7 +6612,6 @@ export async function generateCustomCanvasImage(data: CustomCanvasData): Promise
       top: `${el.y}px`,
       width: `${el.width}px`,
       height: `${el.height}px`,
-      zIndex: el.zIndex || 1,
       overflow: el.type === "text" ? "visible" : "hidden",
     };
 
@@ -4181,7 +6760,6 @@ export async function generateCustomCanvasImage(data: CustomCanvasData): Promise
           width: `${width}px`,
           height: `${height}px`,
           pointerEvents: "none",
-          zIndex: 999,
         },
         children: globalNodes,
       },

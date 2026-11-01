@@ -130,7 +130,7 @@ export const sparkMagicPattern: StudioPattern = {
     }
   ],
   "category": "builtin",
-  "createdAt": "2026-11-01T11:46:55.474Z"
+  "createdAt": "2026-11-01T15:13:18.816Z"
 };
 
 export default sparkMagicPattern;

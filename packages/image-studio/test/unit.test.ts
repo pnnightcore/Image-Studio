@@ -246,4 +246,44 @@ test("patterns: animatePattern and framePattern with built-in and custom pattern
   assert.equal(remoteCalls[0].url, "https://cdn.example/my-pattern.json");
   const remoteBody = JSON.parse(remoteCalls[1].init.body as string);
   assert.equal(remoteBody.data.duration, 1000);
+
+  // 5. direct inline custom StudioPattern object
+  const inlinePattern = {
+    id: "welcome-card-animation",
+    name: "Welcome Card Animation",
+    description: "Pattern created in Image Studio (930x280)",
+    duration: 500,
+    fps: 12,
+    canvas: {
+      title: "Welcome Card Animation",
+      width: 930,
+      height: 280,
+      background: "linear-gradient(135deg, #090614 0%, #1e1035 50%, #4a1d6e 100%)",
+      elements: [
+        { id: "avatar", type: "avatar" as const, x: 445, y: 96, width: 140, height: 140, imageUrl: "{userAVTurl}" },
+      ],
+    },
+    tracks: [
+      {
+        elementId: "avatar",
+        keyframes: [
+          { time: 0, x: 20, y: 40, width: 110, height: 110, opacity: 0 },
+          { time: 450, x: 445, y: 96, width: 140, height: 140, opacity: 1 },
+        ],
+      },
+    ],
+  };
+
+  const { fetchImpl: inlineFetch, calls: inlineCalls } = mockFetch([() => png()]);
+  const inlineStudio = new ImageStudio({ baseUrl: "https://api.test", fetch: inlineFetch });
+  const inlineFrame = await inlineStudio.framePattern(inlinePattern, {
+    time: 20,
+    variables: { userName: "ziji" },
+  });
+  assert.equal(inlineCalls.length, 1);
+  assert.equal(inlineCalls[0].init.method, "POST");
+  const inlineReqBody = JSON.parse(inlineCalls[0].init.body as string);
+  assert.equal(inlineReqBody.data.frameTime, 20);
+  assert.equal(inlineReqBody.data.templateVariables.userName, "ziji");
+  assert.equal(inlineFrame.width, 930);
 });

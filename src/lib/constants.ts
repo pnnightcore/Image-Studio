@@ -1,4 +1,4 @@
-import type { CustomCanvasData } from "./types";
+import type { CustomCanvasData, SongLayout, LeaderboardLayout } from "./types";
 
 export const CANVAS_WIDTH = 1130;
 export const CARD_WIDTH = 543;
@@ -17,16 +17,42 @@ export const HEADER_GAP = 12;
  */
 export function calculateHeight(
   itemCount: number,
-  layout: "auto" | "list" | "grid" | "classic" = "auto"
+  layout: SongLayout = "auto",
 ): number {
   if (itemCount <= 0) return 220;
 
   const effectiveLayout =
-    layout !== "auto"
-      ? layout
-      : itemCount <= 10
-      ? "grid"
-      : "list";
+    layout !== "auto" ? layout : itemCount <= 10 ? "grid" : "list";
+
+  if (effectiveLayout === "showcase") {
+    const remaining = Math.max(0, itemCount - 1);
+    const subRows = Math.ceil(remaining / 2);
+    const subRowH = 76;
+    const subGap = 8;
+    return (
+      PADDING_TOP +
+      HEADER_HEIGHT +
+      HEADER_GAP +
+      165 +
+      (remaining > 0
+        ? 14 + subRows * subRowH + Math.max(0, subRows - 1) * subGap
+        : 0) +
+      PADDING_BOTTOM
+    );
+  }
+
+  if (effectiveLayout === "compact-queue") {
+    const rowH = 52;
+    const rowGap = 6;
+    return (
+      PADDING_TOP +
+      HEADER_HEIGHT +
+      HEADER_GAP +
+      itemCount * rowH +
+      Math.max(0, itemCount - 1) * rowGap +
+      PADDING_BOTTOM
+    );
+  }
 
   if (effectiveLayout === "grid") {
     const cols = itemCount <= 8 ? 4 : 5;
@@ -63,23 +89,96 @@ export const PROFILE_HEIGHT = 260;
 
 // Leaderboard Constants
 export const LEADERBOARD_WIDTH = 540;
-export function calculateLeaderboardHeight(itemCount: number, layout?: "podium" | "compact-list" | "cyber-grid" | "minimal-cards"): number {
+export function calculateLeaderboardHeight(
+  itemCount: number,
+  layout?: LeaderboardLayout,
+): number {
   if (layout === "compact-list") {
-    return 20 + 76 + 16 + Math.max(1, itemCount) * 64 + Math.max(0, itemCount - 1) * 8 + 20;
+    return (
+      20 +
+      76 +
+      16 +
+      Math.max(1, itemCount) * 64 +
+      Math.max(0, itemCount - 1) * 8 +
+      20
+    );
   }
   if (layout === "cyber-grid") {
     const rows = Math.ceil(Math.max(1, itemCount) / 2);
     return 20 + 76 + 16 + rows * 82 + Math.max(0, rows - 1) * 8 + 20;
   }
   if (layout === "minimal-cards") {
-    return 20 + 76 + 16 + Math.max(1, itemCount) * 72 + Math.max(0, itemCount - 1) * 8 + 20;
+    return (
+      20 +
+      76 +
+      16 +
+      Math.max(1, itemCount) * 72 +
+      Math.max(0, itemCount - 1) * 8 +
+      20
+    );
+  }
+  if (layout === "versus-duel") {
+    const remaining = Math.max(0, itemCount - 2);
+    return (
+      20 +
+      76 +
+      16 +
+      210 +
+      (remaining > 0
+        ? 16 + remaining * 64 + Math.max(0, remaining - 1) * 8
+        : 0) +
+      20
+    );
+  }
+  if (layout === "hall-of-fame") {
+    const remaining = Math.max(0, itemCount - 1);
+    return (
+      20 +
+      76 +
+      16 +
+      230 +
+      (remaining > 0
+        ? 16 + remaining * 64 + Math.max(0, remaining - 1) * 8
+        : 0) +
+      20
+    );
+  }
+  if (layout === "tier-division") {
+    return (
+      20 +
+      76 +
+      16 +
+      Math.max(1, itemCount) * 66 +
+      Math.max(0, itemCount - 1) * 8 +
+      20
+    );
+  }
+  if (layout === "terminal-matrix") {
+    return (
+      20 +
+      76 +
+      16 +
+      36 +
+      Math.max(1, itemCount) * 56 +
+      Math.max(0, itemCount - 1) * 6 +
+      20
+    );
   }
   if (itemCount <= 0) return 420;
   if (itemCount <= 3) {
     return 20 + 76 + 16 + 265 + 20; // 397px for top 3 podium only
   }
   const remaining = itemCount - 3;
-  return 20 + 76 + 16 + 265 + 16 + remaining * 68 + Math.max(0, remaining - 1) * 8 + 20;
+  return (
+    20 +
+    76 +
+    16 +
+    265 +
+    16 +
+    remaining * 68 +
+    Math.max(0, remaining - 1) * 8 +
+    20
+  );
 }
 
 // Quote Card Constants
@@ -91,12 +190,14 @@ export const CANVAS_PRESET_BACKGROUNDS = [
   {
     id: "dark-purple",
     name: "Midnight Indigo",
-    value: "radial-gradient(circle at 90% 100%, #5b00b8 0%, transparent 55%), linear-gradient(120deg, #0c0918, #100b2d)",
+    value:
+      "radial-gradient(circle at 90% 100%, #5b00b8 0%, transparent 55%), linear-gradient(120deg, #0c0918, #100b2d)",
   },
   {
     id: "ruby-polygon",
     name: "Ruby Polygon",
-    value: "linear-gradient(135deg, #090210 0%, #1a031e 30%, #3d0728 65%, #630c33 100%)",
+    value:
+      "linear-gradient(135deg, #090210 0%, #1a031e 30%, #3d0728 65%, #630c33 100%)",
   },
   {
     id: "cyber-blue",
@@ -134,7 +235,7 @@ export const DEFAULT_CUSTOM_CANVAS: CustomCanvasData = {
       y: 50,
       width: 120,
       height: 120,
-      imageUrl: "https://i.ytimg.com/vi/MsHvLrs6sjk/hq720.jpg",
+      imageUrl: "https://i.ytimg.com/vi/858Eq25HpXg/hq720.jpg",
       borderRadius: 999,
       border: "3px solid #a855f7",
     },
@@ -149,7 +250,8 @@ export const DEFAULT_CUSTOM_CANVAS: CustomCanvasData = {
       color: "#ffffff",
       fontSize: 32,
       fontWeight: 600,
-      textShadow: "0 0 12px rgba(192, 132, 252, 0.7), 2px 3px 6px rgba(0, 0, 0, 0.85)",
+      textShadow:
+        "0 0 12px rgba(192, 132, 252, 0.7), 2px 3px 6px rgba(0, 0, 0, 0.85)",
       shadowEnabled: true,
       shadowOffsetX: 2,
       shadowOffsetY: 3,

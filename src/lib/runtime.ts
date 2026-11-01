@@ -63,3 +63,32 @@ export function getRuntime(): RuntimeAdapter {
   }
   return current;
 }
+
+/**
+ * Recursively strip properties unsupported by Satori (e.g. zIndex, z-index)
+ * from VNode style objects so Satori does not emit console warnings.
+ */
+export function sanitizeSatoriElement(element: any): any {
+  if (!element || typeof element !== "object") return element;
+  if (Array.isArray(element)) {
+    for (let i = 0; i < element.length; i++) {
+      element[i] = sanitizeSatoriElement(element[i]);
+    }
+    return element;
+  }
+  if (element.props) {
+    if (element.props.style && typeof element.props.style === "object") {
+      if ("zIndex" in element.props.style) {
+        delete element.props.style.zIndex;
+      }
+      if ("z-index" in element.props.style) {
+        delete element.props.style["z-index"];
+      }
+    }
+    if (element.props.children) {
+      element.props.children = sanitizeSatoriElement(element.props.children);
+    }
+  }
+  return element;
+}
+

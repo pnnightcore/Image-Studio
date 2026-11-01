@@ -109,7 +109,7 @@ export const musicNeonPattern: StudioPattern = {
     }
   ],
   "category": "builtin",
-  "createdAt": "2026-11-01T11:46:55.479Z"
+  "createdAt": "2026-11-01T15:13:18.820Z"
 };
 
 export default musicNeonPattern;

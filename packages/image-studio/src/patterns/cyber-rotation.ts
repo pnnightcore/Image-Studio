@@ -186,7 +186,7 @@ export const cyberRotationPattern: StudioPattern = {
     }
   ],
   "category": "builtin",
-  "createdAt": "2026-11-01T11:46:55.467Z"
+  "createdAt": "2026-11-01T15:13:18.810Z"
 };
 
 export default cyberRotationPattern;

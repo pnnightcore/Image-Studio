@@ -393,6 +393,266 @@ export function LeaderboardPreview({
                   );
                 })}
               </div>
+            ) : layout === "versus-duel" ? (
+              /* Versus Duel Rivalry Arena */
+              <div className="flex w-full flex-col gap-3">
+                {/* Top 2 Head-to-Head Clash Banner */}
+                <div className="relative flex h-[210px] w-full flex-col justify-between overflow-hidden rounded-2xl border-2 border-amber-500/50 bg-gradient-to-r from-red-950/40 via-[#0e1017] to-cyan-950/40 p-4 shadow-xl">
+                  {/* Top Header */}
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                    <span className="text-red-400 font-bold uppercase tracking-wider">CHALLENGER (RANK #1)</span>
+                    <span className="rounded bg-amber-500/20 px-2.5 py-0.5 text-amber-300 font-bold border border-amber-400/40">
+                      RIVALRY CLASH
+                    </span>
+                    <span className="text-cyan-400 font-bold uppercase tracking-wider">DEFENDER (RANK #2)</span>
+                  </div>
+
+                  {/* Duel Combatants */}
+                  <div className="flex items-center justify-between px-2">
+                    {/* Player 1 */}
+                    <div className="flex flex-col items-center">
+                      <div className="relative">
+                        <img
+                          src={top1?.avatar}
+                          alt="P1"
+                          className="h-[68px] w-[68px] rounded-full border-2 border-red-500 bg-black/60 object-cover shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+                          crossOrigin="anonymous"
+                        />
+                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded bg-red-600 px-1.5 py-0.2 text-[10px] font-mono font-bold text-white shadow">
+                          #1
+                        </div>
+                      </div>
+                      <div className="mt-2 text-center">
+                        <div className="text-[14px] font-bold text-white truncate max-w-[130px]">{top1?.username || "P1"}</div>
+                        <div className="text-[11px] font-mono text-red-400 font-semibold">{top1?.xp.toLocaleString()} XP</div>
+                      </div>
+                    </div>
+
+                    {/* Central VS Badge */}
+                    <div className="flex flex-col items-center">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-tr from-red-600 to-amber-500 text-white font-extrabold text-sm shadow-[0_0_20px_#ef4444] border-2 border-white/20">
+                        VS
+                      </div>
+                      <span className="text-[9px] font-mono text-slate-400 mt-1 uppercase">BATTLE ARENA</span>
+                    </div>
+
+                    {/* Player 2 */}
+                    <div className="flex flex-col items-center">
+                      <div className="relative">
+                        <img
+                          src={top2?.avatar}
+                          alt="P2"
+                          className="h-[68px] w-[68px] rounded-full border-2 border-cyan-400 bg-black/60 object-cover shadow-[0_0_15px_rgba(56,189,248,0.5)]"
+                          crossOrigin="anonymous"
+                        />
+                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded bg-cyan-600 px-1.5 py-0.2 text-[10px] font-mono font-bold text-white shadow">
+                          #2
+                        </div>
+                      </div>
+                      <div className="mt-2 text-center">
+                        <div className="text-[14px] font-bold text-white truncate max-w-[130px]">{top2?.username || "P2"}</div>
+                        <div className="text-[11px] font-mono text-cyan-400 font-semibold">{top2?.xp.toLocaleString()} XP</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* XP Tug-of-war meter */}
+                  <div className="space-y-1">
+                    <div className="h-2 w-full rounded-full bg-black/60 border border-white/10 p-0.5 overflow-hidden flex">
+                      <div
+                        className="h-full rounded-l-full bg-red-500 transition-all duration-300"
+                        style={{
+                          width: `${Math.round(((top1?.xp || 1) / ((top1?.xp || 1) + (top2?.xp || 1))) * 100)}%`,
+                        }}
+                      />
+                      <div
+                        className="h-full rounded-r-full bg-cyan-400 transition-all duration-300"
+                        style={{
+                          width: `${100 - Math.round(((top1?.xp || 1) / ((top1?.xp || 1) + (top2?.xp || 1))) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Remaining Competitors (Ranks 3..N) */}
+                {items.slice(2).map((item) => (
+                  <div
+                    key={item.rank}
+                    className="flex h-[64px] w-full items-center justify-between rounded-xl border border-white/8 bg-white/[0.03] px-3.5 transition hover:border-amber-400/40 hover:bg-white/[0.06]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 font-mono text-xs font-bold text-slate-400 text-center">#{item.rank}</span>
+                      <img
+                        src={item.avatar}
+                        alt={item.username}
+                        className="h-10 w-10 rounded-lg object-cover bg-black/40 border border-white/10"
+                        crossOrigin="anonymous"
+                      />
+                      <div>
+                        <div className="text-sm font-semibold text-white">{item.username}</div>
+                        <div className="text-[11px] text-slate-400 font-mono">{item.handle}</div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="rounded bg-white/5 px-2 py-0.5 text-[10px] font-mono text-slate-300 border border-white/10">
+                        LVL {item.level}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-amber-300 mt-1">{item.xp.toLocaleString()} XP</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : layout === "hall-of-fame" ? (
+              /* Golden Hall of Fame Plaque */
+              <div className="flex w-full flex-col gap-3">
+                {/* Grand Champion Centerpiece */}
+                <div className="relative flex h-[230px] w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-amber-400/60 bg-gradient-to-b from-[#241a06] via-[#141006] to-[#0a0803] p-5 shadow-2xl text-center">
+                  <div className="text-[10px] font-serif font-bold tracking-widest text-amber-300 uppercase mb-1">
+                    ❖ GRAND SOVEREIGN OF THE REALM ❖
+                  </div>
+                  <div className="relative my-1">
+                    <img
+                      src={top1?.avatar}
+                      alt="Grand Champion"
+                      className="h-[84px] w-[84px] rounded-full border-[3px] border-amber-400 bg-black/60 object-cover shadow-[0_0_25px_rgba(245,158,11,0.5)]"
+                      crossOrigin="anonymous"
+                    />
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl select-none">👑</div>
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-amber-500 px-2.5 py-0.2 text-[10px] font-mono font-bold text-black shadow">
+                      CHAMPION #1
+                    </div>
+                  </div>
+                  <div className="text-lg font-bold text-yellow-200 mt-2">{top1?.username || "Grand Champion"}</div>
+                  <div className="text-xs font-mono text-amber-400 font-semibold">{top1?.xp.toLocaleString()} CHAMPION EXP</div>
+                </div>
+
+                {/* Remaining Guild Knights */}
+                {items.slice(1).map((item) => (
+                  <div
+                    key={item.rank}
+                    className="flex h-[64px] w-full items-center justify-between rounded-xl border border-amber-500/20 bg-amber-950/20 px-3.5"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 font-serif font-bold text-amber-300 text-center">#{item.rank}</span>
+                      <img
+                        src={item.avatar}
+                        alt={item.username}
+                        className="h-10 w-10 rounded-full object-cover bg-black/40 border border-amber-400/40"
+                        crossOrigin="anonymous"
+                      />
+                      <div>
+                        <div className="text-sm font-semibold text-white">{item.username}</div>
+                        <div className="text-[11px] text-slate-400 font-mono">{item.handle}</div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="rounded bg-amber-500/20 px-2 py-0.5 text-[10px] font-mono text-amber-200 border border-amber-400/30">
+                        RANK {item.rank}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-amber-300 mt-1">{item.xp.toLocaleString()} XP</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : layout === "tier-division" ? (
+              /* Tier Division (S/A/B Tiers) */
+              <div className="flex w-full flex-col gap-2">
+                {items.map((item) => {
+                  const isSTier = item.rank <= 2;
+                  const isATier = item.rank > 2 && item.rank <= 5;
+                  const tierLabel = isSTier ? "S-TIER" : isATier ? "A-TIER" : "B-TIER";
+                  const tierColor = isSTier ? "#c084fc" : isATier ? "#38bdf8" : "#10b981";
+
+                  return (
+                    <div
+                      key={item.rank}
+                      className="flex h-[66px] w-full items-center justify-between rounded-xl border px-4 transition hover:bg-white/[0.06]"
+                      style={{
+                        backgroundColor: isSTier ? "rgba(147, 51, 234, 0.12)" : isATier ? "rgba(14, 165, 233, 0.08)" : "rgba(255, 255, 255, 0.03)",
+                        borderColor: `${tierColor}44`,
+                      }}
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <span
+                          className="rounded px-2 py-0.5 text-[10px] font-mono font-bold"
+                          style={{
+                            backgroundColor: `${tierColor}20`,
+                            color: tierColor,
+                            border: `1px solid ${tierColor}55`,
+                          }}
+                        >
+                          {tierLabel}
+                        </span>
+                        <img
+                          src={item.avatar}
+                          alt={item.username}
+                          className="h-10 w-10 rounded-lg object-cover bg-black/40 border"
+                          style={{ borderColor: tierColor }}
+                          crossOrigin="anonymous"
+                        />
+                        <div>
+                          <div className="text-sm font-bold text-white flex items-center gap-2">
+                            <span>{item.username}</span>
+                            <span className="text-[11px] font-mono text-slate-400 font-normal">#{item.rank}</span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 font-mono">{item.handle}</div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-end">
+                        <span className="text-[10px] font-mono text-slate-400">LVL {item.level}</span>
+                        <span className="text-xs font-mono font-bold" style={{ color: tierColor }}>
+                          {item.xp.toLocaleString()} XP
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : layout === "terminal-matrix" ? (
+              /* Cyber Terminal Matrix Roster */
+              <div className="flex w-full flex-col overflow-hidden rounded-xl border-2 border-emerald-500/60 bg-[#05080c] p-4 font-mono shadow-[0_0_25px_rgba(34,197,94,0.15)]">
+                {/* Titlebar */}
+                <div className="flex items-center justify-between border-b border-emerald-500/30 pb-2 text-[11px] text-emerald-400 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>[NETRUNNER LEADERBOARD // LIVE RECON]</span>
+                  </div>
+                  <span className="text-emerald-500/80">TOTAL AGENTS: {items.length}</span>
+                </div>
+
+                {/* Rows */}
+                <div className="space-y-1.5">
+                  {items.map((item) => (
+                    <div
+                      key={item.rank}
+                      className="flex h-[54px] items-center justify-between rounded-lg border border-emerald-500/25 bg-black/50 px-3 hover:border-emerald-400/60"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-bold text-emerald-400 text-xs w-6">
+                          {String(item.rank).padStart(2, "0")}
+                        </span>
+                        <img
+                          src={item.avatar}
+                          alt={item.username}
+                          className="h-8 w-8 rounded border border-emerald-500/60 object-cover"
+                          crossOrigin="anonymous"
+                        />
+                        <span className="text-sm font-bold text-emerald-300">
+                          root@{item.username}:~#
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs">
+                        <span className="text-emerald-500/80">LVL.{item.level}</span>
+                        <span className="rounded bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 font-bold text-emerald-300">
+                          {item.xp.toLocaleString()} EXP
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : (
               <>
                 {/* 2. Top 3 Podium */}

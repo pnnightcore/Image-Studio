@@ -93,6 +93,10 @@ export function QuoteForm({
                 { id: "centered-minimal", name: "Centered Editorial", desc: "Monastic typographic symmetry" },
                 { id: "modern-card", name: "Modern Studio", desc: "Layered glass frame" },
                 { id: "neon-cyber", name: "Cyber Terminal", desc: "HUD telemetry quote" },
+                { id: "magazine-editorial", name: "Magazine Cover", desc: "High-fashion Vogue editorial" },
+                { id: "polaroid-vintage", name: "Polaroid Film", desc: "Retro snapshot with tape" },
+                { id: "speech-bubble", name: "Anime Bubble", desc: "Manga dialog with action lines" },
+                { id: "code-terminal", name: "IDE Terminal", desc: "Developer docstring quote" },
               ].map((l) => {
                 const isSelected = (data.layout || "split-portrait") === l.id;
                 return (

@@ -98,6 +98,10 @@ export function ProfileForm({
                 { id: "cyber-neon", name: "Cyber Neon", color: "from-cyan-500 to-purple-600" },
                 { id: "glass-minimal", name: "Glass Emerald", color: "from-emerald-500 to-teal-700" },
                 { id: "gold-legend", name: "Gold Legend", color: "from-amber-500 to-yellow-600" },
+                { id: "cosmic-void", name: "Cosmic Void", color: "from-purple-600 to-indigo-800" },
+                { id: "frost-glacier", name: "Frost Glacier", color: "from-sky-400 to-blue-600" },
+                { id: "sakura-duelist", name: "Sakura Duelist", color: "from-pink-400 to-rose-400" },
+                { id: "hacker-terminal", name: "Hacker Terminal", color: "from-emerald-400 to-green-600" },
               ].map((t) => {
                 const isSelected = (data.theme || "ruby-poly") === t.id;
                 return (

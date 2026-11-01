@@ -13,6 +13,7 @@ import {
   FileCheck,
   SlidersHorizontal,
   Terminal,
+  Search,
 } from "lucide-react";
 import {
   getBuiltinPresets,
@@ -42,18 +43,42 @@ export function SidebarPresets({
   const [presetNameInput, setPresetNameInput] = useState<string>("");
   const [presetDescInput, setPresetDescInput] = useState<string>("");
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Load user presets from localStorage whenever generatorType changes
   useEffect(() => {
     const list = loadUserPresets(generatorType);
     setUserPresets(list);
     setActivePresetId(null);
+    setSearchQuery("");
   }, [generatorType]);
 
   const builtinPresets = useMemo(
     () => getBuiltinPresets(generatorType),
     [generatorType]
   );
+
+  const filteredBuiltin = useMemo(() => {
+    if (!searchQuery.trim()) return builtinPresets;
+    const q = searchQuery.toLowerCase().trim();
+    return builtinPresets.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.badge?.toLowerCase().includes(q)
+    );
+  }, [builtinPresets, searchQuery]);
+
+  const filteredUser = useMemo(() => {
+    if (!searchQuery.trim()) return userPresets;
+    const q = searchQuery.toLowerCase().trim();
+    return userPresets.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.badge?.toLowerCase().includes(q)
+    );
+  }, [userPresets, searchQuery]);
 
   const showFeedback = (msg: string) => {
     setFeedbackMsg(msg);
@@ -219,10 +244,36 @@ await image.save("${preset.id || "preset"}.png");
             </span>
           </div>
 
+          {/* Quick Search */}
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search built-in cards..."
+              className="w-full rounded-lg border border-white/10 bg-[#090a0f] pl-8 pr-7 py-1 text-xs text-white placeholder-slate-500 focus:border-[#ff462b] focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+
           {/* Preset Cards List */}
           {activeTab === "builtin" ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {builtinPresets.map((p) => {
+            filteredBuiltin.length === 0 ? (
+              <div className="rounded-lg border border-white/5 bg-[#0a0c10]/40 p-4 text-center text-xs text-slate-400">
+                No cards match &ldquo;{searchQuery}&rdquo;
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[360px] overflow-y-auto pr-1 custom-scrollbar">
+                {filteredBuiltin.map((p) => {
                 const isActive = activePresetId === p.id;
                 return (
                   <button
@@ -270,6 +321,7 @@ await image.save("${preset.id || "preset"}.png");
                 );
               })}
             </div>
+            )
           ) : (
             <div>
               {userPresets.length === 0 ? (
@@ -279,12 +331,16 @@ await image.save("${preset.id || "preset"}.png");
                     No custom presets stored yet
                   </p>
                   <p className="mt-0.5 text-[10px] text-slate-400">
-                    Customize your canvas parameters and click "+ Save Custom" to store locally.
+                    Customize your canvas parameters and click &ldquo;+ Save Custom&rdquo; to store locally.
                   </p>
                 </div>
+              ) : filteredUser.length === 0 ? (
+                <div className="rounded-lg border border-white/5 bg-[#0a0c10]/40 p-4 text-center text-xs text-slate-400">
+                  No custom cards match &ldquo;{searchQuery}&rdquo;
+                </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-0.5">
-                  {userPresets.map((p) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[360px] overflow-y-auto pr-0.5 custom-scrollbar">
+                  {filteredUser.map((p) => {
                     const isActive = activePresetId === p.id;
                     return (
                       <div

@@ -71,7 +71,6 @@ async function renderElement(element: CustomElement, timeMs = 0): Promise<any> {
     width: px(width),
     height: px(height),
     opacity: element.opacity ?? 1,
-    zIndex: element.zIndex ?? 0,
     boxSizing: "border-box",
     overflow: element.type === "text" ? "visible" : "hidden",
   };
@@ -180,7 +179,6 @@ export async function renderCustomCanvasSvg(canvas: CustomCanvasData, timeMs = 0
           width: px(canvas.width),
           height: px(canvas.height),
           pointerEvents: "none",
-          zIndex: 999,
         },
         children: globalNodes,
       },

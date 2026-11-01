@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import type { SongResult, PresetSample } from "../lib/types";
+import type { SongResult, PresetSample, SongLayout } from "../lib/types";
 import { sampleSongs, presetSamples } from "../lib/sample-data";
 import { calculateHeight } from "../lib/constants";
 import { SongCard } from "./SongCard";
@@ -19,10 +19,10 @@ import {
 interface GeneratorFormProps {
   title: string;
   songs: SongResult[];
-  layout?: "auto" | "list" | "grid" | "classic";
+  layout?: SongLayout;
   onTitleChange: (newTitle: string) => void;
   onSongsChange: (newSongs: SongResult[]) => void;
-  onLayoutChange: (layout: "auto" | "list" | "grid" | "classic") => void;
+  onLayoutChange: (layout: SongLayout) => void;
   onGenerate: () => void;
   isGenerating: boolean;
 }
@@ -213,13 +213,25 @@ export function GeneratorForm({
               : `Enforced: ${layout}`}
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
           {[
             {
               id: "auto",
               label: "Auto Layout",
               sub: "Smart Threshold",
               active: layout === "auto",
+            },
+            {
+              id: "showcase",
+              label: "Showcase Hero",
+              sub: "Top 1 Featured",
+              active: layout === "showcase",
+            },
+            {
+              id: "compact-queue",
+              label: "Single Queue",
+              sub: "1-Col Spotify",
+              active: layout === "compact-queue",
             },
             {
               id: "grid",

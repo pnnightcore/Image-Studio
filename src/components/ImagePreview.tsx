@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import type { SongResult, ParticleConfig } from "../lib/types";
+import type { SongResult, ParticleConfig, SongLayout } from "../lib/types";
 import { calculateHeight, CANVAS_WIDTH } from "../lib/constants";
 import { ParticleCanvas } from "./ParticleCanvas";
 import { ParticleOverlayButton } from "./ParticleOverlayButton";
@@ -17,7 +17,7 @@ import {
 interface ImagePreviewProps {
   title: string;
   songs: SongResult[];
-  layout?: "auto" | "list" | "grid" | "classic";
+  layout?: SongLayout;
   onGenerate: () => void;
   isGenerating: boolean;
   lastGeneratedBlob?: Blob | null;
@@ -41,7 +41,7 @@ export function ImagePreview({
   const [copied, setCopied] = useState<boolean>(false);
   const [previewPngUrl, setPreviewPngUrl] = useState<string | null>(null);
 
-  const effectiveLayout: "list" | "grid" | "classic" =
+  const effectiveLayout: SongLayout =
     layout !== "auto"
       ? layout
       : songs.length <= 10
@@ -248,8 +248,126 @@ export function ImagePreview({
                 <div className="mt-2 h-[2px] w-[60px] rounded-full bg-white/40" />
               </div>
 
-              {/* Grid / List Content */}
-              {effectiveLayout === "grid" ? (
+              {/* Grid / List / Showcase / Queue Content */}
+              {effectiveLayout === "showcase" ? (
+                /* Hero Showcase layout */
+                <div className="mt-[12px] flex flex-col gap-[14px]">
+                  {/* Hero Item #1 */}
+                  {songs[0] && (
+                    <div className="relative flex h-[165px] w-full items-center justify-between overflow-hidden rounded-2xl border-2 border-amber-400/50 bg-gradient-to-r from-[#180e06] via-[#120a1c] to-[#0a0614] p-5 shadow-2xl shadow-amber-500/10">
+                      <div className="flex items-center gap-6">
+                        {/* Artwork with Vinyl Platter preview */}
+                        <div className="relative shrink-0">
+                          <div className="h-[125px] w-[125px] overflow-hidden rounded-xl border border-amber-400/40 shadow-lg">
+                            <img
+                              src={songs[0].avatar}
+                              alt={songs[0].displayName}
+                              className="h-full w-full object-cover"
+                              crossOrigin="anonymous"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Details */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="rounded bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold tracking-wider text-amber-300 border border-amber-400/40 uppercase">
+                              ★ FEATURED MASTER #1
+                            </span>
+                            <span className="text-[11px] font-mono text-purple-300">
+                              {songs[0].source?.toUpperCase() || "AUDIO"}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl font-bold text-white tracking-wide drop-shadow-md line-clamp-1 max-w-[650px]">
+                            {songs[0].displayName}
+                          </h3>
+                          <div className="flex items-center gap-3 text-xs text-slate-300">
+                            <span>{songs[0].author || "Featured Artist"}</span>
+                            <span>•</span>
+                            <span className="font-mono text-amber-300 font-bold">{songs[0].time}</span>
+                            {songs[0].views && <span>• {songs[0].views}</span>}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Equalizer Wave Badge */}
+                      <div className="flex flex-col items-end gap-2 pr-4">
+                        <div className="flex items-end gap-1 h-8">
+                          <div className="w-1.5 bg-amber-400 rounded-t h-4" />
+                          <div className="w-1.5 bg-amber-300 rounded-t h-7" />
+                          <div className="w-1.5 bg-purple-400 rounded-t h-5" />
+                          <div className="w-1.5 bg-purple-300 rounded-t h-8" />
+                          <div className="w-1.5 bg-amber-400 rounded-t h-3" />
+                        </div>
+                        <span className="text-[10px] font-mono text-amber-300/80 uppercase">MASTER HI-RES</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Sub-tracks (items 2..N) */}
+                  {songs.length > 1 && (
+                    <div className="flex flex-col gap-[8px]">
+                      {Array.from({ length: Math.ceil((songs.length - 1) / 2) }, (_, rowIdx) => {
+                        const s1 = songs[1 + rowIdx * 2];
+                        const s2 = songs[2 + rowIdx * 2];
+                        return (
+                          <div key={rowIdx} className="flex flex-row gap-[14px]">
+                            <div className="w-[543px]">
+                              {s1 ? <VideoListItem song={s1} /> : <div className="h-[76px]" />}
+                            </div>
+                            <div className="w-[543px]">
+                              {s2 ? <VideoListItem song={s2} /> : <div className="h-[76px]" />}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ) : effectiveLayout === "compact-queue" ? (
+                /* Compact Queue layout (Single Column Spotify style) */
+                <div className="mt-[12px] flex flex-col gap-[6px]">
+                  {songs.map((song, idx) => (
+                    <div
+                      key={song.index || idx}
+                      className="flex h-[52px] w-full items-center justify-between rounded-xl border border-white/8 bg-white/[0.03] px-4 transition hover:border-amber-400/40 hover:bg-white/[0.06]"
+                    >
+                      <div className="flex items-center gap-3.5 flex-1 min-w-0 pr-4">
+                        <span className="w-6 shrink-0 font-mono text-xs font-bold text-amber-400 text-center">
+                          {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-white/10">
+                          <img
+                            src={song.avatar}
+                            alt={song.displayName}
+                            className="h-full w-full object-cover"
+                            crossOrigin="anonymous"
+                          />
+                        </div>
+                        <span className="text-sm font-semibold text-white truncate max-w-[550px]">
+                          {song.displayName}
+                        </span>
+                        {song.author && (
+                          <span className="text-xs text-slate-400 truncate max-w-[200px]">
+                            — {song.author}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-3 shrink-0">
+                        {song.source && (
+                          <span className="rounded bg-white/5 px-2 py-0.5 text-[10px] font-mono text-slate-400 border border-white/5 uppercase">
+                            {song.source}
+                          </span>
+                        )}
+                        <span className="rounded bg-black/40 px-2 py-0.5 text-xs font-mono font-bold text-amber-300 border border-white/10">
+                          {song.time}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : effectiveLayout === "grid" ? (
                 /* Large Card Grid layout (<= 10 tracks) */
                 <div className="mt-[12px] flex flex-col gap-[16px]">
                   {gridGroups.map((group, rIdx) => (

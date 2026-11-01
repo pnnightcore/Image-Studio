@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import type { LeaderboardData, LeaderboardItem } from "../lib/types";
 import { defaultLeaderboardData } from "../lib/sample-data";
-import { LEADERBOARD_WIDTH, calculateLeaderboardHeight } from "../lib/constants";
-import { Download, Code2, Sliders, AlertCircle, FileCheck, Plus, Trash2, Trophy } from "lucide-react";
+import {
+  LEADERBOARD_WIDTH,
+  calculateLeaderboardHeight,
+} from "../lib/constants";
+import {
+  Download,
+  Code2,
+  Sliders,
+  AlertCircle,
+  FileCheck,
+  Plus,
+  Trash2,
+  Trophy,
+} from "lucide-react";
 
 interface LeaderboardFormProps {
   data: LeaderboardData;
@@ -43,7 +55,7 @@ export function LeaderboardForm({
       rank: nextRank,
       username: `Player ${nextRank}`,
       handle: `@player${nextRank}`,
-      avatar: "https://i.ytimg.com/vi/MsHvLrs6sjk/hq720.jpg",
+      avatar: "https://i.ytimg.com/vi/858Eq25HpXg/hq720.jpg",
       level: 1,
       xp: 0,
     };
@@ -61,7 +73,9 @@ export function LeaderboardForm({
   };
 
   const handleDeleteItem = (index: number) => {
-    const nextItems = data.items.filter((_, i) => i !== index).map((item, i) => ({ ...item, rank: i + 1 }));
+    const nextItems = data.items
+      .filter((_, i) => i !== index)
+      .map((item, i) => ({ ...item, rank: i + 1 }));
     const next = { ...data, items: nextItems };
     onChange(next);
     syncJson(next);
@@ -121,10 +135,46 @@ export function LeaderboardForm({
             </label>
             <div className="mt-1.5 grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { id: "podium", name: "Podium Stage", desc: "Top 3 Tiered Highlight" },
-                { id: "compact-list", name: "Compact Ledger", desc: "Ranked Linear Ledger" },
-                { id: "cyber-grid", name: "Cyber Grid", desc: "Dual Channel Grid" },
-                { id: "minimal-cards", name: "Frosted Cards", desc: "Progress Metric Cards" },
+                {
+                  id: "podium",
+                  name: "Podium Stage",
+                  desc: "Top 3 Tiered Highlight",
+                },
+                {
+                  id: "compact-list",
+                  name: "Compact Ledger",
+                  desc: "Ranked Linear Ledger",
+                },
+                {
+                  id: "cyber-grid",
+                  name: "Cyber Grid",
+                  desc: "Dual Channel Grid",
+                },
+                {
+                  id: "minimal-cards",
+                  name: "Frosted Cards",
+                  desc: "Progress Metric Cards",
+                },
+                {
+                  id: "versus-duel",
+                  name: "Versus Duel",
+                  desc: "Top 2 Rivals Collide",
+                },
+                {
+                  id: "hall-of-fame",
+                  name: "Hall of Fame",
+                  desc: "Royal Gold Plaque",
+                },
+                {
+                  id: "tier-division",
+                  name: "Tier Division",
+                  desc: "S/A/B Classification",
+                },
+                {
+                  id: "terminal-matrix",
+                  name: "Terminal Matrix",
+                  desc: "Bounty Cyber CLI",
+                },
               ].map((l) => {
                 const isSelected = (data.layout || "podium") === l.id;
                 return (
@@ -143,7 +193,9 @@ export function LeaderboardForm({
                     }`}
                   >
                     <span className="text-xs font-semibold">{l.name}</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5 font-mono">{l.desc}</span>
+                    <span className="text-[10px] text-slate-400 mt-0.5 font-mono">
+                      {l.desc}
+                    </span>
                   </button>
                 );
               })}
@@ -230,7 +282,10 @@ export function LeaderboardForm({
                     type="text"
                     value={item.username}
                     onChange={(e) =>
-                      handleUpdateItem(idx, { ...item, username: e.target.value })
+                      handleUpdateItem(idx, {
+                        ...item,
+                        username: e.target.value,
+                      })
                     }
                     placeholder="Username"
                     className="rounded border border-white/10 bg-black/40 px-2 py-1 text-xs text-white focus:border-[#ff462b] focus:outline-none"
@@ -318,12 +373,16 @@ export function LeaderboardForm({
           {isGenerating ? (
             <>
               <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-              <span>Rendering Leaderboard ({LEADERBOARD_WIDTH} × {height}px)...</span>
+              <span>
+                Rendering Leaderboard ({LEADERBOARD_WIDTH} × {height}px)...
+              </span>
             </>
           ) : (
             <>
               <Download className="h-3.5 w-3.5" />
-              <span>Render Leaderboard ({LEADERBOARD_WIDTH} × {height}px)</span>
+              <span>
+                Render Leaderboard ({LEADERBOARD_WIDTH} × {height}px)
+              </span>
             </>
           )}
         </button>

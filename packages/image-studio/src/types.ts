@@ -26,11 +26,19 @@ export interface ParticleConfig {
 
 /* --------------------------------------------------------------------- song */
 export interface SongResult { index: number; avatar: string; displayName: string; time: string; source: string; author?: string; views?: string }
-export type SongLayout = "auto" | "list" | "grid" | "classic";
+export type SongLayout = "auto" | "list" | "grid" | "classic" | "showcase" | "compact-queue";
 export interface SongRequest { type?: "song"; title: string; items: SongResult[]; layout?: SongLayout; particleConfig?: ParticleConfig }
 
 /* ------------------------------------------------------------------ profile */
-export type ProfileTheme = "ruby-poly" | "cyber-neon" | "glass-minimal" | "gold-legend";
+export type ProfileTheme =
+  | "ruby-poly"
+  | "cyber-neon"
+  | "glass-minimal"
+  | "gold-legend"
+  | "cosmic-void"
+  | "frost-glacier"
+  | "sakura-duelist"
+  | "hacker-terminal";
 export interface ProfileData {
   username: string; balance: string; avatar: string; level: number; currentXp: number; requiredXp: number; rank: string;
   theme?: ProfileTheme; badge?: string; title?: string; particleConfig?: ParticleConfig;
@@ -38,13 +46,29 @@ export interface ProfileData {
 export interface ProfileRequest { type: "profile"; data: ProfileData; particleConfig?: ParticleConfig }
 
 /* -------------------------------------------------------------- leaderboard */
-export type LeaderboardLayout = "podium" | "compact-list" | "cyber-grid" | "minimal-cards";
+export type LeaderboardLayout =
+  | "podium"
+  | "compact-list"
+  | "cyber-grid"
+  | "minimal-cards"
+  | "versus-duel"
+  | "hall-of-fame"
+  | "tier-division"
+  | "terminal-matrix";
 export interface LeaderboardItem { rank: number; username: string; handle: string; avatar: string; level: number; xp: number }
 export interface LeaderboardData { guildIcon: string; guildName?: string; season?: string; items: LeaderboardItem[]; layout?: LeaderboardLayout; particleConfig?: ParticleConfig }
 export interface LeaderboardRequest { type: "leaderboard"; data: LeaderboardData; particleConfig?: ParticleConfig }
 
 /* -------------------------------------------------------------------- quote */
-export type QuoteLayout = "split-portrait" | "centered-minimal" | "modern-card" | "neon-cyber";
+export type QuoteLayout =
+  | "split-portrait"
+  | "centered-minimal"
+  | "modern-card"
+  | "neon-cyber"
+  | "magazine-editorial"
+  | "polaroid-vintage"
+  | "speech-bubble"
+  | "code-terminal";
 export interface QuoteData { quote: string; author: string; handle: string; tag: string; avatar: string; layout?: QuoteLayout; particleConfig?: ParticleConfig }
 export interface QuoteRequest { type: "quote"; data: QuoteData; particleConfig?: ParticleConfig }
 
@@ -103,7 +127,23 @@ export interface AnimatedRequest { type: "animated"; data: AnimatedData }
 export type GenerateRequest = SongRequest | ProfileRequest | LeaderboardRequest | QuoteRequest | CustomRequest | AnimatedRequest;
 
 /* ------------------------------------------------------- server capabilities */
-export const BUILTIN_PRESET_IDS = ["welcome", "cyber-rotation", "music", "rank-up", "spark-magic", "sakura-petals", "music-neon"] as const;
+export const BUILTIN_PRESET_IDS = [
+  "welcome",
+  "cyber-rotation",
+  "music",
+  "rank-up",
+  "spark-magic",
+  "sakura-petals",
+  "music-neon",
+  "cyber-bento-hud",
+  "hacker-terminal",
+  "space-boarding-pass",
+  "vinyl-turntable",
+  "tcg-hologram",
+  "vs-battle-duel",
+  "gacha-lootbox",
+  "retro-synthwave-sunset",
+] as const;
 export type PresetId = (typeof BUILTIN_PRESET_IDS)[number];
 
 export interface ServerStats {
