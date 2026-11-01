@@ -13,7 +13,11 @@
     "cf:dev": "vite build && wrangler dev",
     "cf:deploy": "vite build && wrangler deploy",
     "smoke:node": "tsx scripts/smoke-node.ts",
-    "smoke:http": "tsx scripts/smoke-http.ts"
+    "smoke:http": "tsx scripts/smoke-http.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke:handlers": "tsx scripts/smoke-handlers.ts",
+    "sdk:test": "npm --prefix packages/image-studio test && tsx --test packages/image-studio/test/contract.test.ts",
+    "sdk:build": "npm --prefix packages/image-studio run build"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

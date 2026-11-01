@@ -389,3 +389,10 @@ Notes / limits on Cloudflare:
 - `/api/stats` counter is per isolate (in-memory).
 - Optional proxy mode: `API_MODE=proxy` + `BACKEND_API_URL=...`.
 - Smoke test any deployment: `npx tsx scripts/smoke-http.ts https://your-site`.
+
+
+## TypeScript SDK
+
+[`packages/image-studio`](packages/image-studio/README.md) is the typed SDK (`image-studio`) with retries, fail-over between hosts (e.g. Cloudflare → Vercel), typed errors and helpers for discord.js / Workers.
+Server and SDK share one HTTP contract (`src/server/contract.ts`): JSON errors with a `code`, size/timing headers, and capabilities in `GET /api/stats`.
+Checks: `npm run typecheck` (type-level drift guard), `npm run sdk:test`, `npm run smoke:handlers`.

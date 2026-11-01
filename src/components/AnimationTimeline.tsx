@@ -57,6 +57,7 @@ import {
 } from "../lib/animation-history";
 import {
   createIStudioProject,
+  createSdkExportSnippet,
   downloadIStudioFile,
   parseIStudioFile,
   saveProjectToLocalStorage,
@@ -326,6 +327,7 @@ export function AnimationTimeline() {
   const [editablePayloadJson, setEditablePayloadJson] = useState<string>("");
   const [copiedJson, setCopiedJson] = useState<boolean>(false);
   const [copiedCurl, setCopiedCurl] = useState<boolean>(false);
+  const [copiedSdk, setCopiedSdk] = useState<boolean>(false);
   const [isTestingRender, setIsTestingRender] = useState<boolean>(false);
 
   // Drag & drop state for reordering layers / tracks
@@ -1571,6 +1573,24 @@ export function AnimationTimeline() {
     setTimeout(() => setCopiedCurl(false), 2000);
   };
 
+  const handleCopySdkSnippet = async () => {
+    const projectPayload = createIStudioProject(
+      projectName || canvas.title || "animation",
+      canvas,
+      cleanTracks,
+      variables,
+      { duration, fps, format }
+    );
+    const snippet = createSdkExportSnippet(projectPayload, {
+      baseUrl: typeof window !== "undefined" ? window.location.origin : "https://image-studio-green.vercel.app",
+      method: payloadTarget === "frame-png" ? "frame" : "animate",
+      fileName: payloadTarget === "frame-png" ? `frame-${Math.round(time)}ms.png` : `animation.${format}`,
+    });
+    await navigator.clipboard.writeText(snippet);
+    setCopiedSdk(true);
+    setTimeout(() => setCopiedSdk(false), 2000);
+  };
+
   const handleDownloadPayloadJson = () => {
     const blob = new Blob([editablePayloadJson], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -1737,6 +1757,15 @@ export function AnimationTimeline() {
           >
             <Code2 className="h-3.5 w-3.5 text-purple-400" />
             <span>API Payload</span>
+          </button>
+
+          <button
+            onClick={handleCopySdkSnippet}
+            className="flex items-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-950/40 px-3 py-2 text-xs font-semibold text-cyan-200 hover:bg-cyan-900/50 hover:border-cyan-400 transition"
+            title="Sao chép snippet SDK Image Studio từ thiết kế hiện tại"
+          >
+            <Terminal className="h-3.5 w-3.5 text-cyan-400" />
+            <span>{copiedSdk ? "Đã chép SDK!" : "Copy SDK"}</span>
           </button>
 
           <button

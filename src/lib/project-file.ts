@@ -18,7 +18,122 @@ export interface IStudioProjectFile {
   };
 }
 
+export interface SdkExportOptions {
+  baseUrl?: string;
+  clientName?: string;
+  method?: "animate" | "frame" | "custom";
+  fileName?: string;
+}
+
 const LOCAL_STORAGE_KEY = "istudio_saved_project_v1";
+
+/**
+ * Exports a current `.istudio` project as a ready-to-run SDK snippet for the browser/server client.
+ */
+export function createSdkExportSnippet(
+  project: Partial<IStudioProjectFile> | undefined,
+  options: SdkExportOptions = {}
+): string {
+  const safeProject: IStudioProjectFile = {
+    version: 1,
+    name: "animation",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    canvas: {
+      title: "animation",
+      width: 930,
+      height: 280,
+      background: "#090614",
+      elements: [],
+    },
+    elements: [],
+    tracks: [],
+    variables: {},
+    export: {
+      duration: 2000,
+      fps: 15,
+      format: "gif",
+    },
+    ...(project ?? {}),
+  } as IStudioProjectFile;
+
+  const projectName = safeProject.name || safeProject.canvas?.title || "animation";
+  const exportSettings = safeProject.export ?? { duration: 2000, fps: 15, format: "gif" };
+  const baseUrl = options.baseUrl ?? "https://image-studio-green.vercel.app";
+  const clientName = options.clientName ?? "studio";
+  const exportMethod = options.method ?? "animate";
+  const format = exportMethod === "frame" ? "png" : exportSettings.format ?? "gif";
+  const fileName =
+    options.fileName ??
+    `${(projectName || "animation").replace(/[/\\?%*:|"<>]/g, "-")}.${format === "png" ? "png" : format}`;
+
+  const canvas = {
+    ...safeProject.canvas,
+    title: projectName,
+    elements: safeProject.canvas?.elements ?? safeProject.elements ?? [],
+  };
+
+  if (exportMethod === "custom") {
+    return [
+      'import { ImageStudio } from "image-studio";',
+      "",
+      `const ${clientName} = new ImageStudio({ baseUrl: ${JSON.stringify(baseUrl)} });`,
+      "",
+      `const canvas = ${JSON.stringify(canvas, null, 2)};`,
+      "",
+      `const result = await ${clientName}.custom(canvas);`,
+      `await result.save(${JSON.stringify(fileName)});`,
+      "",
+    ].join("\n");
+  }
+
+  if (exportMethod === "frame") {
+    return [
+      'import { ImageStudio } from "image-studio";',
+      "",
+      `const ${clientName} = new ImageStudio({ baseUrl: ${JSON.stringify(baseUrl)} });`,
+      "",
+      `const canvas = ${JSON.stringify(canvas, null, 2)};`,
+      `const tracks = ${JSON.stringify(safeProject.tracks ?? [], null, 2)};`,
+      "",
+      `const result = await ${clientName}.frame({`,
+      `  title: ${JSON.stringify(projectName)},`,
+      `  format: "png",`,
+      `  frameTime: ${Math.round((exportSettings.duration ?? 2000) * 0.4)},`,
+      `  canvas,`,
+      `  tracks,`,
+      `  templateVariables: ${JSON.stringify(safeProject.variables ?? {}, null, 2)},`,
+      `});`,
+      `await result.save(${JSON.stringify(fileName)});`,
+      "",
+    ].join("\n");
+  }
+
+  return [
+    'import { ImageStudio } from "image-studio";',
+    "",
+    `const ${clientName} = new ImageStudio({ baseUrl: ${JSON.stringify(baseUrl)} });`,
+    "",
+    `const canvas = ${JSON.stringify(canvas, null, 2)};`,
+    `const tracks = ${JSON.stringify(safeProject.tracks ?? [], null, 2)};`,
+    "",
+    `const result = await ${clientName}.animate({`,
+    `  title: ${JSON.stringify(projectName)},`,
+    `  format: ${JSON.stringify(format)},`,
+    `  duration: ${exportSettings.duration ?? 2000},`,
+    `  fps: ${exportSettings.fps ?? 15},`,
+    `  loop: 0,`,
+    `  canvas,`,
+    `  tracks,`,
+    `  templateVariables: ${JSON.stringify(safeProject.variables ?? {}, null, 2)},`,
+    `});`,
+    `await result.save(${JSON.stringify(fileName)});`,
+    "",
+  ].join("\n");
+}
+
+export const exportProjectToSdk = createSdkExportSnippet;
+export const generateSdkExportSnippet = createSdkExportSnippet;
 
 /**
  * Builds a validated .istudio project file structure

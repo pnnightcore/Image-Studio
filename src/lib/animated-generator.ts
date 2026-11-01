@@ -1,4 +1,5 @@
 import { getRuntime } from "./runtime.js";
+import { invalid } from "./errors.js";
 import type { AnimatedGenerateData, AnimatedGenerateRequest, AnyGenerateRequest, CustomCanvasData } from "./types.js";
 import { dispatchGenerateImage } from "./image-generator.js";
 import { renderCustomCanvasSvg } from "./animated-canvas-renderer.js";
@@ -6,9 +7,9 @@ import { buildFrame, compileTimelineToFrames, parseTemplateString } from "./time
 import { DEFAULT_TEMPLATE_VARIABLES } from "./animation-presets.js";
 
 export interface GenerateResult { buffer: Buffer; width: number; height: number; mime: "image/png" | "image/gif" | "image/webp"; filename: string; }
-const MAX_FRAMES = 60;
+export const MAX_FRAMES = 60;
 const MAX_FRAME_DELAY = 65_535;
-const MAX_TOTAL_DURATION = 10_000;
+export const MAX_TOTAL_DURATION = 10_000;
 const DEFAULT_DELAY = 120;
 const FRAME_RENDER_CONCURRENCY = 3;
 
@@ -18,9 +19,9 @@ function safeFilename(value: string | undefined, fallback: string) {
 }
 function normalizeDelays(delay: AnimatedGenerateData["delay"], frameCount: number) {
   const delays = Array.isArray(delay) ? [...delay] : Array.from({ length: frameCount }, () => delay ?? DEFAULT_DELAY);
-  if (delays.length !== frameCount) throw new Error(`Animated delay array must contain exactly ${frameCount} values; received ${delays.length}.`);
-  for (const value of delays) if (!Number.isInteger(value) || value < 10 || value > MAX_FRAME_DELAY) throw new Error(`Animated frame delays must be integers between 10 and ${MAX_FRAME_DELAY} ms.`);
-  if (delays.reduce((sum, value) => sum + value, 0) > MAX_TOTAL_DURATION) throw new Error(`Animated output duration cannot exceed ${MAX_TOTAL_DURATION} ms.`);
+  if (delays.length !== frameCount) throw invalid(`Animated delay array must contain exactly ${frameCount} values; received ${delays.length}.`);
+  for (const value of delays) if (!Number.isInteger(value) || value < 10 || value > MAX_FRAME_DELAY) throw invalid(`Animated frame delays must be integers between 10 and ${MAX_FRAME_DELAY} ms.`);
+  if (delays.reduce((sum, value) => sum + value, 0) > MAX_TOTAL_DURATION) throw invalid(`Animated output duration cannot exceed ${MAX_TOTAL_DURATION} ms.`);
   return delays;
 }
 async function mapWithConcurrency<T, R>(items: T[], concurrency: number, worker: (item: T, index: number) => Promise<R>): Promise<R[]> {
@@ -75,7 +76,7 @@ export async function generateAnimatedImage(data: AnimatedGenerateData): Promise
     } else {
       // If frames array was provided
       if (!frames || !frames.length) {
-        throw new Error("Single frame generation requires either canvas/tracks or a frames array.");
+        throw invalid("Single frame generation requires either canvas/tracks or a frames array.");
       }
       const frameDelays: number[] = Array.isArray(delay)
         ? (delay as number[])
@@ -102,7 +103,7 @@ export async function generateAnimatedImage(data: AnimatedGenerateData): Promise
     }
 
     if (!targetFrame || targetFrame.width <= 0 || targetFrame.height <= 0) {
-      throw new Error("Target frame must define a positive width and height.");
+      throw invalid("Target frame must define a positive width and height.");
     }
 
     const renderedSvg = await renderCustomCanvasSvg(targetFrame as CustomCanvasData, targetTime);
@@ -135,15 +136,15 @@ export async function generateAnimatedImage(data: AnimatedGenerateData): Promise
     delay = data.delay ?? compiled.frameDelay;
   }
 
-  if (!frames || !frames.length) throw new Error("Animated generation requires at least one frame or a canvas with tracks.");
+  if (!frames || !frames.length) throw invalid("Animated generation requires at least one frame or a canvas with tracks.");
 
-  if (frames.length > MAX_FRAMES) throw new Error(`Animated generation supports at most ${MAX_FRAMES} frames per request.`);
+  if (frames.length > MAX_FRAMES) throw invalid(`Animated generation supports at most ${MAX_FRAMES} frames per request.`);
   const firstFrame = frames[0];
-  if (!firstFrame || firstFrame.width <= 0 || firstFrame.height <= 0) throw new Error("Animated frames must define a positive width and height.");
-  for (const [index, frame] of frames.entries()) if (frame.width !== firstFrame.width || frame.height !== firstFrame.height) throw new Error(`Animated frame ${index} has ${frame.width}x${frame.height}; all frames must use ${firstFrame.width}x${firstFrame.height}.`);
+  if (!firstFrame || firstFrame.width <= 0 || firstFrame.height <= 0) throw invalid("Animated frames must define a positive width and height.");
+  for (const [index, frame] of frames.entries()) if (frame.width !== firstFrame.width || frame.height !== firstFrame.height) throw invalid(`Animated frame ${index} has ${frame.width}x${frame.height}; all frames must use ${firstFrame.width}x${firstFrame.height}.`);
   const delays = normalizeDelays(delay, frames.length);
   const loop = data.loop ?? 0;
-  if (!Number.isInteger(loop) || loop < 0 || loop > 65_535) throw new Error("Animated loop must be an integer between 0 and 65535.");
+  if (!Number.isInteger(loop) || loop < 0 || loop > 65_535) throw invalid("Animated loop must be an integer between 0 and 65535.");
   const format: "gif" | "webp" = data.format === "webp" ? "webp" : "gif";
   const frameTimes: number[] = [];
   let elapsed = 0;
