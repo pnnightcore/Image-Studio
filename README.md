@@ -368,3 +368,24 @@ MIT License. Open source and ready for bot integrations and production workflows
 ## Support 
 <img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/ebbf178f-a0af-468c-bc6d-34f0502f30a8" />
 
+
+
+## Cloudflare (Workers / Pages-style assets) — native `/api/generate`
+
+`/api/generate`, `/api/animation/frame` and `/api/stats` now run **natively on Cloudflare** (no proxy to Vercel/Netlify needed).
+The same generators run on every host through a small runtime adapter (`src/lib/runtime.ts`):
+
+| Host | Runtime adapter | Rasteriser / GIF |
+| --- | --- | --- |
+| Vercel, Netlify, Express/VPS | `src/lib/runtime-node.ts` | sharp |
+| Cloudflare Workers | `src/worker/runtime-worker.ts` | resvg-wasm + gifenc |
+
+Deploy: Build command `npm run build`, deploy command `npx wrangler deploy` (or `npm run cf:deploy`). Local: `npm run cf:dev`.
+
+Notes / limits on Cloudflare:
+- Needs the **Workers Paid** plan (rendering uses far more than the free 10 ms CPU).
+- Animated **WebP** is not available (HTTP 501) – use `format: "gif"`. Animated GIF, single PNG frames and all card types work.
+- Avatars / backgrounds must be PNG, JPEG or GIF (WebP/AVIF avatars fall back to the placeholder). No server-side resize/crop.
+- `/api/stats` counter is per isolate (in-memory).
+- Optional proxy mode: `API_MODE=proxy` + `BACKEND_API_URL=...`.
+- Smoke test any deployment: `npx tsx scripts/smoke-http.ts https://your-site`.

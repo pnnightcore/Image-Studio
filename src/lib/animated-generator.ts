@@ -1,4 +1,4 @@
-import sharp from "sharp";
+import { getRuntime } from "./runtime.js";
 import type { AnimatedGenerateData, AnimatedGenerateRequest, AnyGenerateRequest, CustomCanvasData } from "./types.js";
 import { dispatchGenerateImage } from "./image-generator.js";
 import { renderCustomCanvasSvg } from "./animated-canvas-renderer.js";
@@ -28,10 +28,8 @@ async function mapWithConcurrency<T, R>(items: T[], concurrency: number, worker:
   async function consume() { while (true) { const index = nextIndex++; if (index >= items.length) return; results[index] = await worker(items[index], index); } }
   await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, consume)); return results;
 }
-async function encodeAnimatedSvgFrames(frames: Buffer[], format: "gif" | "webp", delays: number[], loop: number) {
-  const animated = sharp(frames, { join: { animated: true } });
-  if (format === "gif") return animated.gif({ delay: delays, loop, keepDuplicateFrames: true, reuse: true }).toBuffer();
-  return animated.webp({ delay: delays, loop, effort: 4, quality: 90 }).toBuffer();
+async function encodeAnimatedSvgFrames(frames: Buffer[], format: "gif" | "webp", delays: number[], loop: number, width: number, height: number) {
+  return getRuntime().encodeAnimation(frames, { format, delays, loop, width, height });
 }
 
 export async function generateAnimatedImage(data: AnimatedGenerateData): Promise<GenerateResult> {
@@ -108,7 +106,7 @@ export async function generateAnimatedImage(data: AnimatedGenerateData): Promise
     }
 
     const renderedSvg = await renderCustomCanvasSvg(targetFrame as CustomCanvasData, targetTime);
-    const buffer = await sharp(renderedSvg).png().toBuffer();
+    const buffer = await getRuntime().svgToPng(renderedSvg);
 
     const frameTag = data.frameTime !== undefined
       ? `${Math.round(data.frameTime)}ms`
@@ -151,7 +149,7 @@ export async function generateAnimatedImage(data: AnimatedGenerateData): Promise
   let elapsed = 0;
   for (const delay of delays) { frameTimes.push(elapsed); elapsed += delay; }
   const renderedSvgFrames = await mapWithConcurrency(frames as CustomCanvasData[], FRAME_RENDER_CONCURRENCY, (frame, index) => renderCustomCanvasSvg(frame, frameTimes[index]));
-  const buffer = await encodeAnimatedSvgFrames(renderedSvgFrames, format, delays, loop);
+  const buffer = await encodeAnimatedSvgFrames(renderedSvgFrames, format, delays, loop, firstFrame.width, firstFrame.height);
   const extension = format === "gif" ? "gif" : "webp";
   return { buffer, width: firstFrame.width, height: firstFrame.height, mime: format === "gif" ? "image/gif" : "image/webp", filename: `${safeFilename(data.title, "animated-image")}.${extension}` };
 }

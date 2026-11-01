@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import "../../src/lib/runtime-node.js";
 import type { AnyGenerateRequest } from "../../src/lib/types.js";
 import { dispatchGenerate } from "../../src/lib/animated-generator.js";
 import { incrementGeneratedCount } from "../../src/server/stats.js";

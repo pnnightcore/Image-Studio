@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import satori from "satori";
-import sharp from "sharp";
+import { getRuntime } from "./runtime.js";
 import { loadSatoriAdditionalAsset } from "./unicode-fonts.js";
 import { getEmbeddedRobotoFonts } from "./embedded-fonts.js";
 import { computeElementTextShadow } from "./text-effects.js";
@@ -76,7 +75,7 @@ export async function imageToDataUri(url: string, targetSize = 96): Promise<stri
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        Accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+        Accept: getRuntime().imageAccept,
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
       },
     });
@@ -91,12 +90,9 @@ export async function imageToDataUri(url: string, targetSize = 96): Promise<stri
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const optimized = await sharp(buffer)
-      .resize(targetSize, targetSize, { fit: "cover" })
-      .jpeg({ quality: 85 })
-      .toBuffer();
+    const optimized = await getRuntime().optimizeAvatar(buffer, targetSize);
 
-    const dataUri = `data:image/jpeg;base64,${optimized.toString("base64")}`;
+    const dataUri = `data:${optimized.mime};base64,${optimized.buffer.toString("base64")}`;
     avatarCache.set(cacheKey, dataUri);
     return dataUri;
   } catch (error) {
@@ -145,6 +141,12 @@ function getFontDir(): string {
 
 function loadFonts() {
   if (cachedFonts) return cachedFonts;
+
+  // Edge runtimes (Cloudflare Workers) have no filesystem: use the embedded fonts directly.
+  if (getRuntime().preferEmbeddedFonts) {
+    cachedFonts = getEmbeddedRobotoFonts();
+    return cachedFonts;
+  }
 
   try {
     const fontDir = getFontDir();
@@ -741,14 +743,14 @@ export async function generateSongImage(request: {
   }
 
   const fonts = loadFonts();
-  const svg = await satori(element as any, {
+  const svg = await getRuntime().renderSvg(element as any, {
     width: CANVAS_WIDTH,
     height,
     fonts,
     loadAdditionalAsset: loadSatoriAdditionalAsset,
   });
 
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const png = await getRuntime().svgToPng(svg);
   return { png, height };
 }
 
@@ -2019,14 +2021,14 @@ export async function generateProfileImage(data: ProfileData): Promise<{ png: Bu
   }
 
   const fonts = loadFonts();
-  const svg = await satori(element as any, {
+  const svg = await getRuntime().renderSvg(element as any, {
     width: PROFILE_WIDTH,
     height: PROFILE_HEIGHT,
     fonts,
     loadAdditionalAsset: loadSatoriAdditionalAsset,
   });
 
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const png = await getRuntime().svgToPng(svg);
   return { png, height: PROFILE_HEIGHT };
 }
 
@@ -3273,14 +3275,14 @@ export async function generateLeaderboardImage(data: LeaderboardData): Promise<{
   }
 
   const fonts = loadFonts();
-  const svg = await satori(element as any, {
+  const svg = await getRuntime().renderSvg(element as any, {
     width: LEADERBOARD_WIDTH,
     height,
     fonts,
     loadAdditionalAsset: loadSatoriAdditionalAsset,
   });
 
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const png = await getRuntime().svgToPng(svg);
   return { png, height };
 }
 
@@ -3989,14 +3991,14 @@ export async function generateQuoteImage(data: QuoteData): Promise<{ png: Buffer
   }
 
   const fonts = loadFonts();
-  const svg = await satori(element as any, {
+  const svg = await getRuntime().renderSvg(element as any, {
     width: QUOTE_WIDTH,
     height: QUOTE_HEIGHT,
     fonts,
     loadAdditionalAsset: loadSatoriAdditionalAsset,
   });
 
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const png = await getRuntime().svgToPng(svg);
   return { png, height: QUOTE_HEIGHT };
 }
 
@@ -4203,14 +4205,14 @@ export async function generateCustomCanvasImage(data: CustomCanvasData): Promise
   };
 
   const fonts = loadFonts();
-  const svg = await satori(rootElement as any, {
+  const svg = await getRuntime().renderSvg(rootElement as any, {
     width,
     height,
     fonts,
     loadAdditionalAsset: loadSatoriAdditionalAsset,
   });
 
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const png = await getRuntime().svgToPng(svg);
   return { png, height };
 }
 

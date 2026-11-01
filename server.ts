@@ -1,4 +1,5 @@
 import express from "express";
+import "./src/lib/runtime-node";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";

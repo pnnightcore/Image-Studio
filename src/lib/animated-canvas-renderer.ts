@@ -1,19 +1,22 @@
 import fs from "fs";
 import path from "path";
-import satori from "satori";
-import sharp, { type Metadata } from "sharp";
+import { getRuntime } from "./runtime.js";
 import type { CustomCanvasData, CustomElement } from "./types.js";
 import { imageToDataUri } from "./image-generator.js";
 import { loadSatoriAdditionalAsset } from "./unicode-fonts.js";
+import { getEmbeddedRobotoFonts } from "./embedded-fonts.js";
 import { computeElementTextShadow } from "./text-effects.js";
 import { computeParticles, renderParticlesToSatoriVNodes, createDefaultParticleConfig } from "./particle-system.js";
 
 let fonts: Array<{ name: string; data: Buffer; weight: 400 | 500; style: "normal" }> | null = null;
 const animatedSourceCache = new Map<string, Promise<Buffer>>();
-const animatedMetadataCache = new Map<string, Promise<Metadata>>();
 
 function loadFonts() {
   if (fonts) return fonts;
+  if (getRuntime().preferEmbeddedFonts) {
+    fonts = getEmbeddedRobotoFonts();
+    return fonts;
+  }
   const dir = path.resolve(process.cwd(), "public/fonts");
   const regularLatinPath = path.join(dir, "Roboto-Regular.ttf");
   const regularLatin = fs.readFileSync(fs.existsSync(regularLatinPath) ? regularLatinPath : path.join(dir, "Roboto-Medium-Latin.ttf"));
@@ -41,35 +44,10 @@ async function getAnimatedSource(url: string) {
   return source;
 }
 
-async function getAnimatedMetadata(url: string) {
-  let metadata = animatedMetadataCache.get(url);
-  if (!metadata) {
-    metadata = getAnimatedSource(url).then((buffer) => sharp(buffer, { animated: true }).metadata());
-    animatedMetadataCache.set(url, metadata);
-  }
-  return metadata;
-}
-
 async function animatedImageToDataUri(url: string, timeMs: number, targetWidth: number, targetHeight: number) {
   const source = await getAnimatedSource(url);
-  const metadata = await getAnimatedMetadata(url);
-  const pages = Math.max(1, metadata.pages ?? 1);
-  let page = 0;
-  const delays = metadata.delay ?? [];
-  if (pages > 1 && delays.length) {
-    const total = delays.reduce((sum: number, value: number) => sum + value, 0) || pages * 100;
-    let cursor = ((timeMs % total) + total) % total;
-    for (let i = 0; i < pages; i++) {
-      const delay = delays[i] ?? 100;
-      if (cursor < delay) { page = i; break; }
-      cursor -= delay;
-      page = i;
-    }
-  } else if (pages > 1) {
-    page = Math.min(pages - 1, Math.floor(Math.max(0, timeMs) / 100) % pages);
-  }
-  const frame = await sharp(source, { page }).resize(targetWidth, targetHeight, { fit: "cover" }).png().toBuffer();
-  return `data:image/png;base64,${frame.toString("base64")}`;
+  const frame = await getRuntime().getBackgroundFrame(source, timeMs, targetWidth, targetHeight);
+  return `data:${frame.mime};base64,${frame.buffer.toString("base64")}`;
 }
 
 async function renderElement(element: CustomElement, timeMs = 0): Promise<any> {
@@ -210,6 +188,6 @@ export async function renderCustomCanvasSvg(canvas: CustomCanvasData, timeMs = 0
   }
 
   const tree = { type: "div", props: { style: { position: "relative", display: "flex", width: px(canvas.width), height: px(canvas.height), overflow: "hidden", background: safeBackground(canvas.background) }, children } };
-  const svg = await satori(tree as any, { width: canvas.width, height: canvas.height, fonts: loadFonts(), loadAdditionalAsset: loadSatoriAdditionalAsset });
+  const svg = await getRuntime().renderSvg(tree as any, { width: canvas.width, height: canvas.height, fonts: loadFonts(), loadAdditionalAsset: loadSatoriAdditionalAsset });
   return Buffer.from(svg);
 }

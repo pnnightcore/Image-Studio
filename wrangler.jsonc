@@ -2,13 +2,30 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "image-studio",
   "compatibility_date": "2026-10-23",
-  "main": "dist/_worker.js",
-  "observability": {
-    "enabled": true
+  // Buffer / node:* shims used by the shared image pipeline
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Native /api/* implementation (satori + resvg-wasm). No sharp, no external backend needed.
+  "main": "src/worker/index.ts",
+
+  // Satori's harfbuzzjs cannot compile wasm at runtime on Workers -> use the pre-compiled shim.
+  "alias": {
+    "harfbuzzjs": "./src/worker/harfbuzz-shim.ts"
   },
+
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    // Always run the Worker for the API, even for browser navigations (e.g. opening /api/animation/frame?... in a tab)
+    "run_worker_first": ["/api/*"]
+  },
+
+  "observability": {
+    "enabled": true
   }
+
+  // Image rendering is CPU heavy: use the Workers *Paid* plan (default 30 s CPU).
+  // To allow longer animated GIFs: "limits": { "cpu_ms": 60000 }
 }
