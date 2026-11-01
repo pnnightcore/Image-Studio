@@ -42,6 +42,7 @@ const LANGUAGE_FONTS: Record<string, string> = {
   "vi": "Noto Sans",
   "vi-VN": "Noto Sans",
   "devanagari": "Noto Sans Devanagari",
+  "music": "Noto Music",
   "symbol": "Noto Sans Symbols 2",
   "math": "Noto Sans Math",
 };
@@ -102,6 +103,16 @@ function containsVietnamese(text: string): boolean {
   return /[\u0102\u0103\u0110\u0111\u0128\u0129\u0168\u0169\u01A0\u01A1\u01AF\u01B0\u0300-\u0303\u0306\u031B\u0323\u1EA0-\u1EF9]/u.test(
     text,
   );
+}
+
+function containsMusicGlyphs(text: string): boolean {
+  return /[\u2669-\u267B\u1D15D-\u1D164\u1D166-\u1D169\u1D16D-\u1D172]/u.test(
+    text,
+  );
+}
+
+function containsMathGlyphs(text: string): boolean {
+  return /[\u2200-\u22FF\u27C0-\u27EF\u2980-\u29FF]/u.test(text);
 }
 
 /**
@@ -240,6 +251,15 @@ export async function loadSatoriAdditionalAsset(
     addSource("vi-VN", "Noto Sans", `${VIETNAMESE_GLYPHS} ${text}`);
   }
 
+  // Some symbol sets (for example musical notes) are not served by the generic
+  // "symbol" font family in Google Fonts, so prefer a dedicated family when the
+  // glyphs clearly indicate a music or math subset.
+  if (containsMusicGlyphs(text)) {
+    addSource("music", "Noto Music", text);
+  } else if (containsMathGlyphs(text)) {
+    addSource("math", "Noto Sans Math", text);
+  }
+
   if (!sources.length) return [];
 
   const cacheKey = sources
@@ -280,6 +300,10 @@ export async function loadSatoriAdditionalAsset(
   )
     .then((groups) => groups.flat())
     .catch((error) => {
+      const message = error instanceof Error ? error.message : String(error);
+      if (/(Google Fonts .* (400|403)|No Satori-compatible font source)/i.test(message)) {
+        return [];
+      }
       console.warn(
         `[unicode-fonts] Failed to load dynamic font for ${JSON.stringify(text)} (${languageCode}):`,
         error,
