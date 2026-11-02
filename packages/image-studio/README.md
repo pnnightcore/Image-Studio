@@ -12,67 +12,62 @@ Typed client for the **Image Studio** HTTP API: song / profile / leaderboard / q
 ## Showcase
 
 ### Leaderboard
-
-<table>
+<table width="100%">
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png" width="180" alt="leaderboard-compact-list" /></a><br><sub>compact-list</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-podium.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-podium.png" width="180" alt="leaderboard-podium" /></a><br><sub>podium</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-versus-duel.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-versus-duel.png" width="180" alt="leaderboard-versus-duel" /></a><br><sub>versus-duel</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png" width="100%" alt="leaderboard-compact-list" /></a><br><sub>compact-list</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-podium.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-podium.png" width="100%" alt="leaderboard-podium" /></a><br><sub>podium</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-versus-duel.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-versus-duel.png" width="100%" alt="leaderboard-versus-duel" /></a><br><sub>versus-duel</sub></td>
   </tr>
 </table>
 
 ### Profile
-
-<table>
+<table width="100%">
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-cyber-neon.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-cyber-neon.png" width="180" alt="profile-cyber-neon" /></a><br><sub>cyber-neon</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-glass-minimal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-glass-minimal.png" width="180" alt="profile-glass-minimal" /></a><br><sub>glass-minimal</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-hacker-terminal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-hacker-terminal.png" width="180" alt="profile-hacker-terminal" /></a><br><sub>hacker-terminal</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-cyber-neon.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-cyber-neon.png" width="100%" alt="profile-cyber-neon" /></a><br><sub>cyber-neon</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-glass-minimal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-glass-minimal.png" width="100%" alt="profile-glass-minimal" /></a><br><sub>glass-minimal</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-hacker-terminal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-hacker-terminal.png" width="100%" alt="profile-hacker-terminal" /></a><br><sub>hacker-terminal</sub></td>
   </tr>
 </table>
 
 ### Quote
-
-<table>
+<table width="100%">
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-modern-card.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-modern-card.png" width="180" alt="quote-modern-card" /></a><br><sub>modern-card</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-code-terminal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-code-terminal.png" width="180" alt="quote-code-terminal" /></a><br><sub>code-terminal</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-neon-cyber.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-neon-cyber.png" width="180" alt="quote-neon-cyber" /></a><br><sub>neon-cyber</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-modern-card.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-modern-card.png" width="100%" alt="quote-modern-card" /></a><br><sub>modern-card</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-code-terminal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-code-terminal.png" width="100%" alt="quote-code-terminal" /></a><br><sub>code-terminal</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-neon-cyber.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-neon-cyber.png" width="100%" alt="quote-neon-cyber" /></a><br><sub>neon-cyber</sub></td>
   </tr>
 </table>
 
 ### Song
-
-<table>
+<table width="100%">
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-showcase.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-showcase.png" width="180" alt="song-showcase" /></a><br><sub>showcase</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-grid.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-grid.png" width="180" alt="song-grid" /></a><br><sub>grid</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-list.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-list.png" width="180" alt="song-list" /></a><br><sub>list</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-showcase.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-showcase.png" width="100%" alt="song-showcase" /></a><br><sub>showcase</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-grid.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-grid.png" width="100%" alt="song-grid" /></a><br><sub>grid</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-list.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-list.png" width="100%" alt="song-list" /></a><br><sub>list</sub></td>
   </tr>
 </table>
-
 ### Pattern previews
 
-<table>
+<table width="100%">
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/welcome.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/welcome.gif" width="300" alt="welcome" /></a><br><sub>welcome</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music.gif" width="300" alt="music" /></a><br><sub>music</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music-neon.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music-neon.gif" width="300" alt="music-neon" /></a><br><sub>music-neon</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/welcome.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/welcome.gif" width="100%" alt="welcome" /></a><br><sub>welcome</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music.gif" width="100%" alt="music" /></a><br><sub>music</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music-neon.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music-neon.gif" width="100%" alt="music-neon" /></a><br><sub>music-neon</sub></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/sakura-petals.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/sakura-petals.gif" width="300" alt="sakura-petals" /></a><br><sub>sakura-petals</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-rotation.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-rotation.gif" width="300" alt="cyber-rotation" /></a><br><sub>cyber-rotation</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-bento-hud.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-bento-hud.gif" width="300" alt="cyber-bento-hud" /></a><br><sub>cyber-bento-hud</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/sakura-petals.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/sakura-petals.gif" width="100%" alt="sakura-petals" /></a><br><sub>sakura-petals</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-rotation.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-rotation.gif" width="100%" alt="cyber-rotation" /></a><br><sub>cyber-rotation</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-bento-hud.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-bento-hud.gif" width="100%" alt="cyber-bento-hud" /></a><br><sub>cyber-bento-hud</sub></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/space-boarding-pass.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/space-boarding-pass.gif" width="300" alt="space-boarding-pass" /></a><br><sub>space-boarding-pass</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vinyl-turntable.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vinyl-turntable.gif" width="300" alt="vinyl-turntable" /></a><br><sub>vinyl-turntable</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vs-battle-duel.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vs-battle-duel.gif" width="300" alt="vs-battle-duel" /></a><br><sub>vs-battle-duel</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/space-boarding-pass.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/space-boarding-pass.gif" width="100%" alt="space-boarding-pass" /></a><br><sub>space-boarding-pass</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vinyl-turntable.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vinyl-turntable.gif" width="100%" alt="vinyl-turntable" /></a><br><sub>vinyl-turntable</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vs-battle-duel.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vs-battle-duel.gif" width="100%" alt="vs-battle-duel" /></a><br><sub>vs-battle-duel</sub></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/hacker-terminal.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/hacker-terminal.gif" width="300" alt="hacker-terminal" /></a><br><sub>hacker-terminal</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/tcg-hologram.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/tcg-hologram.gif" width="300" alt="tcg-hologram" /></a><br><sub>tcg-hologram</sub></td>
-    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/spark-magic.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/spark-magic.gif" width="300" alt="spark-magic" /></a><br><sub>spark-magic</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/hacker-terminal.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/hacker-terminal.gif" width="100%" alt="hacker-terminal" /></a><br><sub>hacker-terminal</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/tcg-hologram.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/tcg-hologram.gif" width="100%" alt="tcg-hologram" /></a><br><sub>tcg-hologram</sub></td>
+    <td width="33.33%" align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/spark-magic.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/spark-magic.gif" width="100%" alt="spark-magic" /></a><br><sub>spark-magic</sub></td>
   </tr>
 </table>
 
