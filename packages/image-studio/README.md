@@ -1,11 +1,80 @@
 # image-studio
 
+[leaderboard-compact-list.png (540×556)](https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png)
+
 Typed client for the **Image Studio** HTTP API: song / profile / leaderboard / quote cards, free-form canvas, animated GIF & WebP and single-frame extraction.
 
 - Zero runtime dependencies, uses `fetch` (Node 18+, Bun, Deno, Cloudflare Workers, browsers)
 - ESM + CJS + full types
 - Typed errors, retries with back-off, **fail-over between hosts**, timeouts and `AbortSignal`
 - Fails fast on requests the server would reject (animation limits, unknown presets…)
+
+## Showcase
+
+### Leaderboard
+
+<table>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-compact-list.png" width="180" alt="leaderboard-compact-list" /></a><br><sub>compact-list</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-podium.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-podium.png" width="180" alt="leaderboard-podium" /></a><br><sub>podium</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-versus-duel.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/leaderboard/leaderboard-versus-duel.png" width="180" alt="leaderboard-versus-duel" /></a><br><sub>versus-duel</sub></td>
+  </tr>
+</table>
+
+### Profile
+
+<table>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-cyber-neon.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-cyber-neon.png" width="180" alt="profile-cyber-neon" /></a><br><sub>cyber-neon</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-glass-minimal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-glass-minimal.png" width="180" alt="profile-glass-minimal" /></a><br><sub>glass-minimal</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-hacker-terminal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/profile/profile-hacker-terminal.png" width="180" alt="profile-hacker-terminal" /></a><br><sub>hacker-terminal</sub></td>
+  </tr>
+</table>
+
+### Quote
+
+<table>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-modern-card.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-modern-card.png" width="180" alt="quote-modern-card" /></a><br><sub>modern-card</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-code-terminal.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-code-terminal.png" width="180" alt="quote-code-terminal" /></a><br><sub>code-terminal</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-neon-cyber.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/quote/quote-neon-cyber.png" width="180" alt="quote-neon-cyber" /></a><br><sub>neon-cyber</sub></td>
+  </tr>
+</table>
+
+### Song
+
+<table>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-showcase.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-showcase.png" width="180" alt="song-showcase" /></a><br><sub>showcase</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-grid.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-grid.png" width="180" alt="song-grid" /></a><br><sub>grid</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-list.png"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/song/song-list.png" width="180" alt="song-list" /></a><br><sub>list</sub></td>
+  </tr>
+</table>
+
+### Pattern previews
+
+<table>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/welcome.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/welcome.gif" width="300" alt="welcome" /></a><br><sub>welcome</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music.gif" width="300" alt="music" /></a><br><sub>music</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music-neon.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/music-neon.gif" width="300" alt="music-neon" /></a><br><sub>music-neon</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/sakura-petals.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/sakura-petals.gif" width="300" alt="sakura-petals" /></a><br><sub>sakura-petals</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-rotation.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-rotation.gif" width="300" alt="cyber-rotation" /></a><br><sub>cyber-rotation</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-bento-hud.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/cyber-bento-hud.gif" width="300" alt="cyber-bento-hud" /></a><br><sub>cyber-bento-hud</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/space-boarding-pass.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/space-boarding-pass.gif" width="300" alt="space-boarding-pass" /></a><br><sub>space-boarding-pass</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vinyl-turntable.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vinyl-turntable.gif" width="300" alt="vinyl-turntable" /></a><br><sub>vinyl-turntable</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vs-battle-duel.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/vs-battle-duel.gif" width="300" alt="vs-battle-duel" /></a><br><sub>vs-battle-duel</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/hacker-terminal.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/hacker-terminal.gif" width="300" alt="hacker-terminal" /></a><br><sub>hacker-terminal</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/tcg-hologram.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/tcg-hologram.gif" width="300" alt="tcg-hologram" /></a><br><sub>tcg-hologram</sub></td>
+    <td align="center"><a href="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/spark-magic.gif"><img src="https://raw.githubusercontent.com/zijipia/Image-Studio/refs/heads/main/output/patterns/animations/spark-magic.gif" width="300" alt="spark-magic" /></a><br><sub>spark-magic</sub></td>
+  </tr>
+</table>
 
 ```ts
 import { ImageStudio } from "image-studio";
@@ -50,25 +119,26 @@ You can visually design patterns on the **Image Studio Web** (`/animation`) and 
 
 The SDK ships with **15 pre-bundled visual patterns** ready to render by ID or imported directly from `"image-studio"`:
 
-| Pattern ID | Name | Duration | Default Variables | Category |
-| --- | --- | --- | --- | --- |
-| `welcome` | Welcome Card | 1500 ms | `{ userName, guildName, userAVTurl }` | Classic |
-| `cyber-rotation` | 3D Cyber Rotation | 1800 ms | `{ userName, guildName, userAVTurl }` | Cyber |
-| `music` | Lo-Fi Music Player | 1600 ms | `{ userName, userAVTurl }` | Music |
-| `rank-up` | Rank Up Level Progression | 1500 ms | `{ userName, userAVTurl }` | Gaming |
-| `spark-magic` | Magical Sparkles Burst | 1500 ms | `{ userName, userAVTurl }` | Classic |
-| `sakura-petals` | Falling Sakura Petals | 1500 ms | `{ userName, userAVTurl }` | Classic |
-| `music-neon` | Neon Vinyl Wave | 1600 ms | `{ userName, userAVTurl }` | Music |
-| `cyber-bento-hud` | Cyber Bento Grid HUD | 1800 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
-| `hacker-terminal` | Matrix Netrunner Terminal | 1800 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
-| `space-boarding-pass` | Sci-Fi Space Flight Pass | 1600 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
-| `vinyl-turntable` | Spinning Vinyl Turntable | 2400 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
-| `tcg-hologram` | Holographic TCG Trading Card | 1600 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
-| `vs-battle-duel` | Arcade Fighting VS Battle Clash | 1600 ms | `{ userName, guildName, userAVTurl }` | ✦ Đột phá |
-| `gacha-lootbox` | RPG Gacha SSR Summon (5-Star) | 1800 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
-| `retro-synthwave-sunset` | 80s Outrun Synthwave Sunset | 1800 ms | `{ userName, userAVTurl }` | ✦ Đột phá |
+| Pattern ID               | Name                            | Duration | Default Variables                     | Category  |
+| ------------------------ | ------------------------------- | -------- | ------------------------------------- | --------- |
+| `welcome`                | Welcome Card                    | 1500 ms  | `{ userName, guildName, userAVTurl }` | Classic   |
+| `cyber-rotation`         | 3D Cyber Rotation               | 1800 ms  | `{ userName, guildName, userAVTurl }` | Cyber     |
+| `music`                  | Lo-Fi Music Player              | 1600 ms  | `{ userName, userAVTurl }`            | Music     |
+| `rank-up`                | Rank Up Level Progression       | 1500 ms  | `{ userName, userAVTurl }`            | Gaming    |
+| `spark-magic`            | Magical Sparkles Burst          | 1500 ms  | `{ userName, userAVTurl }`            | Classic   |
+| `sakura-petals`          | Falling Sakura Petals           | 1500 ms  | `{ userName, userAVTurl }`            | Classic   |
+| `music-neon`             | Neon Vinyl Wave                 | 1600 ms  | `{ userName, userAVTurl }`            | Music     |
+| `cyber-bento-hud`        | Cyber Bento Grid HUD            | 1800 ms  | `{ userName, guildName, userAVTurl }` | ✦   |
+| `hacker-terminal`        | Matrix Netrunner Terminal       | 1800 ms  | `{ userName, guildName, userAVTurl }` | ✦   |
+| `space-boarding-pass`    | Sci-Fi Space Flight Pass        | 1600 ms  | `{ userName, guildName, userAVTurl }` | ✦   |
+| `vinyl-turntable`        | Spinning Vinyl Turntable        | 2400 ms  | `{ userName, userAVTurl }`            | ✦   |
+| `tcg-hologram`           | Holographic TCG Trading Card    | 1600 ms  | `{ userName, userAVTurl }`            | ✦   |
+| `vs-battle-duel`         | Arcade Fighting VS Battle Clash | 1600 ms  | `{ userName, guildName, userAVTurl }` | ✦   |
+| `gacha-lootbox`          | RPG Gacha SSR Summon (5-Star)   | 1800 ms  | `{ userName, userAVTurl }`            | ✦   |
+| `retro-synthwave-sunset` | 80s Outrun Synthwave Sunset     | 1800 ms  | `{ userName, userAVTurl }`            | ✦   |
 
 #### Option A: Call by Pattern ID string
+
 ```ts
 import { ImageStudio } from "image-studio";
 
@@ -90,8 +160,13 @@ await frame.save("synthwave-frame.png");
 ```
 
 #### Option B: Call with Typed Pattern Import
+
 ```ts
-import { ImageStudio, gachaLootboxPattern, retroSynthwaveSunsetPattern } from "image-studio";
+import {
+  ImageStudio,
+  gachaLootboxPattern,
+  retroSynthwaveSunsetPattern,
+} from "image-studio";
 
 const studio = new ImageStudio();
 
@@ -126,7 +201,8 @@ const customPattern: StudioPattern = {
     title: "Welcome Card Animation",
     width: 930,
     height: 280,
-    background: "linear-gradient(135deg, #090614 0%, #1e1035 50%, #4a1d6e 100%)",
+    background:
+      "linear-gradient(135deg, #090614 0%, #1e1035 50%, #4a1d6e 100%)",
     elements: [
       {
         id: "avatar",
@@ -150,7 +226,8 @@ const customPattern: StudioPattern = {
         color: "#ffffff",
         fontSize: 44,
         fontWeight: 700,
-        textShadow: "0 0 16px rgba(192, 132, 252, 0.75), 2px 3px 6px rgba(0, 0, 0, 0.9)",
+        textShadow:
+          "0 0 16px rgba(192, 132, 252, 0.75), 2px 3px 6px rgba(0, 0, 0, 0.9)",
       },
     ],
   },
@@ -158,16 +235,69 @@ const customPattern: StudioPattern = {
     {
       elementId: "avatar",
       keyframes: [
-        { time: 0, x: 20, y: 40, width: 110, height: 110, rotation: -12, scaleX: 0.8, scaleY: 0.8, opacity: 0, easing: "bounce" },
-        { time: 450, x: 445, y: 96, width: 140, height: 140, rotation: 6, scaleX: 1.05, scaleY: 1.05, opacity: 1, easing: "ease-out" },
-        { time: 500, x: 445, y: 96, width: 140, height: 140, rotation: 0, scaleX: 1, scaleY: 1, opacity: 1, easing: "ease-in-out" },
+        {
+          time: 0,
+          x: 20,
+          y: 40,
+          width: 110,
+          height: 110,
+          rotation: -12,
+          scaleX: 0.8,
+          scaleY: 0.8,
+          opacity: 0,
+          easing: "bounce",
+        },
+        {
+          time: 450,
+          x: 445,
+          y: 96,
+          width: 140,
+          height: 140,
+          rotation: 6,
+          scaleX: 1.05,
+          scaleY: 1.05,
+          opacity: 1,
+          easing: "ease-out",
+        },
+        {
+          time: 500,
+          x: 445,
+          y: 96,
+          width: 140,
+          height: 140,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          easing: "ease-in-out",
+        },
       ],
     },
     {
       elementId: "title",
       keyframes: [
-        { time: 200, x: 160, y: 55, width: 650, height: 52, rotation: -2, scaleX: 0.95, opacity: 0, easing: "ease-out" },
-        { time: 450, x: 257, y: 36, width: 650, height: 52, rotation: 0, scaleX: 1, opacity: 1, easing: "ease-in-out" },
+        {
+          time: 200,
+          x: 160,
+          y: 55,
+          width: 650,
+          height: 52,
+          rotation: -2,
+          scaleX: 0.95,
+          opacity: 0,
+          easing: "ease-out",
+        },
+        {
+          time: 450,
+          x: 257,
+          y: 36,
+          width: 650,
+          height: 52,
+          rotation: 0,
+          scaleX: 1,
+          opacity: 1,
+          easing: "ease-in-out",
+        },
       ],
     },
   ],
@@ -227,20 +357,20 @@ const image = await studio.animatePattern(
     variables: { userName: "Alice" },
     format: "webp",
     duration: 1800,
-  }
+  },
 );
 await image.save("event.webp");
 ```
 
 ### Pattern Methods Reference
 
-| Method | Argument | Returns |
-| --- | --- | --- |
+| Method                                     | Argument                                                                                | Returns                                |
+| ------------------------------------------ | --------------------------------------------------------------------------------------- | -------------------------------------- |
 | `animatePattern(pattern, options?, call?)` | `pattern`: pattern ID (`string`), `StudioPattern` object, or remote JSON URL (`string`) | `Promise<GeneratedImage>` (GIF / WebP) |
-| `framePattern(pattern, options?, call?)` | `pattern`: pattern ID (`string`), `StudioPattern` object, or remote JSON URL (`string`) | `Promise<GeneratedImage>` (PNG) |
-| `resolvePattern(pattern)` | Resolves ID, URL, or JSON into a typed `StudioPattern` | `Promise<StudioPattern>` |
-| `patterns` | Dictionary of all pre-bundled patterns (`patterns.welcome`, etc.) | `Record<string, StudioPattern>` |
-| `registerPattern(pattern)` | Dynamically register custom pattern into runtime registry | `void` |
+| `framePattern(pattern, options?, call?)`   | `pattern`: pattern ID (`string`), `StudioPattern` object, or remote JSON URL (`string`) | `Promise<GeneratedImage>` (PNG)        |
+| `resolvePattern(pattern)`                  | Resolves ID, URL, or JSON into a typed `StudioPattern`                                  | `Promise<StudioPattern>`               |
+| `patterns`                                 | Dictionary of all pre-bundled patterns (`patterns.welcome`, etc.)                       | `Record<string, StudioPattern>`        |
+| `registerPattern(pattern)`                 | Dynamically register custom pattern into runtime registry                               | `void`                                 |
 
 ### `GeneratedImage`
 
