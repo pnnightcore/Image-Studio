@@ -26,19 +26,29 @@ export interface ParticleConfig {
 
 /* --------------------------------------------------------------------- song */
 export interface SongResult { index: number; avatar: string; displayName: string; time: string; source: string; author?: string; views?: string }
-export type SongLayout = "auto" | "list" | "grid" | "classic" | "showcase" | "compact-queue";
+export const SONG_LAYOUTS = [
+  "auto",
+  "list",
+  "grid",
+  "classic",
+  "showcase",
+  "compact-queue",
+] as const;
+export type SongLayout = (typeof SONG_LAYOUTS)[number];
 export interface SongRequest { type?: "song"; title: string; items: SongResult[]; layout?: SongLayout; particleConfig?: ParticleConfig }
 
 /* ------------------------------------------------------------------ profile */
-export type ProfileTheme =
-  | "ruby-poly"
-  | "cyber-neon"
-  | "glass-minimal"
-  | "gold-legend"
-  | "cosmic-void"
-  | "frost-glacier"
-  | "sakura-duelist"
-  | "hacker-terminal";
+export const PROFILE_THEMES = [
+  "ruby-poly",
+  "cyber-neon",
+  "glass-minimal",
+  "gold-legend",
+  "cosmic-void",
+  "frost-glacier",
+  "sakura-duelist",
+  "hacker-terminal",
+] as const;
+export type ProfileTheme = (typeof PROFILE_THEMES)[number];
 export interface ProfileData {
   username: string; balance: string; avatar: string; level: number; currentXp: number; requiredXp: number; rank: string;
   theme?: ProfileTheme; badge?: string; title?: string; particleConfig?: ParticleConfig;
@@ -46,29 +56,33 @@ export interface ProfileData {
 export interface ProfileRequest { type: "profile"; data: ProfileData; particleConfig?: ParticleConfig }
 
 /* -------------------------------------------------------------- leaderboard */
-export type LeaderboardLayout =
-  | "podium"
-  | "compact-list"
-  | "cyber-grid"
-  | "minimal-cards"
-  | "versus-duel"
-  | "hall-of-fame"
-  | "tier-division"
-  | "terminal-matrix";
+export const LEADERBOARD_LAYOUTS = [
+  "podium",
+  "compact-list",
+  "cyber-grid",
+  "minimal-cards",
+  "versus-duel",
+  "hall-of-fame",
+  "tier-division",
+  "terminal-matrix",
+] as const;
+export type LeaderboardLayout = (typeof LEADERBOARD_LAYOUTS)[number];
 export interface LeaderboardItem { rank: number; username: string; handle: string; avatar: string; level: number; xp: number }
 export interface LeaderboardData { guildIcon: string; guildName?: string; season?: string; items: LeaderboardItem[]; layout?: LeaderboardLayout; particleConfig?: ParticleConfig }
 export interface LeaderboardRequest { type: "leaderboard"; data: LeaderboardData; particleConfig?: ParticleConfig }
 
 /* -------------------------------------------------------------------- quote */
-export type QuoteLayout =
-  | "split-portrait"
-  | "centered-minimal"
-  | "modern-card"
-  | "neon-cyber"
-  | "magazine-editorial"
-  | "polaroid-vintage"
-  | "speech-bubble"
-  | "code-terminal";
+export const QUOTE_LAYOUTS = [
+  "split-portrait",
+  "centered-minimal",
+  "modern-card",
+  "neon-cyber",
+  "magazine-editorial",
+  "polaroid-vintage",
+  "speech-bubble",
+  "code-terminal",
+] as const;
+export type QuoteLayout = (typeof QUOTE_LAYOUTS)[number];
 export interface QuoteData { quote: string; author: string; handle: string; tag: string; avatar: string; layout?: QuoteLayout; particleConfig?: ParticleConfig }
 export interface QuoteRequest { type: "quote"; data: QuoteData; particleConfig?: ParticleConfig }
 

@@ -17,6 +17,12 @@ export type { ImageInput, GeneratedImageMeta } from "./image.js";
 export { ImageStudioError, isImageStudioError } from "./errors.js";
 export type { ImageStudioErrorCode, AttemptInfo } from "./errors.js";
 export type { CallOptions } from "./transport.js";
-export { BUILTIN_PRESET_IDS } from "./types.js";
+export {
+  BUILTIN_PRESET_IDS,
+  SONG_LAYOUTS,
+  PROFILE_THEMES,
+  LEADERBOARD_LAYOUTS,
+  QUOTE_LAYOUTS,
+} from "./types.js";
 export type * from "./types.js";
 export * from "./patterns/index.js";

@@ -357,6 +357,19 @@ const image = await studio.animatePattern(
 await image.save("event.webp");
 ```
 
+### Handy preset constants
+
+When you want to reuse supported theme/layout names without hard-coding magic strings, keep them in a single constant array:
+
+```ts
+import { PROFILE_THEMES, QUOTE_LAYOUTS } from "image-studio";
+
+const selectedTheme = PROFILE_THEMES[4];
+const selectedLayout = QUOTE_LAYOUTS[4];
+```
+
+This keeps the examples readable and makes it easy to switch card style presets later.
+
 ### Pattern Methods Reference
 
 | Method                                     | Argument                                                                                | Returns                                |

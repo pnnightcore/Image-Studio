@@ -83,6 +83,8 @@ When the user wants to generate an image and save it directly to disk:
 ```ts
 import { ImageStudio } from "image-studio";
 
+import { ImageStudio, PROFILE_THEMES, QUOTE_LAYOUTS } from "image-studio";
+
 const studio = new ImageStudio();
 
 // Example 1: User Profile / Rank Card (PNG)
@@ -94,7 +96,7 @@ const profile = await studio.profile({
   requiredXp: 10000,
   balance: "1,250,000",
   avatar: "https://github.com/shadcn.png",
-  theme: "cosmic-void", // "ruby-poly" | "cyber-neon" | "glass-minimal" | "gold-legend" | "cosmic-void" | "frost-glacier" | "sakura-duelist" | "hacker-terminal"
+  theme: PROFILE_THEMES[4],
 });
 await profile.save("profile.png");
 
@@ -105,7 +107,7 @@ const quote = await studio.quote({
   handle: "@dijkstra",
   tag: "#computer-science",
   avatar: "https://github.com/shadcn.png",
-  layout: "magazine-editorial", // "split-portrait" | "centered-minimal" | "modern-card" | "neon-cyber" | "magazine-editorial" | "polaroid-vintage" | "speech-bubble" | "code-terminal"
+  layout: QUOTE_LAYOUTS[4],
 });
 await quote.save("quote.png");
 ```
